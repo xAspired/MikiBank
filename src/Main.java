@@ -18,16 +18,6 @@ public class Main {
             la presenza.
          */
 
-        try {
-            File contiBancariFile = new File("contiBancari.txt");
-            if (contiBancariFile.createNewFile()) {
-                System.out.println("File creato: " + contiBancariFile.getName());
-            } else {
-                System.out.println("Il File esiste già.");
-            }
-        } catch (IOException e) {
-            System.out.println("Errore riscontrato.");
-            e.printStackTrace();
-        }
+        File contiBancariFile = new File("contiBancari.txt");
     }
 }
