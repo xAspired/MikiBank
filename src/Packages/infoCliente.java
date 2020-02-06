@@ -9,7 +9,7 @@ public class infoCliente {
     //Inserire il Documento di Residenza
 
     public infoCliente() {
-        
+
     }
 
     public infoCliente(String nome, String cognome, int dataDiNascita, String codiceFiscale){

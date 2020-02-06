@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MikiBank.iml" filepath="$PROJECT_DIR$/MikiBank.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ProveVarie/ProveVarie.iml" filepath="$PROJECT_DIR$/ProveVarie/ProveVarie.iml" />
     </modules>
   </component>
 </project>
