@@ -14,7 +14,7 @@ public class Main {
             eventuali metodi di sicurezza per gli impiegati)
 
             Il file sarà creato solo alla prima esecuzione
-            del file. Dunque, le rimanenti volte basta verificarne
+            del programma. Dunque, le rimanenti volte basta verificarne
             la presenza.
          */
 
