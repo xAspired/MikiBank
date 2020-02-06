@@ -1,23 +1,27 @@
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 public class Main {
-    public static void main(String[] Args) {
-        List<String> contiBancari = new ArrayList<>();
-
+    public static void main(String[] Args) throws IOException, ClassNotFoundException {
         /*
-            [Gestione file da parte dell'impiegato]
-
-            (Possibile rimozione dell'output o aggiunta di
-            eventuali metodi di sicurezza per gli impiegati)
-
-            Il file sarà creato solo alla prima esecuzione
-            del programma. Dunque, le rimanenti volte basta verificarne
-            la presenza.
+        Questa era una prova. Il codice dell'ultimo file aggiornato è nella cartella "ProveVarie"
          */
 
-        File contiBancariFile = new File("contiBancari.txt");
+        ArrayList<Object> contiBancariArrayIn = new ArrayList<>();
+
+        //SCRIVE l'oggetto alunno in un FILE BIANARIO tramite la serializzazione
+        ObjectOutputStream contiBancari = new ObjectOutputStream(new FileOutputStream("contiBancari.dat"));
+
+//        contiBancariArray.add( * Qua dentro aggiungiamo un nuovo conto ogni volta che si crea * );
+
+
+
+        //Quando si vuole scrivere qualcosa dentro al file:
+        contiBancari.writeObject(contiBancariArrayIn); //Si aggiunge l'arraylist dentro al file (sovrascrive)
+        contiBancari.flush();
+        contiBancari.close();
+
+
     }
 }

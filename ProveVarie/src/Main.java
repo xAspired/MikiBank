@@ -12,7 +12,6 @@ public class Main {
         Clienti.add(c2);
 
         //SCRIVE l'oggetto alunno in un FILE BIANARIO tramite la serializzazione
-        ObjectOutputStream codiceFiscaleOut = new ObjectOutputStream(new FileOutputStream("codiceFiscale.dat"));
         ObjectOutputStream clienti = new ObjectOutputStream(new FileOutputStream("clienti.dat"));
 
 
