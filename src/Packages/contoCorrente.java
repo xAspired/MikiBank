@@ -1,41 +1,7 @@
 package Packages;
-
 import java.io.Serializable;
 
-public class contoCorrente implements Serializable {
-
-    /*
-    Intestatari
-     */
-    private String nome1;
-    private String cognome1;
-
-    private String nome2;
-    private String cognome2;
-
-    private String nome3;
-    private String cognome3;
-
-    /*
-    Carta d'identità
-     */
-    private String cartaID; //ID riconoscitivo carta d'identità (CA00000AA) Numero Unico Nazionale
-    private String cartaScadenza; //Scadenza carta d'identità
-    private String dataDiNascita;
-    private String sesso;
-    private String codiceFiscale;
-
-
-    /*
-    Certificato di Residenza
-     */
-    private String cittadinanza;
-    private String indirizzoResidenza;
-    private int numeroCivico;
-    private String comuneResidenza;
-    private String statoResidenza;
-    private String capResidenza;
-
+public class contoCorrente extends infoCliente implements Serializable {
     /*
     Movimento
      */
@@ -50,9 +16,73 @@ public class contoCorrente implements Serializable {
     private float saldo;
     private float interesse;
 
+    /*
+     * =========================================================
+     * Costruttori
+     * =========================================================
+     */
+    public contoCorrente(String IBAN, float saldo, float interesse) {
+        this.IBAN = IBAN;
+        this.saldo = saldo;
+        this.interesse = interesse;
+    }
 
+    public contoCorrente() {}
 
-    public contoCorrente() {
+    public void setDataContabile(String dataContabile) {
+        this.dataContabile = dataContabile;
+    }
 
+    public String getDataContabile() {
+        return dataContabile;
+    }
+
+    public void setDataValuta(String dataValuta) {
+        this.dataValuta = dataValuta;
+    }
+
+    public String getDataValuta() {
+        return dataValuta;
+    }
+
+    public void setImporto(float importo) {
+        this.importo = importo;
+    }
+
+    public float getImporto() {
+        return importo;
+    }
+
+    public void setIBAN(String IBAN) {
+        this.IBAN = IBAN;
+    }
+
+    public String getIBAN() {
+        return IBAN;
+    }
+
+    public void setSaldo(float saldo) {
+        this.saldo = saldo;
+    }
+
+    public float getSaldo() {
+        return saldo;
+    }
+
+    public void setInteresse(float interesse) {
+        this.interesse = interesse;
+    }
+
+    public float getInteresse() {
+        return interesse;
+    }
+
+    @Override
+    public String toString() {
+        return "Conto [" +
+                "IBAN='" + IBAN + '\'' +
+                ", saldo=" + saldo +
+                ", interesse=" + interesse +
+                ']';
     }
 }

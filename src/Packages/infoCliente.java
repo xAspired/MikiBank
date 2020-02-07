@@ -1,29 +1,37 @@
 package Packages;
+import java.io.Serializable;
 
-public class infoCliente {
-    String nome;
-    String cognome;
-    int dataDiNascita;
-    String codiceFiscale;
+public class infoCliente implements Serializable {
 
-    //Inserire il Documento di Residenza
+    /*
+    Carta d'identità
+     */
+    private String nome;
+    private String cognome;
+    private String cartaID; //ID riconoscitivo carta d'identità (CA00000AA) Numero Unico Nazionale
+    private String cartaScadenza; //Scadenza carta d'identità
+    private String dataDiNascita;
+    private String sesso;
+    private String codiceFiscale;
 
-    public infoCliente() {
 
-    }
+    /*
+    Certificato di Residenza
+     */
+    private String cittadinanza;
+    private String indirizzoResidenza;
+    private int numeroCivico;
+    private String comuneResidenza;
+    private String statoResidenza;
+    private String capResidenza;
 
-    public infoCliente(String nome, String cognome, int dataDiNascita, String codiceFiscale){
-        this.nome = nome;
-        this.cognome = cognome;
-        this.dataDiNascita = dataDiNascita;
-        this.codiceFiscale = codiceFiscale;
-    }
+    public infoCliente() {}
 
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    public String getNome () {
+    public String getNome() {
         return nome;
     }
 
@@ -35,6 +43,38 @@ public class infoCliente {
         return cognome;
     }
 
+    public void setCartaID(String cartaID) {
+        this.cartaID = cartaID;
+    }
+
+    public String getCartaID() {
+        return cartaID;
+    }
+
+    public void setCartaScadenza(String cartaScadenza) {
+        this.cartaScadenza = cartaScadenza;
+    }
+
+    public String getCartaScadenza() {
+        return cartaScadenza;
+    }
+
+    public void setDataDiNascita(String dataDiNascita) {
+        this.dataDiNascita = dataDiNascita;
+    }
+
+    public String getDataDiNascita() {
+        return dataDiNascita;
+    }
+
+    public void setSesso(String sesso) {
+        this.sesso = sesso;
+    }
+
+    public String getSesso() {
+        return sesso;
+    }
+
     public void setCodiceFiscale(String codiceFiscale) {
         this.codiceFiscale = codiceFiscale;
     }
@@ -43,21 +83,70 @@ public class infoCliente {
         return codiceFiscale;
     }
 
-    public void setDataDiNascita(int dataDiNascita) {
-        this.dataDiNascita = dataDiNascita;
+    public void setCittadinanza(String cittadinanza) {
+        this.cittadinanza = cittadinanza;
     }
 
-    public int getDataDiNascita() {
-        return dataDiNascita;
+    public String getCittadinanza() {
+        return cittadinanza;
+    }
+
+    public void setIndirizzoResidenza(String indirizzoResidenza) {
+        this.indirizzoResidenza = indirizzoResidenza;
+    }
+
+    public String getIndirizzoResidenza() {
+        return indirizzoResidenza;
+    }
+
+    public void setNumeroCivico(int numeroCivico) {
+        this.numeroCivico = numeroCivico;
+    }
+
+    public int getNumeroCivico() {
+        return numeroCivico;
+    }
+
+    public void setComuneResidenza(String comuneResidenza) {
+        this.comuneResidenza = comuneResidenza;
+    }
+
+    public String getComuneResidenza() {
+        return comuneResidenza;
+    }
+
+    public void setStatoResidenza(String statoResidenza) {
+        this.statoResidenza = statoResidenza;
+    }
+
+    public String getStatoResidenza() {
+        return statoResidenza;
+    }
+
+    public void setCapResidenza(String capResidenza) {
+        this.capResidenza = capResidenza;
+    }
+
+    public String getCapResidenza() {
+        return capResidenza;
     }
 
     @Override
     public String toString() {
         return "Cliente [" +
                 "Nome:'" + nome + '\'' +
-                ", Cognome='" + cognome + '\'' +
-                ", Data di Nascita=" + dataDiNascita +
-                ", Codice Fiscale='" + codiceFiscale + '\'' +
+                ", Cognome:'" + cognome + '\'' +
+                ", ID='" + cartaID + '\'' +
+                ", Data Scadenza CDI:'" + cartaScadenza + '\'' + //Carta di Identità
+                ", Data di Nascita:'" + dataDiNascita + '\'' +
+                ", Sesso:'" + sesso + '\'' +
+                ", Codice Fiscale:'" + codiceFiscale + '\'' +
+                ", Cittadinanza:'" + cittadinanza + '\'' +
+                ", Indirizzo:'" + indirizzoResidenza + '\'' +
+                ", Numero Civico:" + numeroCivico +
+                ", Comune:'" + comuneResidenza + '\'' +
+                ", Stato:'" + statoResidenza + '\'' +
+                ", CAP:'" + capResidenza + '\'' +
                 ']';
     }
 }
