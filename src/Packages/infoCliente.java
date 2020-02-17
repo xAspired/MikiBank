@@ -2,7 +2,6 @@ package Packages;
 import java.io.Serializable;
 
 public class infoCliente implements Serializable {
-
     /*
     Carta d'identità
      */
@@ -26,6 +25,22 @@ public class infoCliente implements Serializable {
     private String capResidenza;
 
     public infoCliente() {}
+
+    public infoCliente(String nome, String cognome ,String cartaID, String cartaScadenza, String dataDiNascita, String sesso, String codiceFiscale, String cittadinanza, String indirizzoResidenza, int numeroCivico, String comuneResidenza, String statoResidenza, String capResidenza) {
+         this.nome=nome;
+         this.cognome=cognome;
+         this.cartaID=cartaID;
+         this.cartaScadenza=cartaScadenza;
+         this.dataDiNascita=dataDiNascita;
+         this.sesso=sesso;
+         this.codiceFiscale=codiceFiscale;
+         this.cittadinanza=cittadinanza;
+         this.indirizzoResidenza=indirizzoResidenza;
+         this.numeroCivico=numeroCivico;
+         this.comuneResidenza=comuneResidenza;
+         this.statoResidenza= statoResidenza;
+         this.capResidenza=capResidenza;
+    }
 
     public void setNome(String nome) {
         this.nome = nome;

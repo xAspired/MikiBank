@@ -1,8 +1,8 @@
-import Packages.contoCorrente;
-
+import Packages.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
+import static Packages.metodiVerifiche.*;
 
 /*
     Main Class
@@ -30,9 +30,9 @@ public class ObjectWrite {
 
         System.out.println("Dimensione dell'ArrayList: " + contiCorrentiArray.size());
 
-        contoCorrente c1 = new contoCorrente("IDNALFO", 14, 1);
+        //contoCorrente c1 = new contoCorrente("IDNALFO", 14, 1);
 
-        contiCorrentiArray.add(c1);
+        //contiCorrentiArray.add(c1);
 
         FileOutputStream fileOut = new FileOutputStream(file);
         ObjectOutputStream fileObj = new ObjectOutputStream(fileOut);
@@ -77,7 +77,8 @@ public class ObjectWrite {
                 break;
             case 1:
                 //Creazione Conto Corrente
-                creaConto(contiCorrentiArray);
+
+                contiCorrentiArray.add(creaConto());
                 break;
             case 2:
                 //Visualizzare Info Conto Corrente
@@ -109,7 +110,51 @@ public class ObjectWrite {
     private static void visualizzaInfoConto(ArrayList<contoCorrente> contiCorrentiArray) {
     }
 
-    private static void creaConto(ArrayList<contoCorrente> contiCorrentiArray) {
+    private static contoCorrente creaConto() {
+        String dataContabile;
+        String dataValuta;
+        float importo;
+
+        int intestatari = 0;
+        System.out.println("inserisci il numero di intestatari 1-3");
+        intestatari = input.nextInt();
+
+        //infoCliente cliente = new infoCliente;
+
+        infoCliente[] cointestatari = new infoCliente[intestatari];
+        for (int i = 0; i < intestatari; i++) {
+
+            //informazioni cliente
+            String nome = "";
+
+
+            String cognome = "";
+            String cartaID = ""; //ID riconoscitivo carta d'identità (CA00000AA) Numero Unico Nazionale
+            String cartaScadenza = ""; //Scadenza carta d'identità
+            String dataDiNascita = "";
+            String sesso = "";
+            String codiceFiscale = "";
+
+            String cittadinanza = "";
+            String indirizzoResidenza = "";
+            int numeroCivico = 0;
+            String comuneResidenza = "";
+            String statoResidenza = "";
+            String capResidenza = "";
+            infoCliente cliente = new infoCliente(nome, cognome, cartaID, cartaScadenza, dataDiNascita, sesso, codiceFiscale, cittadinanza, indirizzoResidenza, numeroCivico, comuneResidenza, statoResidenza, capResidenza);
+            cointestatari[i] = cliente;
+        }
+        //informazioni conto
+        String IBAN = verificaIBAN();
+        float saldo = verificaSaldo();
+        float interesse = verificaInteresse();
+        String tipoConto = verificaTipoConto();
+
+        contoCorrente conto;
+        conto = new contoCorrente(IBAN, saldo, interesse, cointestatari, tipoConto);
+
+        return conto;
     }
 
 }
+

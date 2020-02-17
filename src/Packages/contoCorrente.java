@@ -2,6 +2,8 @@ package Packages;
 import java.io.Serializable;
 
 public class contoCorrente extends infoCliente implements Serializable {
+    //vettore di massimo 3 cointestatari
+    infoCliente[] cointestatari = new infoCliente[3];
     /*
     Movimento
      */
@@ -15,16 +17,19 @@ public class contoCorrente extends infoCliente implements Serializable {
     private String IBAN;
     private float saldo;
     private float interesse;
+    private String tipoConto;
 
     /*
      * =========================================================
      * Costruttori
      * =========================================================
      */
-    public contoCorrente(String IBAN, float saldo, float interesse) {
+    public contoCorrente(String IBAN, float saldo, float interesse, infoCliente[] cointestatari, String tipoConto) {
         this.IBAN = IBAN;
         this.saldo = saldo;
         this.interesse = interesse;
+        this.cointestatari = cointestatari;
+        this.tipoConto = tipoConto;
     }
 
     public contoCorrente() {}
