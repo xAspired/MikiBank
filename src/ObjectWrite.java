@@ -52,7 +52,7 @@ public class ObjectWrite {
             System.out.println("[0] Uscita dal programma");
             System.out.println("[1] Creazione di un conto corrente");
             System.out.println("[2] Visualizzazione informazione conto corrente");
-            System.out.println("[3] Visualizzazione utente");
+            System.out.println("[3] Visualizzazione utente - aggiornare dati");
             System.out.println("[4] Chiedere un prestito");
             System.out.print("➡ ");
 
@@ -125,22 +125,20 @@ public class ObjectWrite {
         for (int i = 0; i < intestatari; i++) {
 
             //informazioni cliente
-            String nome = "";
+            String nome = verificaNomeCognome("nome");
+            String cognome = verificaNomeCognome("congnome");
+            String cartaID = verificaCartaID(); //ID riconoscitivo carta d'identità (CA00000AA) Numero Unico Nazionale
+            String cartaScadenza = verificaData(); //Scadenza carta d'identità
+            String dataDiNascita = verificaData();
+            String sesso = verificaSesso();
+            String codiceFiscale = verificaCodiceFiscale(nome, cognome, dataDiNascita);
 
-
-            String cognome = "";
-            String cartaID = ""; //ID riconoscitivo carta d'identità (CA00000AA) Numero Unico Nazionale
-            String cartaScadenza = ""; //Scadenza carta d'identità
-            String dataDiNascita = "";
-            String sesso = "";
-            String codiceFiscale = "";
-
-            String cittadinanza = "";
-            String indirizzoResidenza = "";
+            String cittadinanza = verificaCittadinanza();
+            String indirizzoResidenza = verificaIndirizzoResidenza();
             int numeroCivico = 0;
-            String comuneResidenza = "";
-            String statoResidenza = "";
-            String capResidenza = "";
+            String comuneResidenza = verificaComuneResidenza();
+            String statoResidenza = verificaStatoResidenza();
+            String capResidenza = verificaComuneResidenza();
             infoCliente cliente = new infoCliente(nome, cognome, cartaID, cartaScadenza, dataDiNascita, sesso, codiceFiscale, cittadinanza, indirizzoResidenza, numeroCivico, comuneResidenza, statoResidenza, capResidenza);
             cointestatari[i] = cliente;
         }
