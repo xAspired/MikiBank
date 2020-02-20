@@ -28,7 +28,7 @@ public class ObjectWrite {
             contiCorrentiArray = new ArrayList<>();
         }
 
-        System.out.println("Dimensione dell'ArrayList: " + contiCorrentiArray.size());
+        System.out.println("Dimensione dell'ArrayList: " + contiCorrentiArray.size() + "\n");
 
         //contoCorrente c1 = new contoCorrente("IDNALFO", 14, 1);
 
@@ -124,26 +124,27 @@ public class ObjectWrite {
         infoCliente[] cointestatari = new infoCliente[intestatari];
         for (int i = 0; i < intestatari; i++) {
 
-            //informazioni cliente
-            String nome = verificaNomeCognome("nome");
-            String cognome = verificaNomeCognome("congnome");
-            String cartaID = verificaCartaID(); //ID riconoscitivo carta d'identità (CA00000AA) Numero Unico Nazionale
-            String cartaScadenza = verificaData(); //Scadenza carta d'identità
-            String dataDiNascita = verificaData();
-            String sesso = verificaSesso();
-            String codiceFiscale = verificaCodiceFiscale(nome, cognome, dataDiNascita);
-
-            String cittadinanza = verificaCittadinanza();
-            String indirizzoResidenza = verificaIndirizzoResidenza();
-            int numeroCivico = 0;
-            String comuneResidenza = verificaComuneResidenza();
-            String statoResidenza = verificaStatoResidenza();
-            String capResidenza = verificaComuneResidenza();
-            infoCliente cliente = new infoCliente(nome, cognome, cartaID, cartaScadenza, dataDiNascita, sesso, codiceFiscale, cittadinanza, indirizzoResidenza, numeroCivico, comuneResidenza, statoResidenza, capResidenza);
-            cointestatari[i] = cliente;
+//            //informazioni cliente
+//            String nome = verificaNomeCognome("nome");
+//            String cognome = verificaNomeCognome("congnome");
+//            String cartaID = verificaCartaID(); //ID riconoscitivo carta d'identità (CA00000AA) Numero Unico Nazionale
+//            String cartaScadenza = verificaData(); //Scadenza carta d'identità
+//            String dataDiNascita = verificaData();
+//            String sesso = verificaSesso();
+//            String codiceFiscale = verificaCodiceFiscale(nome, cognome, dataDiNascita);
+//
+//            String cittadinanza = verificaCittadinanza();
+//            String indirizzoResidenza = verificaIndirizzoResidenza();
+//            String numeroCivico = verificaNumeroCivico();
+//            String comuneResidenza = verificaComuneResidenza();
+//            String statoResidenza = verificaStatoResidenza();
+//            int capResidenza = verificaCapResidenza();
+//            infoCliente cliente = new infoCliente(nome, cognome, cartaID, cartaScadenza, dataDiNascita, sesso, codiceFiscale, cittadinanza, indirizzoResidenza, numeroCivico, comuneResidenza, statoResidenza, capResidenza);
+//            cointestatari[i] = cliente;
         }
+
         //informazioni conto
-        String IBAN = verificaIBAN();
+        String IBAN = creaIBAN();
         float saldo = verificaSaldo();
         float interesse = verificaInteresse();
         String tipoConto = verificaTipoConto();

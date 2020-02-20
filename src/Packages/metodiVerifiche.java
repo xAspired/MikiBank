@@ -1,10 +1,20 @@
 package Packages;
 
+//Librerie java.io
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+//Librerie java.util
+import java.util.Properties;
 import java.util.Scanner;
 
 public class metodiVerifiche {
     static Scanner input = new Scanner(System.in);
     static boolean exitMethods = true;
+    static int contoNumeroIBAN = 0;
+
 
     public static float verificaIBAN() {
         float saldo = 0;
@@ -28,7 +38,7 @@ public class metodiVerifiche {
 
     public static String verificaNomeCognome(String var) {
         System.out.println(var+":");
-        String nome = "";
+        String nome;
         int j = 0;
 
         do {
@@ -49,7 +59,7 @@ public class metodiVerifiche {
     }
 
     public static String verificaCartaID() {
-        String cartaID="";
+        String cartaID;
         String tempCartaID;
 
         do {
@@ -82,7 +92,7 @@ public class metodiVerifiche {
     }
 
     public static String verificaData() {
-        String cartaScadenza="";
+        String cartaScadenza;
         System.out.println("Formato:DD.MM.YYYY");
         do {
             exitMethods = true;
@@ -144,7 +154,7 @@ public class metodiVerifiche {
     }
 
     public static String verificaCodiceFiscale(String nome, String cognome, String dataDiNascita) {
-        String codiceFiscale="";
+        String codiceFiscale;
         do {
             exitMethods = true;
             codiceFiscale = input.nextLine();
@@ -265,5 +275,80 @@ public class metodiVerifiche {
         }
         exitMethods = true;
         return CAP;
+    }
+
+    public static String creaIBAN() {
+
+        //Inizializzazione
+        Properties prop = new Properties(System.getProperties());
+        InputStream input = null;
+
+        try {
+            //Assegno alla variabile Input il contenuto di ciò che vi è all'interno del File Config
+            input = new FileInputStream("resources/config.properties");
+
+            //Carico il file
+            prop.load(input);
+
+            //Prendo in considerazione il dato all'interno del File
+            try {
+
+                contoNumeroIBAN = Integer.parseInt(prop.getProperty("contoNumeroIBAN"));
+            }
+            catch (Exception ignored) {}
+
+        }
+        //Gestione di eventuali errori per la lettura del File
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        /*
+         * Il finally racchiude un pezzo di codice che dovra essere eseguito a
+         * prescindere dal fatto che il codice nel try abbia generato o meno errori
+         */
+
+        finally {
+            if (input != null) {
+                try {
+                    //Bisogna chiudere la lettura del File
+                    input.close();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        //Numero Conto Corrente (12 Cifre)
+
+        String IBAN = "IT60X";
+        IBAN += 10000 + (int)(Math.random() * ((19999 - 10000) + 1)); //Codice ABI
+        IBAN += 10000 + (int)(Math.random() * ((19999 - 10000) + 1)); //Codice CAB
+
+        //noinspection SingleStatementInBlock,ConstantConditions
+        if(contoNumeroIBAN < 1000000000000L) {
+            IBAN += contoNumeroIBAN++; //Numero Conto Corrente
+        }
+        else
+            System.out.print("Errore Interno: 14x0"); //Limite massimo IBAN raggiunto
+
+
+        //Scrittura su File del numero corrente di IBAN
+        try {
+
+            //Si scrive il valore sul File
+            prop.setProperty("contoNumeroIBAN", String.valueOf(contoNumeroIBAN));
+
+
+            //save properties to project root folder
+            prop.store(new FileOutputStream("resources/config.properties"), null);
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        System.out.print(IBAN);
+        return IBAN;
     }
 }

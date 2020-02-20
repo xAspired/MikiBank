@@ -19,14 +19,14 @@ public class infoCliente implements Serializable {
      */
     private String cittadinanza;
     private String indirizzoResidenza;
-    private int numeroCivico;
+    private String numeroCivico;
     private String comuneResidenza;
     private String statoResidenza;
-    private String capResidenza;
+    private int capResidenza;
 
     public infoCliente() {}
 
-    public infoCliente(String nome, String cognome ,String cartaID, String cartaScadenza, String dataDiNascita, String sesso, String codiceFiscale, String cittadinanza, String indirizzoResidenza, int numeroCivico, String comuneResidenza, String statoResidenza, String capResidenza) {
+    public infoCliente(String nome, String cognome ,String cartaID, String cartaScadenza, String dataDiNascita, String sesso, String codiceFiscale, String cittadinanza, String indirizzoResidenza, String numeroCivico, String comuneResidenza, String statoResidenza, int capResidenza) {
          this.nome=nome;
          this.cognome=cognome;
          this.cartaID=cartaID;
@@ -114,11 +114,11 @@ public class infoCliente implements Serializable {
         return indirizzoResidenza;
     }
 
-    public void setNumeroCivico(int numeroCivico) {
+    public void setNumeroCivico(String numeroCivico) {
         this.numeroCivico = numeroCivico;
     }
 
-    public int getNumeroCivico() {
+    public String getNumeroCivico() {
         return numeroCivico;
     }
 
@@ -138,11 +138,11 @@ public class infoCliente implements Serializable {
         return statoResidenza;
     }
 
-    public void setCapResidenza(String capResidenza) {
+    public void setCapResidenza(int capResidenza) {
         this.capResidenza = capResidenza;
     }
 
-    public String getCapResidenza() {
+    public int getCapResidenza() {
         return capResidenza;
     }
 
