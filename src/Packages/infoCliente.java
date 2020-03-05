@@ -18,15 +18,16 @@ public class infoCliente implements Serializable {
     Certificato di Residenza
      */
     private String cittadinanza;
+    private  String comuneNascita;
     private String indirizzoResidenza;
-    private String numeroCivico;
+    private int numeroCivico;
     private String comuneResidenza;
     private String statoResidenza;
     private int capResidenza;
 
     public infoCliente() {}
 
-    public infoCliente(String nome, String cognome ,String cartaID, String cartaScadenza, String dataDiNascita, String sesso, String codiceFiscale, String cittadinanza, String indirizzoResidenza, String numeroCivico, String comuneResidenza, String statoResidenza, int capResidenza) {
+    public infoCliente(String nome, String cognome, String cartaID, String cartaScadenza, String dataDiNascita, String sesso, String comuneNascita, String codiceFiscale, String cittadinanza, String statoResidenza, String comuneResidenza, String indirizzoResidenza, int numeroCivico, int capResidenza){
          this.nome=nome;
          this.cognome=cognome;
          this.cartaID=cartaID;
@@ -35,6 +36,7 @@ public class infoCliente implements Serializable {
          this.sesso=sesso;
          this.codiceFiscale=codiceFiscale;
          this.cittadinanza=cittadinanza;
+         this.comuneNascita=comuneNascita;
          this.indirizzoResidenza=indirizzoResidenza;
          this.numeroCivico=numeroCivico;
          this.comuneResidenza=comuneResidenza;
@@ -106,6 +108,14 @@ public class infoCliente implements Serializable {
         return cittadinanza;
     }
 
+    public void setComuneNascita(String cittadinanza) {
+        this.comuneNascita = comuneNascita;
+    }
+
+    public String getComuneNascita() {
+        return comuneNascita;
+    }
+
     public void setIndirizzoResidenza(String indirizzoResidenza) {
         this.indirizzoResidenza = indirizzoResidenza;
     }
@@ -114,11 +124,11 @@ public class infoCliente implements Serializable {
         return indirizzoResidenza;
     }
 
-    public void setNumeroCivico(String numeroCivico) {
+    public void setNumeroCivico(int numeroCivico) {
         this.numeroCivico = numeroCivico;
     }
 
-    public String getNumeroCivico() {
+    public int getNumeroCivico() {
         return numeroCivico;
     }
 

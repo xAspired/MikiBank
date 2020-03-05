@@ -17,6 +17,7 @@ import static Packages.metodiVerifiche.*;
 public class ObjectWrite extends JPasswordField {
     static Scanner input = new Scanner(System.in);
 
+
     public static void main(String[] args) throws Exception {
 
         ArrayList<contoCorrente> contiCorrentiArray;
@@ -36,17 +37,6 @@ public class ObjectWrite extends JPasswordField {
         }
 
         System.out.println("Dimensione dell'ArrayList: " + contiCorrentiArray.size() + "\n");
-
-        //contoCorrente c1 = new contoCorrente("IDNALFO", 14, 1);
-
-        //contiCorrentiArray.add(c1);
-
-        FileOutputStream fileOut = new FileOutputStream(file);
-        ObjectOutputStream fileObj = new ObjectOutputStream(fileOut);
-
-        fileObj.writeObject(contiCorrentiArray);
-        fileObj.close();
-        fileOut.close();
 
         //Fine Serializzazione e Deserializzazione
 
@@ -85,8 +75,17 @@ public class ObjectWrite extends JPasswordField {
                     break;
                 case 1:
                     //Creazione Conto Corrente
+                    contiCorrentiArray.add(creaConto(contiCorrentiArray));
 
-                    contiCorrentiArray.add(creaConto());
+                    //Serializzazione
+                    FileOutputStream fileOut = new FileOutputStream(file);
+                    ObjectOutputStream fileObj = new ObjectOutputStream(fileOut);
+
+                    fileObj.writeObject(contiCorrentiArray);
+                    fileObj.close();
+                    fileOut.close();
+                    //Fine Serializzazione
+
                     break;
                 case 2:
                     //Visualizzare Info Conto Corrente
@@ -110,16 +109,20 @@ public class ObjectWrite extends JPasswordField {
         } while (true);
     }
 
+    @SuppressWarnings("unused")
     private static void chiederePresito(ArrayList<contoCorrente> contiCorrentiArray) {
     }
 
+    @SuppressWarnings("unused")
     private static void visualizzaInfoUtente(ArrayList<contoCorrente> contiCorrentiArray) {
     }
 
+    @SuppressWarnings("unused")
     private static void visualizzaInfoConto(ArrayList<contoCorrente> contiCorrentiArray) {
     }
 
-    private static contoCorrente creaConto() throws InterruptedException {
+    @SuppressWarnings("unused")
+    private static contoCorrente creaConto(ArrayList<contoCorrente> contiCorrentiArray) throws InterruptedException {
         String dataContabile;
         String dataValuta;
         float importo;
@@ -128,12 +131,12 @@ public class ObjectWrite extends JPasswordField {
         boolean conferma = true;
 
         while (conferma) {
-            System.out.print("Inserisci il numero di intestatari (1-3): ");
+            System.out.println("inserisci il numero di intestatari 1-3");
             try {
                 intestatari = Integer.parseInt(input.nextLine());
 
                 if (intestatari == 1 || intestatari == 2 || intestatari == 3) {
-                    conferma = false;
+                    conferma= !verificaDatiInseriti();
                 } else
                     System.out.println("-valore non valido-");
 
@@ -145,60 +148,63 @@ public class ObjectWrite extends JPasswordField {
         //infoCliente cliente = new infoCliente;
 
         infoCliente[] cointestatari = new infoCliente[intestatari];
-        contoCorrente conto = new contoCorrente();
+        @SuppressWarnings("UnusedAssignment") contoCorrente conto = new contoCorrente();
         for (int i = 0; i < intestatari; i++) {
             if (intestatari == 1)
-                System.out.println("\n- Informazioni Cliente -");
+                System.out.println("- Informazioni Cliente: -");
             else if (i == 0)
-                System.out.println("\n- Primo Intestatario -");
+                System.out.println("- Primo Intestatario: -");
             else if (i == 1)
-                System.out.println("\n- Secondo Intestatario -");
+                System.out.println("- Secondo Intestatario: -");
             else
-                System.out.println("\n- Terzo Intestatario -");
-            //informazioni cliente
-            //nome
+                System.out.println("- Terzo Intestatario: -");
+
+            //Informazioni cliente - Nome
             String nome;
             nome = verificaNomeCognome("Nome");
 
-
             String cognome = verificaNomeCognome("Cognome");
             String cartaID = verificaCartaID(); //ID riconoscitivo carta d'identità (CA00000AA) Numero Unico Nazionale
-            String cartaScadenza = verificaData("data scadenza carta"); //Scadenza carta d'identità
+            String cartaScadenza = verificaData("Data scadenza carta"); //Scadenza carta d'identità
             if (cartaScadenza.equals("0")) {
                 System.out.println("Errore - la carta d'identità è scaduta. \nStai per essere reindirizzato al menu...\n");
                 TimeUnit.SECONDS.sleep(1);
-            } else {
+            }
+            else {
                 String dataDiNascita = verificaData("data di nascita");
-                //bisogna avere almeno 18 anni
+                //Bisogna avere almeno 18 anni
                 if (dataDiNascita.equals("0")) {
                     System.out.println("Errore - l'età del cliente non soddisfa l'età minima \nStai per essere reindirizzato al menu...");
                     TimeUnit.SECONDS.sleep(1);
-                } else {
+                }
+                else {
                     String sesso = verificaSesso();
-                    String comuneResidenza = verificaComuneResidenza();
-                    String codiceFiscale = verificaCodiceFiscale(nome, cognome, dataDiNascita, sesso, comuneResidenza);
+                    String comuneNascita = verificaComune("nascita");
+                    String comuneResidenza = verificaComune("Residenza");
+
+                    String codiceFiscale = verificaCodiceFiscale(nome, cognome, dataDiNascita, sesso, comuneNascita);
 
                     String cittadinanza = verificaCittadinanza();
                     String indirizzoResidenza = verificaIndirizzoResidenza();
-                    String numeroCivico = verificaNumeroCivico();
+                    int numeroCivico = verificaNumeroCivico();
                     String statoResidenza = verificaStatoResidenza();
                     if (!statoResidenza.equals("Altro")) {
                         int capResidenza = verificaCapResidenza();
-                        infoCliente cliente = new infoCliente(nome, cognome, cartaID, cartaScadenza, dataDiNascita, sesso, codiceFiscale, cittadinanza, indirizzoResidenza, numeroCivico, comuneResidenza, statoResidenza, capResidenza);
+                        infoCliente cliente = new infoCliente(nome, cognome, cartaID, cartaScadenza, dataDiNascita, sesso, comuneNascita, codiceFiscale, cittadinanza, statoResidenza, comuneResidenza, indirizzoResidenza, numeroCivico, capResidenza);
+
+                        verificaDatiInseritiFinale(cliente);
                         cointestatari[i] = cliente;
 
-
-                        //informazioni conto
-                        String IBAN = creaIBAN();
-                        float saldo = verificaSaldo();
-                        float interesse = verificaInteresse();
-                        String tipoConto = verificaTipoConto();
-
-                        conto = new contoCorrente(IBAN, saldo, interesse, cointestatari, tipoConto);
                     }
                 }
             }
         }
+        //informazioni conto
+        String IBAN = creaIBAN();
+        float saldo = verificaSaldo();
+        float interesse = verificaInteresse();
+        String tipoConto = verificaTipoConto();
+        conto = new contoCorrente(IBAN, saldo, interesse, cointestatari, tipoConto);
         return conto;
 
     }

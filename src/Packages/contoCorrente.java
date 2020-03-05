@@ -1,6 +1,7 @@
 package Packages;
 import java.io.Serializable;
 
+@SuppressWarnings("unused")
 public class contoCorrente extends infoCliente implements Serializable {
     //vettore di massimo 3 cointestatari
     infoCliente[] cointestatari = new infoCliente[3];

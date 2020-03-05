@@ -17,79 +17,28 @@ public class metodiVerifiche {
     static int contoNumeroIBAN = 0;
 
 
+    @SuppressWarnings("unused")
     public static float verificaIBAN() {
-        float saldo = 0;
-        return saldo;
+        return (float) 0;
     }
 
     public static float verificaSaldo() {
-        float saldo = 0;
-        return saldo;
+        return (float) 0;
     }
 
     public static float verificaInteresse() {
-        float interesse = 0;
-        return interesse;
+        return (float) 0;
     }
 
     public static String verificaTipoConto() {
-        String tipoConto = "";
-        return tipoConto;
+        System.out.print("Che tipo di conto vuoi creare?");
+        System.out.print("[1] Conto Deposito;");
+        System.out.print("[2] Conto Corrente a Canone Fisso;");
+        System.out.print("[3] Conto Corrente senza Canone");
+        System.out.print("➡ ");
+        return "";
     }
 
-
-    public static void verificaDatiInseritiFinale(String nome, String cognome) {
-        boolean conferma=true;
-        int scelta=1;
-        while (exitMethods) {
-            System.out.println("Confermi i dati inseriti:\n1-SI\n2-NO");
-            try {
-                scelta = input.nextInt();
-                if(scelta==1) {
-                    conferma=true;
-                    exitMethods = false;
-                }
-                else if(scelta==2) {
-                    conferma=false;
-                    exitMethods = false;
-                }
-                else
-                    System.out.println("valore non valido!");
-            } catch (Exception e) {
-                System.out.print("valore non valido!");
-            }
-        }
-        exitMethods = true;
-        if(!conferma) {
-            do {
-                System.out.println("Inserisci il numero dei dati errati e 0 per terminare\n1-nome:"+nome+"\n2-cognome");
-                while (exitMethods) {
-                    System.out.println("Confermi il dato inserito:\n1-SI\n2-NO");
-                    try {
-                        scelta = input.nextInt();
-                        if(scelta>0 && scelta<3){
-                        exitMethods = false;
-                        }
-                        else
-                            System.out.println("Valore non valido!");
-                    } catch (Exception e) {
-                        System.out.print("Valore non valido!");
-                    }
-                }
-                exitMethods = true;
-                switch (scelta) {
-                    //esci
-                    case 0:
-                        scelta=0;
-                        break;
-
-                    //nome
-                    case 1:
-                        nome = verificaNomeCognome("Nome");
-                }
-            }while(scelta!=0);
-        }
-    }
 
         public static String verificaNomeCognome(String var) {
         System.out.print(var + ": ");
@@ -186,7 +135,8 @@ public class metodiVerifiche {
 
             for (int i = 0; i < data.length() && exitMethods; i++) {
 
-                if (i == 2 && i == 5 && data.charAt(i) == '.') {
+                //noinspection ConstantConditions
+                if ((i == 2) && (i == 5) && (data.charAt(i) == '.')) {
                     exitMethods = false;
                     System.out.println("Hai dimenticato i punti.");
                 } else if (Character.isLetter(data.charAt(i))) {
@@ -240,6 +190,32 @@ public class metodiVerifiche {
         return data;
         }
 
+    public static boolean verificaDatiInseriti() {
+        boolean conferma=true;
+        int scelta;
+
+        while (exitMethods) {
+            System.out.println("Sei sicuro:\n[1] SI\n[2] NO");
+            try {
+                scelta = Integer.parseInt(input.nextLine());
+
+                if(scelta==1) {
+                    exitMethods = false;
+                }
+                else if(scelta==2) {
+                    conferma=false;
+                    exitMethods = false;
+                }
+                else
+                    System.out.println("-valore non valido!-");
+            } catch (Exception e) {
+                System.out.println("-valore non valido!-");
+            }
+        }
+        exitMethods = true;
+        return conferma;
+    }
+
         public static String verificaSesso () {
             System.out.println("Sesso:");
 
@@ -285,13 +261,9 @@ public class metodiVerifiche {
         }
 
     public static String verificaCodiceFiscale (String nome, String cognome, String dataDiNascita, String sesso, String comune){
-        System.out.println("codice fiscale:");
-
         nome = nome.toUpperCase();
         cognome = cognome.toUpperCase();
         comune = comune.toUpperCase();
-
-        System.out.println(nome +" "+cognome+" "+dataDiNascita+" "+sesso+" "+comune);
 
         String codiceFiscale = "";
 
@@ -380,11 +352,9 @@ public class metodiVerifiche {
             case "01":
                 temp.append("A");
                 break;
-
             case "02":
                 temp.append("B");
                 break;
-
             case "03":
                 temp.append("C");
                 break;
@@ -420,7 +390,6 @@ public class metodiVerifiche {
         String giorno = dataDiNascita.charAt(0) + "" + dataDiNascita.charAt(1);
 
         if(sesso.equals("M"))
-
             temp.append(giorno);
         else {
             int temp1 = Integer.parseInt(giorno);
@@ -662,9 +631,7 @@ public class metodiVerifiche {
     }
 
     public static String verificaCodiceControllo(float numero){
-        System.out.println(numero);
         int position=(int)numero;
-        System.out.println(numero);
         switch(position) {
             case 0:
                 return "A";
@@ -740,72 +707,157 @@ public class metodiVerifiche {
             exitMethods = true;
             return cittadinanza;
         }
-    //rivedere
+
+        //Via 0, Viale 0, Rotonda 0, Piazza 0, Vicolo 0
         public static String verificaIndirizzoResidenza () {
-            String indirizzoResidenza = null;
+            String indirizzoResidenza = "";
             while (exitMethods) {
-                System.out.print("Indirizzo Residenza: (via roma) ");
                 try {
+                    System.out.print("Indirizzo Residenza (Via/Viale/Rotonda/Piazza/Vicolo Roma): ");
                     indirizzoResidenza = input.nextLine();
-                    exitMethods = false;
+                        if(indirizzoResidenza.charAt(0) == 'V') {
+                            if(indirizzoResidenza.charAt(1) == 'i') {
+                                if(indirizzoResidenza.charAt(2) == 'a') {
+                                    if(indirizzoResidenza.charAt(3) == ' ') {
+                                        exitMethods = false;
+                                        break;
+                                    }
+                                    else if(indirizzoResidenza.charAt(3) == 'l') {
+                                        if(indirizzoResidenza.charAt(4) == 'e') {
+                                            exitMethods = false;
+                                            break;
+                                        }
+                                    }
+                                }
+                                else if(indirizzoResidenza.charAt(2) == 'c') {
+                                    if(indirizzoResidenza.charAt(3) == 'o') {
+                                        if(indirizzoResidenza.charAt(4) == 'l') {
+                                            if(indirizzoResidenza.charAt(5) == 'o') {
+                                                exitMethods = false;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                        else if(indirizzoResidenza.charAt(0) == 'R') {
+                            if(indirizzoResidenza.charAt(1) == 'o') {
+                                if(indirizzoResidenza.charAt(2) == 't') {
+                                    if(indirizzoResidenza.charAt(3) == 'o') {
+                                        if(indirizzoResidenza.charAt(4) == 'n') {
+                                            if(indirizzoResidenza.charAt(5) == 'd') {
+                                                if(indirizzoResidenza.charAt(6) == 'a') {
+                                                    exitMethods = false;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else if(indirizzoResidenza.charAt(0) == 'P') {
+                            if(indirizzoResidenza.charAt(1) == 'i') {
+                                if(indirizzoResidenza.charAt(2) == 'a') {
+                                    if(indirizzoResidenza.charAt(3) == 'z') {
+                                        if(indirizzoResidenza.charAt(4) == 'z') {
+                                            if(indirizzoResidenza.charAt(5) == 'a') {
+                                                exitMethods = false;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else if(exitMethods) {
+                            System.out.println("Errore Interno: 12x4 | Verificare le maiuscole!"); //L'utente non ha inserito bene i dati
+                        }
                 } catch (Exception e) {
+                    indirizzoResidenza = " ";
                     System.out.print("Indirizzo non valido!");
                 }
             }
             exitMethods = true;
             return indirizzoResidenza;
         }
-    //rivedere
-        public static String verificaNumeroCivico () {
-            String numeroCivico = null;
-            while (exitMethods) {
-                System.out.println("Numero Civico: ");
-                try {
-                    numeroCivico = input.nextLine();
-                    if (numeroCivico.length() <= 4) {
-                        exitMethods = false;
-                    }
-                } catch (Exception e) {
-                    System.out.print("Indirizzo Civico non valido!");
-                }
-            }
-            exitMethods = true;
-            return numeroCivico;
-        }
 
-        public static String verificaComuneResidenza () {
-            String comuneResidenza = null;
-            while (exitMethods) {
-                System.out.println("Comune Residenza: (Monfalcone)");
-                try {
-                    comuneResidenza = input.nextLine();
+
+    public static int verificaNumeroCivico () {
+        int numeroCivico = 0;
+        while (exitMethods) {
+            System.out.print("Numero Civico: ");
+            try {
+                numeroCivico = Integer.parseInt(input.nextLine());
+                if (numeroCivico >= 0 && numeroCivico <=100) {
                     exitMethods = false;
-                } catch (Exception e) {
-                    System.out.print("Comune Residenza non valido!");
                 }
+                else
+                    System.out.println("Numero non valido");
+            } catch (Exception e) {
+                System.out.print("Indirizzo Civico non valido!");
+            }
+        }
+        exitMethods = true;
+        return numeroCivico;
+    }
+
+    public static String verificaComune (String var) {
+
+        String comune = null;
+        while (exitMethods) {
+            System.out.println("Comune " + var + ": (Es. Monfalcone)");
+            try {
+                comune = input.nextLine();
+                exitMethods = false;
+            } catch (Exception e) {
+                System.out.print("Comune Residenza non valido!");
             }
 
-            exitMethods = true;
-            return comuneResidenza;
+            boolean exist = false;
+            try {
+                Scanner file = new Scanner(new File("comuni.txt"));
+                assert comune != null;
+                comune = comune.toUpperCase();
+                String[] nomeComune = comune.split(" ");
+                while (file.hasNext() && !exist) {
+                    String riga = file.nextLine();
+                    String[] riga2 = riga.split("\t");
+                    String[] riga3 = riga2[1].split(" ");
+
+                    if (Arrays.equals(nomeComune, riga3)) {
+                        exist = true;
+                    }
+                }
+            } catch (Exception ignored) {}
+
+            if(!exist)
+                exitMethods=true;
         }
+        exitMethods = true;
+        return comune;
+    }
 
         public static String verificaStatoResidenza () {
             int scelta;
             String statoResidenza = "";
             while (exitMethods) {
-                System.out.println("Stato Residenza: \n1-ITALIA \n2-ALTRO");
+                System.out.println("Stato Residenza: \n[1] Italia \n[2] Altro ");
+                System.out.print("➡ ");
                 try {
-                    scelta = input.nextInt();
+                    scelta = Integer.parseInt(input.nextLine());
                     if(scelta==1) {
                         statoResidenza="Italia";
                         exitMethods = false;
                     }
-                    if(scelta==2) {
+                    else if(scelta==2) {
                         statoResidenza="Altro";
                         exitMethods = false;
                     }
                     else
-                        System.out.println("Stato Residenza non valido!");
+                        System.out.println("Scelta non valida!");
                 } catch (Exception e) {
                     System.out.print("Stato Residenza non valido!");
                 }
@@ -814,7 +866,7 @@ public class metodiVerifiche {
             return statoResidenza;
         }
 
-        public static int verificaCapResidenza () {
+        public static int verificaCapResidenza() {
             int CAP = 0;
             while (exitMethods) {
                 System.out.print("CAP: ");
@@ -924,4 +976,112 @@ public class metodiVerifiche {
             System.out.print(IBAN);
             return IBAN;
         }
+
+    public static void verificaDatiInseritiFinale(infoCliente cliente) {
+        int scelta = 0;
+        do {
+            System.out.println("\nInserisci il numero dei possibili dati errati e/o 0 per terminare");
+            System.out.println("[0] Conferma Dati e Salva");
+            System.out.println("[1] Nome:" + cliente.getNome());
+            System.out.println("[2] Cognome:" + cliente.getCognome());
+            System.out.println("[3] CartaID:" + cliente.getCartaID());
+            System.out.println("[4] Scadenza carta:" + cliente.getCartaScadenza());
+            System.out.println("[5] Data di nascita:" + cliente.getDataDiNascita());
+            System.out.println("[6] Sesso:" + cliente.getSesso());
+            System.out.println("[7] Comune di nascita:" + cliente.getComuneNascita());
+            System.out.println("[8] Codice fiscale:" + cliente.getCodiceFiscale());
+            System.out.println("[9] Cittadinanza:" + cliente.getCittadinanza());
+            System.out.println("[10] Stato di residenza:" + cliente.getStatoResidenza());
+            System.out.println("[11] Comune di residenza:" + cliente.getComuneResidenza());
+            System.out.println("[12] Indirizzo di residenza:" + cliente.getStatoResidenza());
+            System.out.println("[13] Numero civico:" + cliente.getNumeroCivico());
+            System.out.println("[14] CAP di residenza:" + cliente.getCapResidenza());
+
+            while (exitMethods) {
+                try {
+                    scelta = Integer.parseInt(input.nextLine());
+                    if (scelta >= 0 && scelta < 15) {
+                        exitMethods = false;
+                    }
+                }
+                catch (Exception ignored) {}
+            }
+            exitMethods = true;
+            switch (scelta) {
+                //Esci
+                case 0:
+                    scelta = 0;
+                    System.out.println("I dati del cliente sono stati registrati.\n");
+                    break;
+
+                //Nome
+                case 1:
+                    cliente.setNome(verificaNomeCognome("Nome"));
+                    break;
+
+                //Cognome
+                case 2:
+                    cliente.setCognome(verificaNomeCognome("Cognome"));
+                    break;
+
+                //ID Carta
+                case 3:
+                    cliente.setCartaID(verificaCartaID());
+                    break;
+
+                //Data Scadenza Carta
+                case 4:
+                    cliente.setCartaScadenza(verificaData("Data scadenza carta"));
+                    break;
+
+                //Data di Nascita
+                case 5:
+                    cliente.setDataDiNascita(verificaData("Data di nascita"));
+                    break;
+
+                //Sesso
+                case 6:
+                    cliente.setSesso(verificaSesso());
+                    break;
+
+                case 7:
+
+                //Codice Fiscale
+                case 8:
+                    cliente.setCodiceFiscale(verificaCodiceFiscale(cliente.getNome(), cliente.getCognome(), cliente.getDataDiNascita(), cliente.getSesso(), cliente.getComuneResidenza()));
+                    break;
+
+                //Cittadinanza
+                case 9:
+                    cliente.setCittadinanza(verificaCittadinanza());
+                    break;
+
+                //Stato di Residenza
+                case 10:
+                    cliente.setStatoResidenza(verificaStatoResidenza());
+                    break;
+
+                //Comune di Residenza
+                case 11:
+                    cliente.setComuneResidenza(verificaComune("Residenza"));
+                    break;
+
+                //Indirizzo di Residenza
+                case 12:
+                    cliente.setIndirizzoResidenza(verificaIndirizzoResidenza());
+                    break;
+
+                //Numero Civico
+                case 13:
+                    cliente.setNumeroCivico(verificaNumeroCivico());
+                    break;
+
+                //CAP di Residenza
+                case 14:
+                    cliente.setCapResidenza(verificaCapResidenza());
+                    break;
+
+            }
+        }while(scelta!=0);
     }
+}
