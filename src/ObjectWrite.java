@@ -131,7 +131,7 @@ public class ObjectWrite extends JPasswordField {
         boolean conferma = true;
 
         while (conferma) {
-            System.out.println("inserisci il numero di intestatari 1-3");
+            System.out.print("\nQuanti intestatari? (1-3): ");
             try {
                 intestatari = Integer.parseInt(input.nextLine());
 
@@ -151,7 +151,7 @@ public class ObjectWrite extends JPasswordField {
         @SuppressWarnings("UnusedAssignment") contoCorrente conto = new contoCorrente();
         for (int i = 0; i < intestatari; i++) {
             if (intestatari == 1)
-                System.out.println("- Informazioni Cliente: -");
+                System.out.println("\n- Informazioni Cliente: -");
             else if (i == 0)
                 System.out.println("- Primo Intestatario: -");
             else if (i == 1)
@@ -165,13 +165,13 @@ public class ObjectWrite extends JPasswordField {
 
             String cognome = verificaNomeCognome("Cognome");
             String cartaID = verificaCartaID(); //ID riconoscitivo carta d'identità (CA00000AA) Numero Unico Nazionale
-            String cartaScadenza = verificaData("Data scadenza carta"); //Scadenza carta d'identità
+            String cartaScadenza = verificaData("Data scadenza Carta d'Identità"); //Scadenza carta d'identità
             if (cartaScadenza.equals("0")) {
                 System.out.println("Errore - la carta d'identità è scaduta. \nStai per essere reindirizzato al menu...\n");
                 TimeUnit.SECONDS.sleep(1);
             }
             else {
-                String dataDiNascita = verificaData("data di nascita");
+                String dataDiNascita = verificaData("Data di nascita");
                 //Bisogna avere almeno 18 anni
                 if (dataDiNascita.equals("0")) {
                     System.out.println("Errore - l'età del cliente non soddisfa l'età minima \nStai per essere reindirizzato al menu...");
@@ -179,7 +179,7 @@ public class ObjectWrite extends JPasswordField {
                 }
                 else {
                     String sesso = verificaSesso();
-                    String comuneNascita = verificaComune("nascita");
+                    String comuneNascita = verificaComune("Nascita");
                     String comuneResidenza = verificaComune("Residenza");
 
                     String codiceFiscale = verificaCodiceFiscale(nome, cognome, dataDiNascita, sesso, comuneNascita);

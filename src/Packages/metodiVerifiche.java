@@ -70,7 +70,7 @@ public class metodiVerifiche {
         String cartaID;
 
         do {
-            System.out.print("CartaID (CA00000AA o XA0000000):");
+            System.out.print("CartaID (CA00000AA o XA0000000): ");
             exitMethods = true;
             cartaID = input.nextLine();
             cartaID = cartaID.toUpperCase();
@@ -116,7 +116,7 @@ public class metodiVerifiche {
     }
 
     public static String verificaData(String var) {
-        System.out.print(var + "(DD.MM.YYYY): ");
+        System.out.print(var + " (DD.MM.YYYY): ");
 
         String data;
 
@@ -172,7 +172,7 @@ public class metodiVerifiche {
 
         //si verifica nel caso della scadenza carta che non sia già scduta
         LocalDateTime time = LocalDateTime.now();
-        if (var.equals("Data scadenza carta")) {
+        if (var.equals("Data scadenza Carta d'Identità")) {
             //System.out.println(time.getYear()+" "+time.getMonthValue()+" "+time.getDayOfMonth());
             if (annoReale < time.getYear() || (annoReale==time.getYear() && meseReale < time.getMonthValue()) || (annoReale==time.getYear() && meseReale==time.getMonthValue() && giornoReale < time.getDayOfYear())) {
                 data = "0";
@@ -195,7 +195,8 @@ public class metodiVerifiche {
         int scelta;
 
         while (exitMethods) {
-            System.out.println("Sei sicuro:\n[1] SI\n[2] NO");
+            System.out.println("Sei sicuro? \n[1] Sì\n[2] No");
+            System.out.print(" ➡ ");
             try {
                 scelta = Integer.parseInt(input.nextLine());
 
@@ -222,10 +223,10 @@ public class metodiVerifiche {
             String cartaSesso = "";
             int posizione = 0;
             do {
-                System.out.println("[1] Maschio;");
-                System.out.println("[2] Femmina;");
+                System.out.println("[1] Maschio");
+                System.out.println("[2] Femmina");
 
-                System.out.print("Inserisci un valore:");
+                System.out.print(" ➡ ");
                 do {
                     try {
                         posizione = Integer.parseInt(input.nextLine());
@@ -440,7 +441,8 @@ public class metodiVerifiche {
         int scelta;
 
         while (exitMethods) {
-            System.out.println("Confermi il codice fiscale generato automaticamente" + "(" + temp + ")" + ":\n1-SI\n2-NO");
+            System.out.println("Confermi il codice fiscale generato automaticamente " + "(" + temp + ")" + ":\n[1] Sì\n[2] No");
+            System.out.print(" ➡ ");
             try {
                 scelta = Integer.parseInt(input.nextLine());
 
@@ -808,7 +810,7 @@ public class metodiVerifiche {
 
         String comune = null;
         while (exitMethods) {
-            System.out.println("Comune " + var + ": (Es. Monfalcone)");
+            System.out.print("Comune " + var + " (Es. Monfalcone): ");
             try {
                 comune = input.nextLine();
                 exitMethods = false;
@@ -845,7 +847,7 @@ public class metodiVerifiche {
             String statoResidenza = "";
             while (exitMethods) {
                 System.out.println("Stato Residenza: \n[1] Italia \n[2] Altro ");
-                System.out.print("➡ ");
+                System.out.print(" ➡ ");
                 try {
                     scelta = Integer.parseInt(input.nextLine());
                     if(scelta==1) {
@@ -1038,7 +1040,7 @@ public class metodiVerifiche {
 
                 //Data Scadenza Carta
                 case 4:
-                    cliente.setCartaScadenza(verificaData("Data scadenza carta"));
+                    cliente.setCartaScadenza(verificaData("Data scadenza Carta d'Identità"));
                     break;
 
                 //Data di Nascita
