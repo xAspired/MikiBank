@@ -440,7 +440,7 @@ public class metodiVerifiche {
         int scelta;
 
         while (exitMethods) {
-            System.out.println("Confermi il dato generato automaticamente" + "(" + temp + ")" + ":\n1-SI\n2-NO");
+            System.out.println("Confermi il codice fiscale generato automaticamente" + "(" + temp + ")" + ":\n1-SI\n2-NO");
             try {
                 scelta = Integer.parseInt(input.nextLine());
 
@@ -1002,9 +1002,16 @@ public class metodiVerifiche {
                     scelta = Integer.parseInt(input.nextLine());
                     if (scelta >= 0 && scelta < 15) {
                         exitMethods = false;
+                        boolean verifica = verificaDatiInseriti();
+                        if(!verifica)
+                            exitMethods=true;
                     }
+                    else
+                        System.out.println("Inserire un valore valido.");
                 }
-                catch (Exception ignored) {}
+                catch (Exception e) {
+                    System.out.println("Inserire un valore valido.");
+                }
             }
             exitMethods = true;
             switch (scelta) {
