@@ -873,7 +873,7 @@ public class metodiVerifiche {
             while (exitMethods) {
                 System.out.print("CAP: ");
                 try {
-                    CAP = input.nextInt();
+                    CAP = Integer.parseInt(input.nextLine());
                     exitMethods = false;
                 } catch (Exception e) {
                     System.out.print("CAP non valido!");
@@ -981,7 +981,9 @@ public class metodiVerifiche {
 
     public static void verificaDatiInseritiFinale(infoCliente cliente) {
         int scelta = 0;
+        int conferma1 = 0;
         do {
+            boolean conferma = true;
             System.out.println("\nInserisci il numero dei possibili dati errati e/o 0 per terminare");
             System.out.println("[0] Conferma Dati e Salva");
             System.out.println("[1] Nome:" + cliente.getNome());
@@ -998,24 +1000,25 @@ public class metodiVerifiche {
             System.out.println("[12] Indirizzo di residenza:" + cliente.getStatoResidenza());
             System.out.println("[13] Numero civico:" + cliente.getNumeroCivico());
             System.out.println("[14] CAP di residenza:" + cliente.getCapResidenza());
+            while (conferma) {
 
-            while (exitMethods) {
                 try {
                     scelta = Integer.parseInt(input.nextLine());
-                    if (scelta >= 0 && scelta < 15) {
-                        exitMethods = false;
-                        boolean verifica = verificaDatiInseriti();
-                        if(!verifica)
-                            exitMethods=true;
-                    }
-                    else
-                        System.out.println("Inserire un valore valido.");
-                }
-                catch (Exception e) {
-                    System.out.println("Inserire un valore valido.");
+
+                    if (scelta >= 0 && scelta <= 14) {
+                        conferma = !verificaDatiInseriti();
+                        if(conferma)
+                            conferma1++;
+                    } else
+                        System.out.println("-valore non valido-");
+
+                } catch (Exception e) {
+                    //if (conferma1>0) {
+                        System.out.println("-valore non valido-");
+                    //}
                 }
             }
-            exitMethods = true;
+
             switch (scelta) {
                 //Esci
                 case 0:
