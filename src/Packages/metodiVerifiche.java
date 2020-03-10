@@ -1014,7 +1014,7 @@ public class metodiVerifiche {
 
                 } catch (Exception e) {
                     //if (conferma1>0) {
-                        System.out.println("-valore non valido-");
+                        System.out.println("Valore non valido");
                     //}
                 }
             }
