@@ -83,12 +83,16 @@ public class contoCorrente extends infoCliente implements Serializable {
         return interesse;
     }
 
+    public infoCliente[] getCointestatari() {
+        return cointestatari;
+    }
+
     @Override
     public String toString() {
         return "Conto [" +
                 "IBAN='" + IBAN + '\'' +
                 ", saldo=" + saldo +
-                ", interesse=" + interesse +
+                ", interesse=" + interesse + cointestatari +
                 ']';
     }
 }

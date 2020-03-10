@@ -4,10 +4,8 @@ package Packages;
 
 import java.io.*;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Properties;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.IntStream;
 
 //Librerie java.util
 
@@ -15,7 +13,6 @@ public class metodiVerifiche {
     static Scanner input = new Scanner(System.in);
     static boolean exitMethods = true;
     static int contoNumeroIBAN = 0;
-
 
     @SuppressWarnings("unused")
     public static float verificaIBAN() {
@@ -449,6 +446,7 @@ public class metodiVerifiche {
                 if(scelta==1) {
                     conferma=true;
                     exitMethods = false;
+                    codiceFiscale = String.valueOf(temp);
                 }
                 else if(scelta==2) {
                     conferma=false;
@@ -488,6 +486,7 @@ public class metodiVerifiche {
             } while (!exitMethods);
 
         exitMethods = true;
+
         return codiceFiscale;
     }
 
@@ -883,7 +882,7 @@ public class metodiVerifiche {
             return CAP;
         }
 
-        public static String creaIBAN() {
+        public static String creaIBAN(ArrayList<contoCorrente> contiCorrentiArray) {
 
             //Inizializzazione
             Properties prop = new Properties(System.getProperties());

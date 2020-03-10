@@ -156,6 +156,7 @@ public class infoCliente implements Serializable {
         return capResidenza;
     }
 
+
     @Override
     public String toString() {
         return "Cliente [" +

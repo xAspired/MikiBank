@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 import static Packages.metodiVerifiche.*;
 
@@ -37,6 +38,9 @@ public class ObjectWrite extends JPasswordField {
         }
 
         System.out.println("Dimensione dell'ArrayList: " + contiCorrentiArray.size() + "\n");
+        contoCorrente temp = contiCorrentiArray.get(1);
+        infoCliente[] temp1 = temp.getCointestatari();
+        System.out.println(temp1[0].getCodiceFiscale());
 
         //Fine Serializzazione e Deserializzazione
 
@@ -115,6 +119,17 @@ public class ObjectWrite extends JPasswordField {
 
     @SuppressWarnings("unused")
     private static void visualizzaInfoUtente(ArrayList<contoCorrente> contiCorrentiArray) {
+        int[] numbers = IntStream.rangeClosed(0, contiCorrentiArray.size() - 1).toArray();
+
+        try {
+            for(int i : numbers) {
+                contoCorrente verCodice = contiCorrentiArray.get(1);
+                infoCliente[] verCodiceCliente = verCodice.getCointestatari();
+                if(verCodiceCliente[i].getCodiceFiscale().equals(codiceFiscale)) {
+                    System.out.println("\n|| Attualmente tale utente possiede i seguenti conti: \n||\n|| IBAN: " + verCodice.getIBAN() + "    Proprietario: " + verCodiceCliente[0].getNome() + " " + verCodiceCliente[0].getCognome() + "\n");
+                }
+            }
+        } catch (Exception ignored) {}
     }
 
     @SuppressWarnings("unused")
@@ -200,7 +215,7 @@ public class ObjectWrite extends JPasswordField {
             }
         }
         //informazioni conto
-        String IBAN = creaIBAN();
+        String IBAN = creaIBAN(contiCorrentiArray);
         float saldo = verificaSaldo();
         float interesse = verificaInteresse();
         String tipoConto = verificaTipoConto();
@@ -208,7 +223,6 @@ public class ObjectWrite extends JPasswordField {
         return conto;
 
     }
-
     public static String loginRead(int datiLogin) {
         //Inizializzazione
         Properties prop = new Properties(System.getProperties());
