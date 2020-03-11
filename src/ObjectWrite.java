@@ -37,10 +37,10 @@ public class ObjectWrite extends JPasswordField {
             contiCorrentiArray = new ArrayList<>();
         }
 
-        System.out.println("Dimensione dell'ArrayList: " + contiCorrentiArray.size() + "\n");
-        contoCorrente temp = contiCorrentiArray.get(1);
-        infoCliente[] temp1 = temp.getCointestatari();
-        System.out.println(temp1[0].getCodiceFiscale());
+        System.out.println("Numero Conti Presenti: " + contiCorrentiArray.size() + "\n");
+//        contoCorrente temp = contiCorrentiArray.get(2);
+//        infoCliente[] temp1 = temp.getCointestatari();
+//        System.out.println(temp1[0].getCodiceFiscale());
 
         //Fine Serializzazione e Deserializzazione
 
@@ -120,13 +120,49 @@ public class ObjectWrite extends JPasswordField {
     @SuppressWarnings("unused")
     private static void visualizzaInfoUtente(ArrayList<contoCorrente> contiCorrentiArray) {
         int[] numbers = IntStream.rangeClosed(0, contiCorrentiArray.size() - 1).toArray();
+        boolean presenzaCodice = false;
+
+        //Informazioni cliente
+        String nome;
+        System.out.println("\n- Informazioni Cliente: -");
+        nome = verificaNomeCognome("Nome");
+        String cognome = verificaNomeCognome("Cognome");
+        String cartaID = verificaCartaID(); //ID riconoscitivo carta d'identità (CA00000AA) Numero Unico Nazionale
+        String cartaScadenza = verificaData("Data scadenza Carta d'Identità"); //Scadenza carta d'identità
+        String dataDiNascita = verificaData("Data di nascita");
+        String sesso = verificaSesso();
+        String comuneNascita = verificaComune("Nascita");
+        String codiceFiscale = verificaCodiceFiscale(nome, cognome, dataDiNascita, sesso, comuneNascita);
+
+        StringBuilder totaleConti = new StringBuilder();
 
         try {
             for(int i : numbers) {
-                contoCorrente verCodice = contiCorrentiArray.get(1);
+                //Si crea un oggetto temporaneo per ogni indice [i]
+                contoCorrente verCodice = contiCorrentiArray.get(i);
                 infoCliente[] verCodiceCliente = verCodice.getCointestatari();
-                if(verCodiceCliente[i].getCodiceFiscale().equals(codiceFiscale)) {
-                    System.out.println("\n|| Attualmente tale utente possiede i seguenti conti: \n||\n|| IBAN: " + verCodice.getIBAN() + "    Proprietario: " + verCodiceCliente[0].getNome() + " " + verCodiceCliente[0].getCognome() + "\n");
+                for (Packages.infoCliente infoCliente : verCodiceCliente) { /* for(int h = 0; h<verCodiceCliente.length; h++) { */
+                    if (infoCliente.getCodiceFiscale().equals(codiceFiscale))
+                        totaleConti.append("\n|| IBAN: ").append(verCodice.getIBAN()).append("    ").append("Saldo Contabile: ").append("\n");
+                }
+            }
+            if(totaleConti.length() != 0) {
+                System.out.println("\n\n|| Attualmente " + nome + " " + cognome + " possiede i seguenti conti: \n||" + totaleConti);
+                System.out.print("Stai per essere reindirizzato al menù");
+                TimeUnit.SECONDS.sleep(1);
+                System.out.print(".");
+                TimeUnit.SECONDS.sleep(1);
+                System.out.print(".");
+                TimeUnit.SECONDS.sleep(1);
+                System.out.println(".\n");
+            }
+            else {
+                System.out.print("\n\n|| " + nome + " " + cognome + " non possiede alcun conto. Cosa desidera fare? \n||\n|| [1] Creare un nuovo conto\n|| [2] Tornare al menù\n||\n|| ➡ ");
+                try {
+                    if (input.nextLine().equals("1")) {
+                        creaConto(contiCorrentiArray);
+                    }
+                } catch (Exception ignored) {
                 }
             }
         } catch (Exception ignored) {}
@@ -151,7 +187,7 @@ public class ObjectWrite extends JPasswordField {
                 intestatari = Integer.parseInt(input.nextLine());
 
                 if (intestatari == 1 || intestatari == 2 || intestatari == 3) {
-                    conferma= !verificaDatiInseriti();
+                    conferma= verificaDatiInseriti();
                 } else
                     System.out.println("-valore non valido-");
 
@@ -215,7 +251,7 @@ public class ObjectWrite extends JPasswordField {
             }
         }
         //informazioni conto
-        String IBAN = creaIBAN(contiCorrentiArray);
+        String IBAN = creaIBAN();
         float saldo = verificaSaldo();
         float interesse = verificaInteresse();
         String tipoConto = verificaTipoConto();

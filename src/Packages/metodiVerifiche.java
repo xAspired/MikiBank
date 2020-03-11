@@ -4,8 +4,10 @@ package Packages;
 
 import java.io.*;
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.IntStream;
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.Properties;
+import java.util.Scanner;
 
 //Librerie java.util
 
@@ -151,11 +153,11 @@ public class metodiVerifiche {
             giornoReale = Integer.parseInt(giorno);
             //System.out.println("giorno:"+giornoReale);
 
-            //calcolo anno bisestile
+            //Calcolo anno bisestile
             boolean bisestile=false;
             if(annoReale%400==0 || (annoReale%4==0 && annoReale%100!=0))
                 bisestile=true;
-            //calcolo mese da 30 giorni o 31 giorni
+            //Calcolo mese da 30 giorni o 31 giorni
             boolean trentaGiorni = false;
             if(meseReale==4 | meseReale==6 || meseReale==9 || meseReale==11)
                 trentaGiorni = true;
@@ -167,7 +169,7 @@ public class metodiVerifiche {
         } while (!exitMethods);
 
 
-        //si verifica nel caso della scadenza carta che non sia già scduta
+        //Si verifica nel caso della scadenza carta che non sia già scduta
         LocalDateTime time = LocalDateTime.now();
         if (var.equals("Data scadenza Carta d'Identità")) {
             //System.out.println(time.getYear()+" "+time.getMonthValue()+" "+time.getDayOfMonth());
@@ -176,7 +178,7 @@ public class metodiVerifiche {
             }
         }
 
-        //si verifica che il cliente sia maggiorenne
+        //Si verifica che il cliente sia maggiorenne
         else{
             if (time.getYear()-annoReale<18 || (time.getYear()-annoReale==18 && meseReale > time.getMonthValue()) || (time.getYear()-annoReale==18 && meseReale==time.getMonthValue() && giornoReale > time.getDayOfYear())) {
                 data = "0";
@@ -211,7 +213,7 @@ public class metodiVerifiche {
             }
         }
         exitMethods = true;
-        return conferma;
+        return !conferma;
     }
 
         public static String verificaSesso () {
@@ -438,7 +440,7 @@ public class metodiVerifiche {
         int scelta;
 
         while (exitMethods) {
-            System.out.println("Confermi il codice fiscale generato automaticamente " + "(" + temp + ")" + ":\n[1] Sì\n[2] No");
+            System.out.println("Confermi il codice fiscale generato automaticamente? " + "➡ " + temp + "" + ":\n[1] Sì\n[2] No");
             System.out.print(" ➡ ");
             try {
                 scelta = Integer.parseInt(input.nextLine());
@@ -882,7 +884,7 @@ public class metodiVerifiche {
             return CAP;
         }
 
-        public static String creaIBAN(ArrayList<contoCorrente> contiCorrentiArray) {
+        public static String creaIBAN() {
 
             //Inizializzazione
             Properties prop = new Properties(System.getProperties());
@@ -980,41 +982,36 @@ public class metodiVerifiche {
 
     public static void verificaDatiInseritiFinale(infoCliente cliente) {
         int scelta = 0;
-        int conferma1 = 0;
         do {
             boolean conferma = true;
-            System.out.println("\nInserisci il numero dei possibili dati errati e/o 0 per terminare");
-            System.out.println("[0] Conferma Dati e Salva");
-            System.out.println("[1] Nome:" + cliente.getNome());
-            System.out.println("[2] Cognome:" + cliente.getCognome());
-            System.out.println("[3] CartaID:" + cliente.getCartaID());
-            System.out.println("[4] Scadenza carta:" + cliente.getCartaScadenza());
-            System.out.println("[5] Data di nascita:" + cliente.getDataDiNascita());
-            System.out.println("[6] Sesso:" + cliente.getSesso());
-            System.out.println("[7] Comune di nascita:" + cliente.getComuneNascita());
-            System.out.println("[8] Codice fiscale:" + cliente.getCodiceFiscale());
-            System.out.println("[9] Cittadinanza:" + cliente.getCittadinanza());
-            System.out.println("[10] Stato di residenza:" + cliente.getStatoResidenza());
-            System.out.println("[11] Comune di residenza:" + cliente.getComuneResidenza());
-            System.out.println("[12] Indirizzo di residenza:" + cliente.getStatoResidenza());
-            System.out.println("[13] Numero civico:" + cliente.getNumeroCivico());
-            System.out.println("[14] CAP di residenza:" + cliente.getCapResidenza());
-            while (conferma) {
+            System.out.println("\n|| Inserisci il numero corrispondente ai possibili dati errati e/o 0 per terminare\n||");
+            System.out.println("|| [0] Conferma Dati e Salva");
+            System.out.println("|| [1] Nome: " + cliente.getNome());
+            System.out.println("|| [2] Cognome: " + cliente.getCognome());
+            System.out.println("|| [3] CartaID: " + cliente.getCartaID());
+            System.out.println("|| [4] Scadenza carta: " + cliente.getCartaScadenza());
+            System.out.println("|| [5] Data di nascita: " + cliente.getDataDiNascita());
+            System.out.println("|| [6] Sesso: " + cliente.getSesso());
+            System.out.println("|| [7] Comune di nascita: " + cliente.getComuneNascita());
+            System.out.println("|| [8] Codice fiscale: " + cliente.getCodiceFiscale());
+            System.out.println("|| [9] Cittadinanza: " + cliente.getCittadinanza());
+            System.out.println("|| [10] Stato di residenza: " + cliente.getStatoResidenza());
+            System.out.println("|| [11] Comune di residenza: " + cliente.getComuneResidenza());
+            System.out.println("|| [12] Indirizzo di residenza: " + cliente.getStatoResidenza());
+            System.out.println("|| [13] Numero civico: " + cliente.getNumeroCivico());
+            System.out.println("|| [14] CAP di residenza: " + cliente.getCapResidenza());
 
+            while (conferma) {
                 try {
                     scelta = Integer.parseInt(input.nextLine());
 
                     if (scelta >= 0 && scelta <= 14) {
-                        conferma = !verificaDatiInseriti();
-                        if(conferma)
-                            conferma1++;
+                        conferma = verificaDatiInseriti();
                     } else
                         System.out.println("-valore non valido-");
 
                 } catch (Exception e) {
-                    //if (conferma1>0) {
                         System.out.println("Valore non valido");
-                    //}
                 }
             }
 
