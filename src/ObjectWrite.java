@@ -122,7 +122,6 @@ public class ObjectWrite extends JPasswordField {
         int[] numbers = IntStream.rangeClosed(0, contiCorrentiArray.size() - 1).toArray();
         boolean presenzaCodice = false;
 
-        //Informazioni cliente
         String nome;
         String codiceFiscale="";
         System.out.println("\n- Informazioni Cliente: -");
@@ -146,6 +145,8 @@ public class ObjectWrite extends JPasswordField {
                 codiceFiscale = verificaCodiceFiscale(nome, cognome, dataDiNascita, sesso, comuneNascita);
             }
         }
+        //Informazioni cliente
+
         StringBuilder totaleConti = new StringBuilder();
 
         try {
@@ -153,6 +154,8 @@ public class ObjectWrite extends JPasswordField {
                 //Si crea un oggetto temporaneo per ogni indice [i]
                 contoCorrente verCodice = contiCorrentiArray.get(i);
                 infoCliente[] verCodiceCliente = verCodice.getCointestatari();
+
+                //noinspection ForLoopReplaceableByForEach
                 for(int h = 0; h<verCodiceCliente.length; h++) { /* for(int h = 0; h<verCodiceCliente.length; h++) { */
                     if (verCodiceCliente[h].getCodiceFiscale().equals(codiceFiscale))
                         totaleConti.append("\n|| IBAN: ").append(verCodice.getIBAN()).append("    ").append("Saldo Contabile: ").append("\n");
