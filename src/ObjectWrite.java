@@ -51,7 +51,7 @@ public class ObjectWrite extends JPasswordField {
         do {
             boolean whileStatement = true;
             while (whileStatement) {
-                System.out.println("MIKIBANK - Oltre le Taglie");
+                System.out.println("\t\tMIKIBANK");
                 System.out.println("[0] Uscita dal programma");
                 System.out.println("[1] Creazione di un conto corrente");
                 System.out.println("[2] Visualizzazione informazione conto corrente");
@@ -118,22 +118,34 @@ public class ObjectWrite extends JPasswordField {
     }
 
     @SuppressWarnings("unused")
-    private static void visualizzaInfoUtente(ArrayList<contoCorrente> contiCorrentiArray) {
+    private static void visualizzaInfoUtente(ArrayList<contoCorrente> contiCorrentiArray) throws InterruptedException {
         int[] numbers = IntStream.rangeClosed(0, contiCorrentiArray.size() - 1).toArray();
         boolean presenzaCodice = false;
 
         //Informazioni cliente
         String nome;
+        String codiceFiscale="";
         System.out.println("\n- Informazioni Cliente: -");
         nome = verificaNomeCognome("Nome");
         String cognome = verificaNomeCognome("Cognome");
         String cartaID = verificaCartaID(); //ID riconoscitivo carta d'identità (CA00000AA) Numero Unico Nazionale
         String cartaScadenza = verificaData("Data scadenza Carta d'Identità"); //Scadenza carta d'identità
-        String dataDiNascita = verificaData("Data di nascita");
-        String sesso = verificaSesso();
-        String comuneNascita = verificaComune("Nascita");
-        String codiceFiscale = verificaCodiceFiscale(nome, cognome, dataDiNascita, sesso, comuneNascita);
-
+        if (cartaScadenza.equals("0")) {
+            System.out.println("Errore - la carta d'identità è scaduta. \nStai per essere reindirizzato al menu...\n");
+            TimeUnit.SECONDS.sleep(1);
+        }
+        else {
+            String dataDiNascita = verificaData("Data di nascita");
+            //Bisogna avere almeno 18 anni
+            if (dataDiNascita.equals("0")) {
+                System.out.println("Errore - l'età del cliente non soddisfa l'età minima \nStai per essere reindirizzato al menu...");
+                TimeUnit.SECONDS.sleep(1);
+            } else {
+                String sesso = verificaSesso();
+                String comuneNascita = verificaComune("Nascita");
+                codiceFiscale = verificaCodiceFiscale(nome, cognome, dataDiNascita, sesso, comuneNascita);
+            }
+        }
         StringBuilder totaleConti = new StringBuilder();
 
         try {
@@ -141,8 +153,8 @@ public class ObjectWrite extends JPasswordField {
                 //Si crea un oggetto temporaneo per ogni indice [i]
                 contoCorrente verCodice = contiCorrentiArray.get(i);
                 infoCliente[] verCodiceCliente = verCodice.getCointestatari();
-                for (Packages.infoCliente infoCliente : verCodiceCliente) { /* for(int h = 0; h<verCodiceCliente.length; h++) { */
-                    if (infoCliente.getCodiceFiscale().equals(codiceFiscale))
+                for(int h = 0; h<verCodiceCliente.length; h++) { /* for(int h = 0; h<verCodiceCliente.length; h++) { */
+                    if (verCodiceCliente[h].getCodiceFiscale().equals(codiceFiscale))
                         totaleConti.append("\n|| IBAN: ").append(verCodice.getIBAN()).append("    ").append("Saldo Contabile: ").append("\n");
                 }
             }
