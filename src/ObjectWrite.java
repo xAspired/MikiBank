@@ -185,6 +185,54 @@ public class ObjectWrite extends JPasswordField {
 
     @SuppressWarnings("unused")
     private static void visualizzaInfoConto(ArrayList<contoCorrente> contiCorrentiArray) {
+        int[] numbers = IntStream.rangeClosed(0, contiCorrentiArray.size() - 1).toArray();
+        StringBuilder resocontoConto = new StringBuilder();
+
+        System.out.println("\n- Informazioni Conto: -");
+        System.out.print("Inserisci l'IBAN: ");
+
+        String iban = input.nextLine();
+
+        try {
+            for (int i : numbers) {
+                //Si crea un oggetto temporaneo per ogni indice [i]
+                contoCorrente verCodice = contiCorrentiArray.get(i);
+                infoCliente[] verCodiceCliente = verCodice.getCointestatari();
+
+                    if(verCodice.getIBAN().equalsIgnoreCase(iban)) {
+                        for (int h = 0; h < verCodiceCliente.length; h++) {
+                            resocontoConto.append("\n|| Cointestatario ").append(h + 1).append(": ");
+                            if(verCodiceCliente[h].getSesso().equalsIgnoreCase("F"))
+                                resocontoConto.append("\uD83D\uDE4E\uD83C\uDFFC\u200D♀ ");
+                            else
+                                resocontoConto.append("\uD83D\uDE4E\uD83C\uDFFD\u200D♂ ");
+                            resocontoConto.append(verCodiceCliente[h].getNome()).append(" ").append(verCodiceCliente[h].getCognome()).append("    [").append(verCodiceCliente[h].getDataDiNascita()).append("]");
+                        }
+                        resocontoConto.append("\n||\n|| Valuta: ").append("    ").append("Saldo contabile: ");
+                    }
+
+            }
+
+            if(resocontoConto.length() != 0) {
+                System.out.println("\n\n|| L'IBAN " + iban +  " possiede le seguenti caratteristiche: \n||" + resocontoConto);
+                System.out.print("\nStai per essere reindirizzato al menù");
+                TimeUnit.SECONDS.sleep(1);
+                System.out.print(".");
+                TimeUnit.SECONDS.sleep(1);
+                System.out.print(".");
+                TimeUnit.SECONDS.sleep(1);
+                System.out.println(".\n");
+            }
+            else {
+                System.out.print("\n\n|| L'IBAN " + iban + " non è stato trovato. Cosa desidera fare? \n||\n|| [1] Creare un nuovo conto\n|| [2] Tornare al menù\n||\n|| ➡ ");
+                try {
+                    if (input.nextLine().equals("1")) {
+                        creaConto(contiCorrentiArray);
+                    }
+                } catch (Exception ignored) {}
+            }
+        } catch (Exception ignored){}
+
     }
 
     @SuppressWarnings("unused")

@@ -974,7 +974,7 @@ public class metodiVerifiche {
             ex.printStackTrace();
         }
 
-        System.out.print(IBAN);
+        System.out.println(IBAN);
         return IBAN;
     }
 
@@ -996,23 +996,10 @@ public class metodiVerifiche {
             System.out.println("|| [9] Cittadinanza: " + cliente.getCittadinanza());
             System.out.println("|| [10] Stato di residenza: " + cliente.getStatoResidenza());
             System.out.println("|| [11] Comune di residenza: " + cliente.getComuneResidenza());
-            System.out.println("|| [12] Indirizzo di residenza: " + cliente.getStatoResidenza());
+            System.out.println("|| [12] Indirizzo di residenza: " + cliente.getIndirizzoResidenza());
             System.out.println("|| [13] Numero civico: " + cliente.getNumeroCivico());
             System.out.println("|| [14] CAP di residenza: " + cliente.getCapResidenza());
-
-            while (conferma) {
-                try {
-                    scelta = Integer.parseInt(input.nextLine());
-
-                    if (scelta >= 0 && scelta <= 14) {
-                        conferma = verificaDatiInseriti();
-                    } else
-                        System.out.println("-valore non valido-");
-
-                } catch (Exception e) {
-                        System.out.println("Valore non valido");
-                }
-            }
+            System.out.print(" ➡ ");
 
             switch (scelta) {
                 //Esci
