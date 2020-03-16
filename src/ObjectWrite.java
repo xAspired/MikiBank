@@ -318,7 +318,10 @@ public class ObjectWrite extends JPasswordField {
         float saldo = verificaSaldo();
         float interesse = verificaInteresse();
         String tipoConto = verificaTipoConto();
-        conto = new contoCorrente(IBAN, saldo, interesse, cointestatari, tipoConto);
+        float saldoValuta = 0;
+        float saldoContabile = 0;
+        String [] listaMovimenti = new String [10];
+        conto = new contoCorrente(IBAN, saldoValuta, saldoContabile, listaMovimenti, interesse, cointestatari, tipoConto);
         return conto;
 
     }
