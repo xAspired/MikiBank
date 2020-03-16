@@ -21,26 +21,23 @@ public class ObjectWrite extends JPasswordField {
 
     public static void main(String[] args) throws Exception {
 
-        ArrayList<contoCorrente> contiCorrentiArray;
-        File file = new File("contiCorrenti");
-        if (file.exists()) {
-            FileInputStream fileIn = new FileInputStream(file);
-            ObjectInputStream fileObjIn = new ObjectInputStream(fileIn);
+            ArrayList<contoCorrente> contiCorrentiArray;
+            File file = new File("contiCorrenti");
+            if (file.exists()) {
+                FileInputStream fileIn = new FileInputStream(file);
+                ObjectInputStream fileObjIn = new ObjectInputStream(fileIn);
 
-            //noinspection unchecked
-            contiCorrentiArray = (ArrayList<contoCorrente>) fileObjIn.readObject();
+                //noinspection unchecked
+                contiCorrentiArray = (ArrayList<contoCorrente>) fileObjIn.readObject();
 
-            fileObjIn.close();
-            fileIn.close();
-        }
-        else {
-            contiCorrentiArray = new ArrayList<>();
-        }
+
+                fileObjIn.close();
+                fileIn.close();
+            } else {
+                contiCorrentiArray = new ArrayList<>();
+            }
 
         System.out.println("Numero Conti Presenti: " + contiCorrentiArray.size() + "\n");
-//        contoCorrente temp = contiCorrentiArray.get(2);
-//        infoCliente[] temp1 = temp.getCointestatari();
-//        System.out.println(temp1[0].getCodiceFiscale());
 
         //Fine Serializzazione e Deserializzazione
 
@@ -117,6 +114,11 @@ public class ObjectWrite extends JPasswordField {
     private static void chiederePresito(ArrayList<contoCorrente> contiCorrentiArray) {
     }
 
+    /*
+     * =========================================================
+     * Visualizza Info Utente
+     * =========================================================
+     */
     @SuppressWarnings("unused")
     private static void visualizzaInfoUtente(ArrayList<contoCorrente> contiCorrentiArray) throws InterruptedException {
         int[] numbers = IntStream.rangeClosed(0, contiCorrentiArray.size() - 1).toArray();
@@ -183,6 +185,11 @@ public class ObjectWrite extends JPasswordField {
         } catch (Exception ignored) {}
     }
 
+    /*
+     * =========================================================
+     * Visualizza Info Conto
+     * =========================================================
+     */
     @SuppressWarnings("unused")
     private static void visualizzaInfoConto(ArrayList<contoCorrente> contiCorrentiArray) {
         int[] numbers = IntStream.rangeClosed(0, contiCorrentiArray.size() - 1).toArray();
@@ -214,14 +221,18 @@ public class ObjectWrite extends JPasswordField {
             }
 
             if(resocontoConto.length() != 0) {
-                System.out.println("\n\n|| L'IBAN " + iban +  " possiede le seguenti caratteristiche: \n||" + resocontoConto);
-                System.out.print("\nStai per essere reindirizzato al menù");
-                TimeUnit.SECONDS.sleep(1);
-                System.out.print(".");
-                TimeUnit.SECONDS.sleep(1);
-                System.out.print(".");
-                TimeUnit.SECONDS.sleep(1);
-                System.out.println(".\n");
+                System.out.println("=========================================================\n               " + iban + "\n=========================================================\n" + resocontoConto);
+                System.out.println("\n\n** Cosa vuole fare? **\n[1] Depositare\n[2] Prelevare\n[3] Tornare al menù");
+                System.out.print(" ➡ ");
+                if(input.nextInt() == 3) {
+                    System.out.print("\n\nSta per essere reindirizzato al menù");
+                    TimeUnit.SECONDS.sleep(1);
+                    System.out.print(".");
+                    TimeUnit.SECONDS.sleep(1);
+                    System.out.print(".");
+                    TimeUnit.SECONDS.sleep(1);
+                    System.out.println(".\n");
+                }
             }
             else {
                 System.out.print("\n\n|| L'IBAN " + iban + " non è stato trovato. Cosa desidera fare? \n||\n|| [1] Creare un nuovo conto\n|| [2] Tornare al menù\n||\n|| ➡ ");
@@ -235,6 +246,11 @@ public class ObjectWrite extends JPasswordField {
 
     }
 
+    /*
+     * =========================================================
+     * Crea Conto
+     * =========================================================
+     */
     @SuppressWarnings("unused")
     private static contoCorrente creaConto(ArrayList<contoCorrente> contiCorrentiArray) throws InterruptedException {
         String dataContabile;
@@ -424,6 +440,7 @@ public class ObjectWrite extends JPasswordField {
             System.out.println("|| Per il login eseguire il programma su CMD ||\n");
         }
     }
+
 
 }
 
