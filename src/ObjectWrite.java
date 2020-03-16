@@ -191,7 +191,7 @@ public class ObjectWrite extends JPasswordField {
      * =========================================================
      */
     @SuppressWarnings("unused")
-    private static void visualizzaInfoConto(ArrayList<contoCorrente> contiCorrentiArray) {
+    private static void visualizzaInfoConto(ArrayList<contoCorrente> contiCorrentiArray) throws InterruptedException {
         int[] numbers = IntStream.rangeClosed(0, contiCorrentiArray.size() - 1).toArray();
         StringBuilder resocontoConto = new StringBuilder();
 
@@ -200,7 +200,7 @@ public class ObjectWrite extends JPasswordField {
 
         String iban = input.nextLine();
 
-        try {
+        //try {
             for (int i : numbers) {
                 //Si crea un oggetto temporaneo per ogni indice [i]
                 contoCorrente verCodice = contiCorrentiArray.get(i);
@@ -224,7 +224,7 @@ public class ObjectWrite extends JPasswordField {
                 System.out.println("=========================================================\n               " + iban + "\n=========================================================\n" + resocontoConto);
                 System.out.println("\n\n** Cosa vuole fare? **\n[1] Depositare\n[2] Prelevare\n[3] Tornare al menù");
                 System.out.print(" ➡ ");
-                if(input.nextInt() == 3) {
+                if(Integer.parseInt(input.nextLine()) == 3) {
                     System.out.print("\n\nSta per essere reindirizzato al menù");
                     TimeUnit.SECONDS.sleep(1);
                     System.out.print(".");
@@ -242,7 +242,7 @@ public class ObjectWrite extends JPasswordField {
                     }
                 } catch (Exception ignored) {}
             }
-        } catch (Exception ignored){}
+        //} catch (Exception ignored){}
 
     }
 

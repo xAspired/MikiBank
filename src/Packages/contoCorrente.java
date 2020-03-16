@@ -3,6 +3,8 @@ import java.io.Serializable;
 
 @SuppressWarnings("unused")
 public class contoCorrente extends infoCliente implements Serializable {
+    private static final long serialVersionUID = -1662022300670224623L;
+
     //vettore di massimo 3 cointestatari
     infoCliente[] cointestatari = new infoCliente[3];
     /*
@@ -72,14 +74,6 @@ public class contoCorrente extends infoCliente implements Serializable {
         return IBAN;
     }
 
-    public void setSaldo(float saldo) {
-        this.saldo = saldo;
-    }
-
-    public float getSaldo() {
-        return saldo;
-    }
-
     public void setInteresse(float interesse) {
         this.interesse = interesse;
     }
@@ -88,8 +82,29 @@ public class contoCorrente extends infoCliente implements Serializable {
         return interesse;
     }
 
+    public float getSaldoValuta() {
+        return saldoValuta;
+    }
+
+    public void setSaldoValuta(float saldoValuta) {
+        this.saldoValuta = saldoValuta;
+    }
+
+    public void setSaldoContabile(float saldoContabile) {
+        this.saldoContabile = saldoContabile;
+    }
+
+    public float getSaldoContabile() {
+        return saldoContabile;
+    }
+
     public infoCliente[] getCointestatari() {
         return cointestatari;
+    }
+
+
+    public String[] getListaMovimenti(){
+        return listaMovimenti;
     }
 
     @Override
