@@ -39,7 +39,7 @@ public class metodiVerifiche {
     }
 
 
-        public static String verificaNomeCognome(String var) {
+    public static String verificaNomeCognome(String var) {
         System.out.print(var + ": ");
         String nome;
         exitMethods = false;
@@ -216,49 +216,48 @@ public class metodiVerifiche {
         return !conferma;
     }
 
-        public static String verificaSesso () {
-            System.out.println("Sesso:");
+    public static String verificaSesso () {
+        System.out.println("Sesso:");
 
-            String cartaSesso = "";
-            int posizione = 0;
+        String cartaSesso = "";
+        int posizione = 0;
+        do {
+            System.out.println("[1] Maschio");
+            System.out.println("[2] Femmina");
+            System.out.print(" ➡ ");
             do {
-                System.out.println("[1] Maschio");
-                System.out.println("[2] Femmina");
-
-                System.out.print(" ➡ ");
-                do {
-                    try {
-                        posizione = Integer.parseInt(input.nextLine());
-                        if (posizione == 1 || posizione == 2) {
-                            exitMethods = false;
-                        } else System.out.println("Il valore inserito non è valido - numero sbagliato;");
-                    } catch (Exception e) {
-                        System.out.println("Il valore inserito non è valido;");
-                    }
-                } while (exitMethods);
-                exitMethods = true;
-
-                if (posizione == 1 || posizione == 2)
-                    switch (posizione) {
-                        case 1:
-                            cartaSesso = "M";
-                            exitMethods = true;
-                            break;
-                        case 2:
-                            cartaSesso = "F";
-                            exitMethods = true;
-                            break;
-                        default:
-                            System.out.println("Il valore inserito non è valido!");
-                    }
-                else System.out.println("Il valore inserito non è valido!");
-
-
-            } while (!exitMethods);
-
+                try {
+                    posizione = Integer.parseInt(input.nextLine());
+                    if (posizione == 1 || posizione == 2) {
+                        exitMethods = false;
+                    } else System.out.println("Il valore inserito non è valido - numero sbagliato;");
+                } catch (Exception e) {
+                    System.out.println("Il valore inserito non è valido;");
+                }
+            } while (exitMethods);
             exitMethods = true;
-            return cartaSesso;
-        }
+
+            if (posizione == 1 || posizione == 2)
+                switch (posizione) {
+                case 1:
+                    cartaSesso = "M";
+                    exitMethods = true;
+                    break;
+                    case 2:
+                        cartaSesso = "F";
+                        exitMethods = true;
+                        break;
+                    default:
+                        System.out.println("Il valore inserito non è valido!");
+                    }
+            else System.out.println("Il valore inserito non è valido!");
+
+
+        } while (!exitMethods);
+
+        exitMethods = true;
+        return cartaSesso;
+    }
 
     public static String verificaCodiceFiscale (String nome, String cognome, String dataDiNascita, String sesso, String comune){
         nome = nome.toUpperCase();
@@ -694,98 +693,98 @@ public class metodiVerifiche {
 
     }
 
-        public static String verificaCittadinanza () {
-            String cittadinanza = null;
-            while (exitMethods) {
-                System.out.print("Cittadinanza: ");
-                try {
-                    cittadinanza = input.nextLine();
-                    exitMethods = !cittadinanza.equalsIgnoreCase("Italiano") && !cittadinanza.equalsIgnoreCase("Italiana");
+    public static String verificaCittadinanza () {
+        String cittadinanza = null;
+        while (exitMethods) {
+            System.out.print("Cittadinanza: ");
+            try {
+                cittadinanza = input.nextLine();
+                exitMethods = !cittadinanza.equalsIgnoreCase("Italiano") && !cittadinanza.equalsIgnoreCase("Italiana");
 
-                } catch (Exception e) {
-                    System.out.print("Cittadinanza non valida!");
-                }
+            } catch (Exception e) {
+                System.out.print("Cittadinanza non valida!");
             }
-
-            exitMethods = true;
-            return cittadinanza;
         }
 
-        //Via 0, Viale 0, Rotonda 0, Piazza 0, Vicolo 0
-        public static String verificaIndirizzoResidenza () {
-            String indirizzoResidenza = "";
-            while (exitMethods) {
-                try {
-                    System.out.print("Indirizzo Residenza (Via/Viale/Rotonda/Piazza/Vicolo Roma): ");
-                    indirizzoResidenza = input.nextLine();
-                        if(indirizzoResidenza.charAt(0) == 'V') {
-                            if(indirizzoResidenza.charAt(1) == 'i') {
-                                if(indirizzoResidenza.charAt(2) == 'a') {
-                                    if(indirizzoResidenza.charAt(3) == ' ') {
+        exitMethods = true;
+        return cittadinanza;
+    }
+
+    //Via 0, Viale 0, Rotonda 0, Piazza 0, Vicolo 0
+    public static String verificaIndirizzoResidenza () {
+        String indirizzoResidenza = "";
+        while (exitMethods) {
+            try {
+                System.out.print("Indirizzo Residenza (Via/Viale/Rotonda/Piazza/Vicolo Roma): ");
+                indirizzoResidenza = input.nextLine();
+                if(indirizzoResidenza.charAt(0) == 'V') {
+                    if(indirizzoResidenza.charAt(1) == 'i') {
+                        if(indirizzoResidenza.charAt(2) == 'a') {
+                            if(indirizzoResidenza.charAt(3) == ' ') {
+                                exitMethods = false;
+                                break;
+                            }
+                            else if(indirizzoResidenza.charAt(3) == 'l') {
+                                if(indirizzoResidenza.charAt(4) == 'e') {
+                                    exitMethods = false;
+                                    break;
+                                }
+                            }
+                        }
+                        else if(indirizzoResidenza.charAt(2) == 'c') {
+                            if(indirizzoResidenza.charAt(3) == 'o') {
+                                if(indirizzoResidenza.charAt(4) == 'l') {
+                                    if(indirizzoResidenza.charAt(5) == 'o') {
                                         exitMethods = false;
                                         break;
                                     }
-                                    else if(indirizzoResidenza.charAt(3) == 'l') {
-                                        if(indirizzoResidenza.charAt(4) == 'e') {
+                                }
+                            }
+                        }
+                    }
+
+                }
+                else if(indirizzoResidenza.charAt(0) == 'R') {
+                    if(indirizzoResidenza.charAt(1) == 'o') {
+                        if(indirizzoResidenza.charAt(2) == 't') {
+                            if(indirizzoResidenza.charAt(3) == 'o') {
+                                if(indirizzoResidenza.charAt(4) == 'n') {
+                                    if(indirizzoResidenza.charAt(5) == 'd') {
+                                        if(indirizzoResidenza.charAt(6) == 'a') {
                                             exitMethods = false;
                                             break;
                                         }
                                     }
                                 }
-                                else if(indirizzoResidenza.charAt(2) == 'c') {
-                                    if(indirizzoResidenza.charAt(3) == 'o') {
-                                        if(indirizzoResidenza.charAt(4) == 'l') {
-                                            if(indirizzoResidenza.charAt(5) == 'o') {
-                                                exitMethods = false;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                        }
-                        else if(indirizzoResidenza.charAt(0) == 'R') {
-                            if(indirizzoResidenza.charAt(1) == 'o') {
-                                if(indirizzoResidenza.charAt(2) == 't') {
-                                    if(indirizzoResidenza.charAt(3) == 'o') {
-                                        if(indirizzoResidenza.charAt(4) == 'n') {
-                                            if(indirizzoResidenza.charAt(5) == 'd') {
-                                                if(indirizzoResidenza.charAt(6) == 'a') {
-                                                    exitMethods = false;
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
                             }
                         }
-                        else if(indirizzoResidenza.charAt(0) == 'P') {
-                            if(indirizzoResidenza.charAt(1) == 'i') {
-                                if(indirizzoResidenza.charAt(2) == 'a') {
-                                    if(indirizzoResidenza.charAt(3) == 'z') {
-                                        if(indirizzoResidenza.charAt(4) == 'z') {
-                                            if(indirizzoResidenza.charAt(5) == 'a') {
-                                                exitMethods = false;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        else if(exitMethods) {
-                            System.out.println("Errore Interno: 12x4 | Verificare le maiuscole!"); //L'utente non ha inserito bene i dati
-                        }
-                } catch (Exception e) {
-                    indirizzoResidenza = " ";
-                    System.out.print("Indirizzo non valido!");
+                    }
                 }
+                else if(indirizzoResidenza.charAt(0) == 'P') {
+                    if(indirizzoResidenza.charAt(1) == 'i') {
+                        if(indirizzoResidenza.charAt(2) == 'a') {
+                            if(indirizzoResidenza.charAt(3) == 'z') {
+                                if(indirizzoResidenza.charAt(4) == 'z') {
+                                    if(indirizzoResidenza.charAt(5) == 'a') {
+                                        exitMethods = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else if(exitMethods) {
+                    System.out.println("Errore Interno: 12x4 | Verificare le maiuscole!"); //L'utente non ha inserito bene i dati
+                }
+            } catch (Exception e) {
+                indirizzoResidenza = " ";
+                System.out.print("Indirizzo non valido!");
             }
-            exitMethods = true;
-            return indirizzoResidenza;
         }
+        exitMethods = true;
+        return indirizzoResidenza;
+    }
 
 
     public static int verificaNumeroCivico () {
@@ -843,142 +842,142 @@ public class metodiVerifiche {
         return comune;
     }
 
-        public static String verificaStatoResidenza () {
-            int scelta;
-            String statoResidenza = "";
-            while (exitMethods) {
-                System.out.println("Stato Residenza: \n[1] Italia \n[2] Altro ");
-                System.out.print(" ➡ ");
-                try {
-                    scelta = Integer.parseInt(input.nextLine());
-                    if(scelta==1) {
-                        statoResidenza="Italia";
-                        exitMethods = false;
-                    }
-                    else if(scelta==2) {
-                        statoResidenza="Altro";
-                        exitMethods = false;
-                    }
-                    else
-                        System.out.println("Scelta non valida!");
-                } catch (Exception e) {
-                    System.out.print("Stato Residenza non valido!");
-                }
-            }
-            exitMethods = true;
-            return statoResidenza;
-        }
-
-        public static int verificaCapResidenza() {
-            int CAP = 0;
-            while (exitMethods) {
-                System.out.print("CAP: ");
-                try {
-                    CAP = Integer.parseInt(input.nextLine());
-                    exitMethods = false;
-                } catch (Exception e) {
-                    System.out.print("CAP non valido!");
-                }
-            }
-            exitMethods = true;
-            return CAP;
-        }
-
-        public static String creaIBAN() {
-
-            //Inizializzazione
-            Properties prop = new Properties(System.getProperties());
-            InputStream input = null;
-
+    public static String verificaStatoResidenza () {
+        int scelta;
+        String statoResidenza = "";
+        while (exitMethods) {
+            System.out.println("Stato Residenza: \n[1] Italia \n[2] Altro ");
+            System.out.print(" ➡ ");
             try {
-                //Assegno alla variabile Input il contenuto di ciò che vi è all'interno del File Config
-                input = new FileInputStream("resources/config.properties");
-
-                //Carico il file
-                prop.load(input);
-
-                //Prendo in considerazione il dato all'interno del File
-                try {
-
-                    contoNumeroIBAN = Integer.parseInt(prop.getProperty("contoNumeroIBAN"));
-                } catch (Exception ignored) {
+                scelta = Integer.parseInt(input.nextLine());
+                if(scelta==1) {
+                    statoResidenza="Italia";
+                    exitMethods = false;
                 }
+                else if(scelta==2) {
+                    statoResidenza="Altro";
+                    exitMethods = false;
+                }
+                else
+                    System.out.println("Scelta non valida!");
+            } catch (Exception e) {
+                System.out.print("Stato Residenza non valido!");
+            }
+        }
+        exitMethods = true;
+        return statoResidenza;
+    }
 
+    public static int verificaCapResidenza() {
+        int CAP = 0;
+        while (exitMethods) {
+            System.out.print("CAP: ");
+            try {
+                CAP = Integer.parseInt(input.nextLine());
+                exitMethods = false;
+            } catch (Exception e) {
+                System.out.print("CAP non valido!");
             }
-            //Gestione di eventuali errori per la lettura del File
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
+        }
+        exitMethods = true;
+        return CAP;
+    }
+
+    public static String creaIBAN() {
+
+        //Inizializzazione
+        Properties prop = new Properties(System.getProperties());
+        InputStream input = null;
+
+        try {
+            //Assegno alla variabile Input il contenuto di ciò che vi è all'interno del File Config
+            input = new FileInputStream("resources/config.properties");
+
+            //Carico il file
+            prop.load(input);
+
+            //Prendo in considerazione il dato all'interno del File
+            try {
+
+                contoNumeroIBAN = Integer.parseInt(prop.getProperty("contoNumeroIBAN"));
+            } catch (Exception ignored) {}
+
+        }
+        //Gestione di eventuali errori per la lettura del File
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        /*
+         * Il finally racchiude un pezzo di codice che dovrà essere eseguito a
+         * prescindere dal fatto che il codice nel try abbia generato o meno errori
+         */ finally {
+             if (input != null) {
+                 try {
+                     //Bisogna chiudere la lettura del File
+                     input.close();
+                 } catch (IOException e) {
+                     e.printStackTrace();
+                 }
+             }
+         }
+
+         //Numero Conto Corrente (12 Cifre)
+
+        String IBAN = "IT60X";
+
+         //Limite minimo e massimo (5 Cifre)
+        IBAN += 10000 + (int) (Math.random() * ((19999 - 10000) + 1)); //Codice ABI > 5 Cifre
+        IBAN += 10000 + (int) (Math.random() * ((19999 - 10000) + 1)); //Codice CAB > 5 Cifre
+
+        //noinspection ConstantConditions (Serve a togliere solamente la sottolineatura fastidiosa)
+        if (contoNumeroIBAN < 1000000000000L) {
+
+            String IBANchar = "" + contoNumeroIBAN;
+            StringBuilder zero = new StringBuilder("0");
+
+            //Numero Conto Corrente
+            contoNumeroIBAN++;
+
 
             /*
-             * Il finally racchiude un pezzo di codice che dovrà essere eseguito a
-             * prescindere dal fatto che il codice nel try abbia generato o meno errori
-             */ finally {
-                if (input != null) {
-                    try {
-                        //Bisogna chiudere la lettura del File
-                        input.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            //Numero Conto Corrente (12 Cifre)
-
-            String IBAN = "IT60X";
-
-            //Limite minimo e massimo (5 Cifre)
-            IBAN += 10000 + (int) (Math.random() * ((19999 - 10000) + 1)); //Codice ABI > 5 Cifre
-            IBAN += 10000 + (int) (Math.random() * ((19999 - 10000) + 1)); //Codice CAB > 5 Cifre
-
-            //noinspection ConstantConditions (Serve a togliere solamente la sottolineatura fastidiosa)
-            if (contoNumeroIBAN < 1000000000000L) {
-
-                String IBANchar = "" + contoNumeroIBAN;
-                StringBuilder zero = new StringBuilder("0");
-
-                //Numero Conto Corrente
-                contoNumeroIBAN++;
+             *  Aggiungo uno zero fino a formare una stringa di 12 cifre
+             *  (compreso il numero del conto salvato sul file)
+             *
+             *
+             *  for(int i = IBANchar.length(); i<11; i++)
+             *      zero.append("0");
+             */
+            zero.append("0".repeat(Math.max(0, 11 - IBANchar.length())));
 
 
-                /*
-                 *  Aggiungo uno zero fino a formare una stringa di 12 cifre
-                 *  (compreso il numero del conto salvato sul file)
-                 *
-                 *
-                 *  for(int i = IBANchar.length(); i<11; i++)
-                 *      zero.append("0");
-                 */
-                zero.append("0".repeat(Math.max(0, 11 - IBANchar.length())));
+            //Aggiunta all'IBAN degli 0 + il numero effettivo del conto
+            IBAN += zero;
+            IBAN += contoNumeroIBAN;
+        } else
+            System.out.print("Errore Interno: 14x0"); //Limite massimo IBAN raggiunto
 
 
-                //Aggiunta all'IBAN degli 0 + il numero effettivo del conto
-                IBAN += zero;
-                IBAN += contoNumeroIBAN;
-            } else
-                System.out.print("Errore Interno: 14x0"); //Limite massimo IBAN raggiunto
+        //Scrittura su File del numero corrente di IBAN
+        try {
+
+            //Si scrive il valore sul File
+            prop.setProperty("contoNumeroIBAN", String.valueOf(contoNumeroIBAN));
 
 
-            //Scrittura su File del numero corrente di IBAN
-            try {
-
-                //Si scrive il valore sul File
-                prop.setProperty("contoNumeroIBAN", String.valueOf(contoNumeroIBAN));
-
-
-                //save properties to project root folder
-                prop.store(new FileOutputStream("resources/config.properties"), "NON MODIFICARE PER NESSUN MOTIVO\nIn caso di " +
+            //save properties to project root folder
+            prop.store(new FileOutputStream("resources/config.properties"), "NON MODIFICARE PER NESSUN MOTIVO\nIn caso di " +
                         "modifica, l'azienda produttrice non si assume alcuna responsabilita'.\nPer ulteriori informazioni consultare il manuale " +
                         "fornito insieme al software.\n");
 
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-
-            System.out.print(IBAN);
-            return IBAN;
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
+
+        System.out.print(IBAN);
+        return IBAN;
+    }
+
 
     public static void verificaDatiInseritiFinale(infoCliente cliente) {
         int scelta = 0;
