@@ -1000,6 +1000,20 @@ public class metodiVerifiche {
             System.out.println("|| [13] Numero civico: " + cliente.getNumeroCivico());
             System.out.println("|| [14] CAP di residenza: " + cliente.getCapResidenza());
             System.out.print(" ➡ ");
+            
+            while (conferma) {
+                try {
+                    scelta = Integer.parseInt(input.nextLine());
+
+                    if (scelta >= 0 && scelta <= 14) {
+                        conferma = verificaDatiInseriti();
+                    } else
+                        System.out.println("-valore non valido-");
+
+                } catch (Exception e) {
+                    System.out.println("Valore non valido");
+                }
+            }
 
             switch (scelta) {
                 //Esci
