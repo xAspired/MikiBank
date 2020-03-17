@@ -123,7 +123,7 @@ public class ObjectWrite extends JPasswordField {
     private static void visualizzaInfoUtente(ArrayList<contoCorrente> contiCorrentiArray) throws InterruptedException {
         int[] numbers = IntStream.rangeClosed(0, contiCorrentiArray.size() - 1).toArray();
         boolean presenzaCodice = false;
-
+        /*
         String nome;
         String codiceFiscale="";
         System.out.println("\n- Informazioni Cliente: -");
@@ -147,7 +147,15 @@ public class ObjectWrite extends JPasswordField {
                 codiceFiscale = verificaCodiceFiscale(nome, cognome, dataDiNascita, sesso, comuneNascita);
             }
         }
-        //Informazioni cliente
+
+         */
+        System.out.println("Inserisci il codice fiscale:");
+
+        String codiceFiscale = input.nextLine();
+        codiceFiscale=codiceFiscale.toUpperCase();
+        String nome = " ";
+        String cognome = " ";
+        //Informazioni ciente
 
         StringBuilder totaleConti = new StringBuilder();
 
@@ -159,8 +167,21 @@ public class ObjectWrite extends JPasswordField {
 
                 //noinspection ForLoopReplaceableByForEach
                 for(int h = 0; h<verCodiceCliente.length; h++) { /* for(int h = 0; h<verCodiceCliente.length; h++) { */
-                    if (verCodiceCliente[h].getCodiceFiscale().equals(codiceFiscale))
-                        totaleConti.append("\n|| IBAN: ").append(verCodice.getIBAN()).append("    ").append("Saldo Contabile: ").append("\n");
+                    if (verCodiceCliente[h].getCodiceFiscale().equals(codiceFiscale)) {
+
+                        //prendo in icnsiderazione tutti i cointestatari
+                        infoCliente[] persone = verCodice.getCointestatari();
+                        infoCliente persona = new infoCliente();
+                        for (int j = 0; j < persone.length; j++) {
+                            persona = persone[j];
+                            if (persona.getCodiceFiscale().equals(codiceFiscale)) {
+                                nome = persona.getNome();
+                                cognome = persona.getCognome();
+                            }
+                        }
+                        totaleConti.append("\n|| IBAN: ").append(verCodice.getIBAN()).append("    ").append("Saldo Contabile: " + verCodice.getSaldoContabile()).append("\n");
+
+                    }
                 }
             }
             if(totaleConti.length() != 0) {
@@ -174,12 +195,27 @@ public class ObjectWrite extends JPasswordField {
                 System.out.println(".\n");
             }
             else {
-                System.out.print("\n\n|| " + nome + " " + cognome + " non possiede alcun conto. Cosa desidera fare? \n||\n|| [1] Creare un nuovo conto\n|| [2] Tornare al menù\n||\n|| ➡ ");
-                try {
-                    if (input.nextLine().equals("1")) {
-                        creaConto(contiCorrentiArray);
+                System.out.print("\n\n|| il codice fiscale " + codiceFiscale + " non è associato alcun conto. ");
+                int scelta=2;
+                boolean exitMethods = true;
+                while (exitMethods) {
+
+                    System.out.print("Vuoi creare un nuovo conto\n|| [1] SI \n|| [2] NO\n||\n|| ➡ ");
+                    try {
+                        scelta = Integer.parseInt(input.nextLine());
+
+                        if(scelta==1) {
+                            exitMethods = false;
+                            //creaConto();
+                        }
+                        else if(scelta==2) {
+                            exitMethods = false;
+                        }
+                        else
+                            System.out.println("-valore non valido!-");
+                    } catch (Exception e) {
+                        System.out.println("-valore non valido!-");
                     }
-                } catch (Exception ignored) {
                 }
             }
         } catch (Exception ignored) {}
@@ -199,11 +235,11 @@ public class ObjectWrite extends JPasswordField {
         System.out.print("Inserisci l'IBAN: ");
 
         String iban = input.nextLine();
-
+        contoCorrente verCodice = new contoCorrente();
         //try {
             for (int i : numbers) {
                 //Si crea un oggetto temporaneo per ogni indice [i]
-                contoCorrente verCodice = contiCorrentiArray.get(i);
+                verCodice = contiCorrentiArray.get(i);
                 infoCliente[] verCodiceCliente = verCodice.getCointestatari();
 
                     if(verCodice.getIBAN().equalsIgnoreCase(iban)) {
@@ -224,7 +260,32 @@ public class ObjectWrite extends JPasswordField {
                 System.out.println("=========================================================\n               " + iban + "\n=========================================================\n" + resocontoConto);
                 System.out.println("\n\n** Cosa vuole fare? **\n[1] Depositare\n[2] Prelevare\n[3] Tornare al menù");
                 System.out.print(" ➡ ");
-                if(Integer.parseInt(input.nextLine()) == 3) {
+                int scelta = Integer.parseInt(input.nextLine());
+
+                    if(scelta == 1) {
+                    verCodice.setSaldoContabile(deposita());
+                    /*
+                    System.out.print("\n\nSta per essere reindirizzato al menù");
+                    TimeUnit.SECONDS.sleep(1);
+                    System.out.print(".");
+                    TimeUnit.SECONDS.sleep(1);
+                    System.out.print(".");
+                    TimeUnit.SECONDS.sleep(1);
+                    System.out.println(".\n");
+
+                     */
+                }
+                if(scelta == 2) {
+                    verCodice.setSaldoContabile(preleva());
+                    System.out.print("\n\nSta per essere reindirizzato al menù");
+                    TimeUnit.SECONDS.sleep(1);
+                    System.out.print(".");
+                    TimeUnit.SECONDS.sleep(1);
+                    System.out.print(".");
+                    TimeUnit.SECONDS.sleep(1);
+                    System.out.println(".\n");
+                }
+                if(scelta == 3) {
                     System.out.print("\n\nSta per essere reindirizzato al menù");
                     TimeUnit.SECONDS.sleep(1);
                     System.out.print(".");
@@ -242,8 +303,25 @@ public class ObjectWrite extends JPasswordField {
                     }
                 } catch (Exception ignored) {}
             }
+
+
         //} catch (Exception ignored){}
 
+    }
+    private static float deposita(){
+        float denaro=0;
+        System.out.println("Inserisci la cifra da aggiungere");
+        denaro = Integer.parseInt(input.nextLine());
+        System.out.println("Hai appena depositato " + denaro + "€");
+        return denaro;
+    }
+    private static float preleva(){
+        float denaro=0;
+        System.out.println("Inserisci la cifra da aggiungere");
+        denaro = Integer.parseInt(input.nextLine());
+        System.out.println("Hai appena prelevato " + denaro + "€");
+
+        return denaro;
     }
 
     /*
