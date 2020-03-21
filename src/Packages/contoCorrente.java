@@ -68,11 +68,11 @@ public class contoCorrente extends infoCliente implements Serializable {
     }
 
     public void setSaldoDisponibile(float saldoDisponibile) {
-        this.saldoDisponibile = saldoDisponibile;
+        this.saldoDisponibile += saldoDisponibile;
     }
 
     public void setSaldoContabile(float saldoContabile) {
-        this.saldoContabile = saldoContabile;
+        this.saldoContabile += saldoContabile;
     }
 
     public float getSaldoContabile() {
@@ -148,11 +148,14 @@ public class contoCorrente extends infoCliente implements Serializable {
     }
 
     public void toStringListaMovimenti(){
-        String listaMovimenti = "";
         System.out.println("Lista Movimenti");
-        for(int i=listaMovimenti.length(); i>0; i--){
-            System.out.println("importo disponibile - data disponibile || importo contabile - data contabile");
-            System.out.println(listaMovimenti[i] + "\t" + dataDisponibile);
+        boolean verifica = false;
+        for(int i=listaMovimenti.length; i>0; i--) {
+            listaMovimenti temp = listaMovimenti[i];
+            if (temp!=null){
+                System.out.println("importo disponibile - data disponibile || importo contabile - data contabile");
+                System.out.println(listaMovimenti[i].getImportoDisponibile() + "\t" + listaMovimenti[i].getDataDisponibile() + "\t" + listaMovimenti[i].getImportoContabile() + "\t" + listaMovimenti[i].getDataContabile());
+            }
         }
 
 

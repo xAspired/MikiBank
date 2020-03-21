@@ -234,7 +234,6 @@ public class ObjectWrite extends JPasswordField {
                         verCodice.setSaldoContabile(importo);
                         verCodice.setSaldoDisponibile(importo);
                         contoCorrente.listaMovimenti[] temp = verCodice.getListaMovimenti();
-                        boolean verifica = false;
                         verCodice.toStringListaMovimenti();
 
 
