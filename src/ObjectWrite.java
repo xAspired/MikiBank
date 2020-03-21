@@ -3,6 +3,7 @@ import Packages.infoCliente;
 
 import javax.swing.*;
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Properties;
@@ -234,8 +235,24 @@ public class ObjectWrite extends JPasswordField {
                         verCodice.setSaldoContabile(importo);
                         verCodice.setSaldoDisponibile(importo);
                         contoCorrente.listaMovimenti[] temp = verCodice.getListaMovimenti();
+                        boolean verifica = false;
+                        for(int i=temp.length; i>0 && !verifica; i--) {
+                            if (temp==null){
+                                verifica=true;
+                                temp[i].setImportoDisponibile(importo);
+                                LocalDateTime time = LocalDateTime.now();
+                                String tempo = null;
+                                tempo=time.getDayOfMonth() + "/" + time.getMonthValue() + "/" + time.getYear() + "   " + time.getHour();
+                                temp[i].setDataDisponibile(tempo);
+                                temp[i].setImportoContabile(importo);
+                                temp[i].setDataDisponibile(tempo);
+                            }
+                            //se ci sono più di 10 movimenti
+                            //if(!verifica)
+                                //togliere il più vecchio
+                                //copiare tutti il posto successivo
+                        }
                         verCodice.toStringListaMovimenti();
-
 
                     /*
                     System.out.print("\n\nTransazione effettuata - Sta per essere reindirizzato al menù");
@@ -284,14 +301,14 @@ public class ObjectWrite extends JPasswordField {
     private static float deposita(){
         float denaro;
         System.out.println("Inserisci la cifra da aggiungere");
-        denaro = Integer.parseInt(input.nextLine());
+        denaro = Integer.parseInt("+" + input.nextLine());
         System.out.println("Hai appena depositato " + denaro + "€");
         return denaro;
     }
     private static float preleva(){
         float denaro;
         System.out.println("Inserisci la cifra da aggiungere");
-        denaro = Integer.parseInt(input.nextLine());
+        denaro = Integer.parseInt("-" + input.nextLine());
         System.out.println("Hai appena prelevato " + denaro + "€");
 
         return denaro;

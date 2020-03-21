@@ -150,11 +150,12 @@ public class contoCorrente extends infoCliente implements Serializable {
     public void toStringListaMovimenti(){
         System.out.println("Lista Movimenti");
         boolean verifica = false;
-        for(int i=listaMovimenti.length; i>0; i--) {
+        for(int i=listaMovimenti.length; i>0 && !verifica; i--) {
             listaMovimenti temp = listaMovimenti[i];
             if (temp!=null){
+                verifica=true;
                 System.out.println("importo disponibile - data disponibile || importo contabile - data contabile");
-                System.out.println(listaMovimenti[i].getImportoDisponibile() + "\t" + listaMovimenti[i].getDataDisponibile() + "\t" + listaMovimenti[i].getImportoContabile() + "\t" + listaMovimenti[i].getDataContabile());
+                System.out.println(listaMovimenti[i].getImportoDisponibile() + "€\t" + listaMovimenti[i].getDataDisponibile() + "\t" + listaMovimenti[i].getImportoContabile() + "€\t" + listaMovimenti[i].getDataContabile());
             }
         }
 
