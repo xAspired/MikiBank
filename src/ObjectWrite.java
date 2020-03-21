@@ -120,41 +120,17 @@ public class ObjectWrite extends JPasswordField {
      * =========================================================
      */
     @SuppressWarnings("unused")
-    private static void visualizzaInfoUtente(ArrayList<contoCorrente> contiCorrentiArray) throws InterruptedException {
+    private static void visualizzaInfoUtente(ArrayList<contoCorrente> contiCorrentiArray) {
         int[] numbers = IntStream.rangeClosed(0, contiCorrentiArray.size() - 1).toArray();
         boolean presenzaCodice = false;
-        /*
-        String nome;
-        String codiceFiscale="";
-        System.out.println("\n- Informazioni Cliente: -");
-        nome = verificaNomeCognome("Nome");
-        String cognome = verificaNomeCognome("Cognome");
-        String cartaID = verificaCartaID(); //ID riconoscitivo carta d'identità (CA00000AA) Numero Unico Nazionale
-        String cartaScadenza = verificaData("Data scadenza Carta d'Identità"); //Scadenza carta d'identità
-        if (cartaScadenza.equals("0")) {
-            System.out.println("Errore - la carta d'identità è scaduta. \nStai per essere reindirizzato al menu...\n");
-            TimeUnit.SECONDS.sleep(1);
-        }
-        else {
-            String dataDiNascita = verificaData("Data di nascita");
-            //Bisogna avere almeno 18 anni
-            if (dataDiNascita.equals("0")) {
-                System.out.println("Errore - l'età del cliente non soddisfa l'età minima \nStai per essere reindirizzato al menu...");
-                TimeUnit.SECONDS.sleep(1);
-            } else {
-                String sesso = verificaSesso();
-                String comuneNascita = verificaComune("Nascita");
-                codiceFiscale = verificaCodiceFiscale(nome, cognome, dataDiNascita, sesso, comuneNascita);
-            }
-        }
 
-         */
+        System.out.println("\n- Informazioni Cliente: - ");
         System.out.println("Inserisci il codice fiscale:");
 
         String codiceFiscale = input.nextLine();
         codiceFiscale=codiceFiscale.toUpperCase();
-        String nome = " ";
-        String cognome = " ";
+        String nome = "";
+        String cognome = "";
         //Informazioni ciente
 
         StringBuilder totaleConti = new StringBuilder();
@@ -168,18 +144,9 @@ public class ObjectWrite extends JPasswordField {
                 //noinspection ForLoopReplaceableByForEach
                 for(int h = 0; h<verCodiceCliente.length; h++) { /* for(int h = 0; h<verCodiceCliente.length; h++) { */
                     if (verCodiceCliente[h].getCodiceFiscale().equals(codiceFiscale)) {
-
-                        //prendo in icnsiderazione tutti i cointestatari
-                        infoCliente[] persone = verCodice.getCointestatari();
-                        infoCliente persona = new infoCliente();
-                        for (int j = 0; j < persone.length; j++) {
-                            persona = persone[j];
-                            if (persona.getCodiceFiscale().equals(codiceFiscale)) {
-                                nome = persona.getNome();
-                                cognome = persona.getCognome();
-                            }
-                        }
-                        totaleConti.append("\n|| IBAN: ").append(verCodice.getIBAN()).append("    ").append("Saldo Contabile: " + verCodice.getSaldoContabile()).append("\n");
+                        nome = verCodiceCliente[h].getNome();
+                        cognome = verCodiceCliente[h].getCognome();
+                        totaleConti.append("\n|| IBAN: ").append(verCodice.getIBAN()).append("    ").append("Saldo Contabile: ").append(verCodice.getSaldoContabile()).append("\n");
 
                     }
                 }
@@ -196,7 +163,7 @@ public class ObjectWrite extends JPasswordField {
             }
             else {
                 System.out.print("\n\n|| il codice fiscale " + codiceFiscale + " non è associato alcun conto. ");
-                int scelta=2;
+                int scelta;
                 boolean exitMethods = true;
                 while (exitMethods) {
 
@@ -263,9 +230,16 @@ public class ObjectWrite extends JPasswordField {
                 int scelta = Integer.parseInt(input.nextLine());
 
                     if(scelta == 1) {
-                    verCodice.setSaldoContabile(deposita());
+                        float importo = deposita();
+                        verCodice.setSaldoContabile(importo);
+                        verCodice.setSaldoDisponibile(importo);
+                        contoCorrente.listaMovimenti[] temp = verCodice.getListaMovimenti();
+                        boolean verifica = false;
+                        verCodice.toStringListaMovimenti();
+
+
                     /*
-                    System.out.print("\n\nSta per essere reindirizzato al menù");
+                    System.out.print("\n\nTransazione effettuata - Sta per essere reindirizzato al menù");
                     TimeUnit.SECONDS.sleep(1);
                     System.out.print(".");
                     TimeUnit.SECONDS.sleep(1);
@@ -309,14 +283,14 @@ public class ObjectWrite extends JPasswordField {
 
     }
     private static float deposita(){
-        float denaro=0;
+        float denaro;
         System.out.println("Inserisci la cifra da aggiungere");
         denaro = Integer.parseInt(input.nextLine());
         System.out.println("Hai appena depositato " + denaro + "€");
         return denaro;
     }
     private static float preleva(){
-        float denaro=0;
+        float denaro;
         System.out.println("Inserisci la cifra da aggiungere");
         denaro = Integer.parseInt(input.nextLine());
         System.out.println("Hai appena prelevato " + denaro + "€");
@@ -412,10 +386,10 @@ public class ObjectWrite extends JPasswordField {
         float saldo = verificaSaldo();
         float interesse = verificaInteresse();
         String tipoConto = verificaTipoConto();
-        float saldoValuta = 0;
+        float saldoDisponibile = 0;
         float saldoContabile = 0;
-        String [] listaMovimenti = new String [10];
-        conto = new contoCorrente(IBAN, saldoValuta, saldoContabile, listaMovimenti, interesse, cointestatari, tipoConto);
+        contoCorrente.listaMovimenti[] listaMovimenti = new contoCorrente.listaMovimenti[10];
+        conto = new contoCorrente(IBAN, saldoDisponibile, saldoContabile, listaMovimenti, interesse, cointestatari, tipoConto);
         return conto;
 
     }

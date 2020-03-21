@@ -10,29 +10,26 @@ public class contoCorrente extends infoCliente implements Serializable {
     /*
     Movimento
      */
-    private String dataContabile;
-    private String dataValuta;
     private float importo;
-
+    public listaMovimenti [] listaMovimenti = new listaMovimenti[10];
     /*
     Conto Corrente
      */
     private String IBAN;
-    private float saldoValuta;
-    private float saldoContabile;
-    String [] listaMovimenti = new String [10];
     private float saldo;
     private float interesse;
     private String tipoConto;
+    private float saldoDisponibile=0;
+    private float saldoContabile=0;
 
     /*
      * =========================================================
      * Costruttori
      * =========================================================
      */
-    public contoCorrente(String IBAN, float saldoValuta, float saldoContabile, String []listaMovimenti, float interesse, infoCliente[] cointestatari, String tipoConto) {
+    public contoCorrente(String IBAN, float saldoValuta, float saldoContabile, listaMovimenti []listaMovimenti, float interesse, infoCliente[] cointestatari, String tipoConto) {
         this.IBAN = IBAN;
-        this.saldoValuta = saldoValuta;
+        this.saldoDisponibile = saldoContabile;
         this.saldoContabile = saldoContabile;
         this.listaMovimenti = listaMovimenti;
         this.interesse = interesse;
@@ -41,22 +38,6 @@ public class contoCorrente extends infoCliente implements Serializable {
     }
 
     public contoCorrente() {}
-
-    public void setDataContabile(String dataContabile) {
-        this.dataContabile = dataContabile;
-    }
-
-    public String getDataContabile() {
-        return dataContabile;
-    }
-
-    public void setDataValuta(String dataValuta) {
-        this.dataValuta = dataValuta;
-    }
-
-    public String getDataValuta() {
-        return dataValuta;
-    }
 
     public void setImporto(float importo) {
         this.importo = importo;
@@ -82,12 +63,12 @@ public class contoCorrente extends infoCliente implements Serializable {
         return interesse;
     }
 
-    public float getSaldoValuta() {
-        return saldoValuta;
+    public float getSaldoDisponibile() {
+        return saldoDisponibile;
     }
 
-    public void setSaldoValuta(float saldoValuta) {
-        this.saldoValuta = saldoValuta;
+    public void setSaldoDisponibile(float saldoDisponibile) {
+        this.saldoDisponibile = saldoDisponibile;
     }
 
     public void setSaldoContabile(float saldoContabile) {
@@ -103,7 +84,7 @@ public class contoCorrente extends infoCliente implements Serializable {
     }
 
 
-    public String[] getListaMovimenti(){
+    public listaMovimenti[] getListaMovimenti(){
         return listaMovimenti;
     }
 
@@ -115,4 +96,67 @@ public class contoCorrente extends infoCliente implements Serializable {
                 ", interesse=" + interesse + cointestatari +
                 ']';
     }
+
+    public static class listaMovimenti implements Serializable {
+
+        private float importoDisponibile=0;
+        private String dataDisponibile="";
+        private float importoContabile=0;
+        private String dataContabile="";
+
+        public listaMovimenti(){}
+
+        private void listaMovimenti (float importoDisponibile, String dataDisponibile, float importoContabile, String dataContabile){
+            this.importoDisponibile=importoDisponibile;
+            this.dataDisponibile=dataDisponibile;
+            this.importoContabile=importoContabile;
+            this.dataContabile=dataContabile;
+        }
+
+        public float getImportoDisponibile() {
+            return importoDisponibile;
+        }
+
+        public void setImportoDisponibile(float saldoDisponibile) {
+            this.importoDisponibile = saldoDisponibile;
+        }
+
+        public float getImportoContabile() {
+            return importoContabile;
+        }
+
+        public void setImportoContabile(float importoContabile) {
+            this.importoContabile = importoContabile;
+        }
+
+        public void setDataContabile(String dataContabile) {
+            this.dataContabile = dataContabile;
+        }
+
+        public String getDataContabile() {
+            return dataContabile;
+        }
+
+        public void setDataDisponibile(String dataDisponibile) {
+            this.dataDisponibile = dataDisponibile;
+        }
+
+        public String getDataDisponibile() {
+            return dataDisponibile;
+        }
+
+    }
+
+    public void toStringListaMovimenti(){
+        String listaMovimenti = "";
+        System.out.println("Lista Movimenti");
+        for(int i=listaMovimenti.length(); i>0; i--){
+            System.out.println("importo disponibile - data disponibile || importo contabile - data contabile");
+            System.out.println(listaMovimenti[i] + "\t" + dataDisponibile);
+        }
+
+
+    }
 }
+
+
