@@ -85,6 +85,9 @@ public class contoCorrente extends infoCliente implements Serializable {
 
 
     public listaMovimenti[] getListaMovimenti(){
+        for(int i=listaMovimenti.length-1; i>0; i--) {
+            listaMovimenti[i] = new listaMovimenti();
+        }
         return listaMovimenti;
     }
 
@@ -106,7 +109,7 @@ public class contoCorrente extends infoCliente implements Serializable {
 
         public listaMovimenti(){}
 
-        private void listaMovimenti (float importoDisponibile, String dataDisponibile, float importoContabile, String dataContabile){
+        public listaMovimenti (float importoDisponibile, String dataDisponibile, float importoContabile, String dataContabile){
             this.importoDisponibile=importoDisponibile;
             this.dataDisponibile=dataDisponibile;
             this.importoContabile=importoContabile;
@@ -150,7 +153,7 @@ public class contoCorrente extends infoCliente implements Serializable {
     public void toStringListaMovimenti(){
         System.out.println("Lista Movimenti");
         boolean verifica = false;
-        for(int i=listaMovimenti.length; i>0 && !verifica; i--) {
+        for(int i=listaMovimenti.length-1; i>0 && !verifica; i--) {
             listaMovimenti temp = listaMovimenti[i];
             if (temp!=null){
                 verifica=true;
