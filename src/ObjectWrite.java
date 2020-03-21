@@ -234,19 +234,20 @@ public class ObjectWrite extends JPasswordField {
                         float importo = deposita();
                         verCodice.setSaldoContabile(importo);
                         verCodice.setSaldoDisponibile(importo);
-                        contoCorrente.listaMovimenti[] temp = verCodice.getListaMovimenti();
+                        contoCorrente.listaMovimenti[] listaMovimentiTemp = verCodice.getListaMovimenti();
                         boolean verifica = false;
-                        for(int i=temp.length; i>0 && !verifica; i--) {
-                            if (temp==null){
+                        for(int i=listaMovimentiTemp.length; i>0 && !verifica; i--) {
+                            if (listaMovimentiTemp[i]==null){
                                 verifica=true;
-                                temp[i].setImportoDisponibile(importo);
+                                listaMovimentiTemp[i].setImportoDisponibile(importo);
                                 LocalDateTime time = LocalDateTime.now();
                                 String tempo = null;
                                 tempo=time.getDayOfMonth() + "/" + time.getMonthValue() + "/" + time.getYear() + "   " + time.getHour();
-                                temp[i].setDataDisponibile(tempo);
-                                temp[i].setImportoContabile(importo);
-                                temp[i].setDataDisponibile(tempo);
+                                listaMovimentiTemp[i].setDataDisponibile(tempo);
+                                listaMovimentiTemp[i].setImportoContabile(importo);
+                                listaMovimentiTemp[i].setDataDisponibile(tempo);
                             }
+                            verCodice.listaMovimenti=listaMovimentiTemp;
                             //se ci sono più di 10 movimenti
                             //if(!verifica)
                                 //togliere il più vecchio
