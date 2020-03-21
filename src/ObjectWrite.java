@@ -219,7 +219,7 @@ public class ObjectWrite extends JPasswordField {
                                 resocontoConto.append("\uD83D\uDE4E\uD83C\uDFFD\u200D♂ ");
                             resocontoConto.append(verCodiceCliente[h].getNome()).append(" ").append(verCodiceCliente[h].getCognome()).append("    [").append(verCodiceCliente[h].getDataDiNascita()).append("]");
                         }
-                        resocontoConto.append("\n||\n|| Valuta: ").append("    ").append("Saldo contabile: ");
+                        resocontoConto.append("\n||\n|| Valuta: ").append(verCodice.getSaldoDisponibile()+"€    ").append("Saldo contabile: ");
                     }
 
             }
@@ -237,7 +237,7 @@ public class ObjectWrite extends JPasswordField {
                         contoCorrente.listaMovimenti[] listaMovimentiTemp = verCodice.getListaMovimenti();
                         boolean verifica = false;
                         for(int i=listaMovimentiTemp.length-1; i>0 && !verifica; i--) {
-                            if (listaMovimentiTemp[i]==null){
+                            //if (listaMovimentiTemp[i]==null){
                                 verifica=true;
                                 listaMovimentiTemp[i].setImportoDisponibile(importo);
                                 LocalDateTime time = LocalDateTime.now();
@@ -245,8 +245,8 @@ public class ObjectWrite extends JPasswordField {
                                 tempo=time.getDayOfMonth() + "/" + time.getMonthValue() + "/" + time.getYear() + "   " + time.getHour();
                                 listaMovimentiTemp[i].setDataDisponibile(tempo);
                                 listaMovimentiTemp[i].setImportoContabile(importo);
-                                listaMovimentiTemp[i].setDataDisponibile(tempo);
-                            }
+                                listaMovimentiTemp[i].setDataContabile(tempo);
+                            //}
                             verCodice.listaMovimenti=listaMovimentiTemp;
                             //se ci sono più di 10 movimenti
                             //if(!verifica)

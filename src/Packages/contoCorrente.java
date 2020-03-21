@@ -27,9 +27,9 @@ public class contoCorrente extends infoCliente implements Serializable {
      * Costruttori
      * =========================================================
      */
-    public contoCorrente(String IBAN, float saldoValuta, float saldoContabile, listaMovimenti []listaMovimenti, float interesse, infoCliente[] cointestatari, String tipoConto) {
+    public contoCorrente(String IBAN, float saldoDisponibile, float saldoContabile, listaMovimenti []listaMovimenti, float interesse, infoCliente[] cointestatari, String tipoConto) {
         this.IBAN = IBAN;
-        this.saldoDisponibile = saldoContabile;
+        this.saldoDisponibile = saldoDisponibile;
         this.saldoContabile = saldoContabile;
         this.listaMovimenti = listaMovimenti;
         this.interesse = interesse;
