@@ -41,11 +41,11 @@ public class metodiVerifiche {
 
     public static String verificaNomeCognome(String var) {
         System.out.print(var + ": ");
-        String nome;
+        StringBuilder nome;
         exitMethods = false;
 
         do {
-            nome = input.nextLine();
+            nome = new StringBuilder(input.nextLine());
             if (nome.length() != 0)
                 exitMethods = true;
             for (int i = 0; i < nome.length() && exitMethods; i++) {
@@ -57,18 +57,18 @@ public class metodiVerifiche {
 
         } while (!exitMethods);
 
-        String[] nomeCognome = nome.split(" ");
+        String[] nomeCognome = nome.toString().split(" ");
 
-        nome="";
+        nome = new StringBuilder();
         for (int i = 0; i < nomeCognome.length; i++) {
             //di rimane sempre minuscolo
             if(!nomeCognome[i].equals("di"))
                 nomeCognome[i] = nomeCognome[i].substring(0,1).toUpperCase() + nomeCognome[i].substring(1).toLowerCase();
-            nome += nomeCognome[i] + " ";
+            nome.append(nomeCognome[i]).append(" ");
         }
 
         exitMethods = true;
-        return nome;
+        return nome.toString();
     }
 
     public static String verificaCartaID() {

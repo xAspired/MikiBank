@@ -137,7 +137,7 @@ public class ObjectWrite extends JPasswordField {
      * =========================================================
      */
     @SuppressWarnings("unused")
-    private static void visualizzaInfoUtente(ArrayList<contoCorrente> contiCorrentiArray) throws InterruptedException {
+    private static void visualizzaInfoUtente(ArrayList<contoCorrente> contiCorrentiArray) {
         int[] numbers = IntStream.rangeClosed(0, contiCorrentiArray.size() - 1).toArray();
         boolean presenzaCodice = false;
 
@@ -236,23 +236,25 @@ public class ObjectWrite extends JPasswordField {
                                 resocontoConto.append("\uD83D\uDE4E\uD83C\uDFFC\u200D♀ ");
                             else
                                 resocontoConto.append("\uD83D\uDE4E\uD83C\uDFFD\u200D♂ ");
-                            resocontoConto.append(verCodiceCliente[h].getNome()).append(" ").append(verCodiceCliente[h].getCognome()).append("    [").append(verCodiceCliente[h].getDataDiNascita()).append("]");
+                            resocontoConto.append(verCodiceCliente[h].getNome()).append(verCodiceCliente[h].getCognome()).append("    [").append(verCodiceCliente[h].getDataDiNascita()).append("]");
                         }
-                        resocontoConto.append("\n||\n|| Valuta: ").append(verCodice.getSaldoDisponibile()+"€    ").append("Saldo contabile: " + verCodice.getSaldoContabile());
-                        verCodice.toStringListaMovimenti();
-
+                        resocontoConto.append("\n||\n|| Valuta: ").append(verCodice.getSaldoDisponibile()).append("€    ").append("Saldo contabile: ").append(verCodice.getSaldoContabile());
                     }
 
             }
 
             if(resocontoConto.length() != 0) {
-                System.out.println("=========================================================\n               " + iban + "\n=========================================================\n" + resocontoConto);
+                System.out.println("\n===============================================================\n                  " + iban + "\n===============================================================\n" + resocontoConto);
+                System.out.println("\n===============================================================\n               " + "       Lista Movimenti" + "\n===============================================================\n");
+                verCodice.toStringListaMovimenti();
                 System.out.println("\n\n** Cosa vuole fare? **\n[1] Depositare\n[2] Prelevare\n[3] Tornare al menù");
                 System.out.print(" ➡ ");
                 int scelta = Integer.parseInt(input.nextLine());
 
                     if(scelta == 1) {
                         float importo = deposita();
+                        String descrizione = aggiuntaDescrizione();
+                        System.out.println("Ha appena depositato " + importo + "€ con causale: " + descrizione +  "\n");
                         verCodice.setSaldoContabile(importo);
                         verCodice.setSaldoDisponibile(importo);
                         contoCorrente.listaMovimenti[] listaMovimentiTemp = verCodice.getListaMovimenti();
@@ -261,11 +263,30 @@ public class ObjectWrite extends JPasswordField {
                                 int movimentoAttuale = verCodice.getMovimentoAttuale();
                                 listaMovimentiTemp[movimentoAttuale].setImportoDisponibile(importo);
                                 LocalDateTime time = LocalDateTime.now();
-                                String tempo;
-                                tempo = time.getDayOfMonth() + "/" + time.getMonthValue() + "/" + time.getYear() + "   " + time.getHour() + ":" + time.getMinute() + ":" + time.getSecond();
+                                String tempo = "";
+
+                                /*
+                                    Si gestisce il caso in cui il numero sia unico e quindi non vada
+                                    a rovinare la tabulazione della Lista Movimenti
+                                 */
+                                if(time.getDayOfMonth() < 10)
+                                    tempo += "0" + time.getDayOfMonth();
+                                else
+                                    tempo += time.getDayOfMonth();
+
+                                tempo += "/";
+
+                                if(time.getMonthValue() < 10)
+                                    tempo += "0" + time.getMonthValue();
+                                else
+                                    tempo += time.getMonthValue();
+
+                                tempo += "/" + time.getYear();
+
                                 listaMovimentiTemp[verCodice.getMovimentoAttuale()].setDataDisponibile(tempo);
                                 listaMovimentiTemp[verCodice.getMovimentoAttuale()].setImportoContabile(importo);
                                 listaMovimentiTemp[verCodice.getMovimentoAttuale()].setDataContabile(tempo);
+                                listaMovimentiTemp[verCodice.getMovimentoAttuale()].setDescrizioneOperazione(descrizione);
                                 verCodice.setMovimentoAttuale(verCodice.getMovimentoAttuale() - 1);
                             }
                             if(verCodice.getMovimentoAttuale()==-1)
@@ -274,17 +295,6 @@ public class ObjectWrite extends JPasswordField {
                             verCodice.listaMovimenti=listaMovimentiTemp;
 
                             contiCorrentiArray.set(posizione,verCodice);
-
-                    /*
-                    System.out.print("\n\nTransazione effettuata - Sta per essere reindirizzato al menù");
-                    TimeUnit.SECONDS.sleep(1);
-                    System.out.print(".");
-                    TimeUnit.SECONDS.sleep(1);
-                    System.out.print(".");
-                    TimeUnit.SECONDS.sleep(1);
-                    System.out.println(".\n");
-
-                     */
                 }
                 if(scelta == 2) {
                     verCodice.setSaldoContabile(preleva());
@@ -320,19 +330,43 @@ public class ObjectWrite extends JPasswordField {
 
     }
     private static float deposita(){
-        float denaro;
-        System.out.println("Inserisci la cifra da aggiungere");
-        denaro = Integer.parseInt("+" + input.nextLine());
-        System.out.println("Hai appena depositato " + denaro + "€");
+        float denaro = 0;
+        boolean exitMethods = true;
+        while(exitMethods) {
+            System.out.print("\nInserisca la cifra da aggiungere: €");
+            try {
+                denaro = Integer.parseInt("+" + Integer.parseInt(input.nextLine()));
+                exitMethods = false;
+            }
+            catch (Exception e) {
+                System.out.print("Errore! Il valore da depositare non può essere uguale a 0€");
+            }
+        }
         return denaro;
     }
     private static float preleva(){
         float denaro;
-        System.out.println("Inserisci la cifra da aggiungere");
+        System.out.print("\nInserisca la cifra da prelevare: €");
         denaro = Integer.parseInt("-" + input.nextLine());
-        System.out.println("Hai appena prelevato " + denaro + "€");
-
+        System.out.println("Ha appena prelevato " + denaro + "€\n");
         return denaro;
+    }
+
+    private static String aggiuntaDescrizione() {
+        String causale = "";
+        String lunghezzaMax = "Descrizione Operazione";
+        boolean exitMethods = true;
+        while(exitMethods) {
+            System.out.print("Inserisca la causale del deposito (Max. " + lunghezzaMax.length() + " Caratteri): ");
+            causale = input.nextLine();
+            if (causale.length() > lunghezzaMax.length())
+                System.out.println("Errore! Inserire una causale più corta.");
+            else if(causale.length() == 0)
+                System.out.println("Errore! Inserire una causale più lunga.");
+            else
+                exitMethods = false;
+        }
+        return causale;
     }
 
     /*

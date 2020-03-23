@@ -19,7 +19,6 @@ public class contoCorrente extends infoCliente implements Serializable {
     private String IBAN;
     private float saldo;
     private float interesse;
-    private String tipoConto;
     private float saldoDisponibile=0;
     private float saldoContabile=0;
     private int movimentoAttuale=9;
@@ -37,7 +36,6 @@ public class contoCorrente extends infoCliente implements Serializable {
         this.listaMovimenti = listaMovimenti;
         this.interesse = interesse;
         this.cointestatari = cointestatari;
-        this.tipoConto = tipoConto;
         this.movimentoAttuale=movimentoAttuale;
     }
 
@@ -101,7 +99,7 @@ public class contoCorrente extends infoCliente implements Serializable {
         return "Conto [" +
                 "IBAN='" + IBAN + '\'' +
                 ", saldo=" + saldo +
-                ", interesse=" + interesse + cointestatari +
+                ", interesse=" + interesse + Arrays.toString(cointestatari) +
                 ']';
     }
 
@@ -112,14 +110,16 @@ public class contoCorrente extends infoCliente implements Serializable {
         private float importoContabile=0;
         private String dataContabile="";
         private int movimentoAttuale=0;
+        private String descrizioneOperazione;
 
         public listaMovimenti(){}
 
-        public listaMovimenti (float importoDisponibile, String dataDisponibile, float importoContabile, String dataContabile, int movimentoAttuale){
+        public listaMovimenti (float importoDisponibile, String dataDisponibile, float importoContabile, String dataContabile, int movimentoAttuale, String descrizioneOperazione){
             this.importoDisponibile=importoDisponibile;
             this.dataDisponibile=dataDisponibile;
             this.importoContabile=importoContabile;
             this.dataContabile=dataContabile;
+            this.descrizioneOperazione=descrizioneOperazione;
         }
 
         public float getImportoDisponibile() {
@@ -154,8 +154,14 @@ public class contoCorrente extends infoCliente implements Serializable {
             return dataDisponibile;
         }
 
-    }
+        public String getDescrizioneOperazione() {
+            return descrizioneOperazione;
+        }
 
+        public void setDescrizioneOperazione(String descrizioneOperazione) {
+            this.descrizioneOperazione = descrizioneOperazione;
+        }
+    }
 
     public int getMovimentoAttuale(){
         return movimentoAttuale;
@@ -164,12 +170,23 @@ public class contoCorrente extends infoCliente implements Serializable {
         this.movimentoAttuale=movimentoAttuale;
     }
     public void toStringListaMovimenti(){
-        System.out.println("Lista Movimenti");
         boolean verifica = false;
-        System.out.println("importo disponibile - data disponibile || importo contabile - data contabile");
+        int intLunghezzaDescrizione;
+        StringBuilder stringLunghezzaDescrizione = new StringBuilder();
+
+
+        System.out.println("+-----------------------------------------------------------------+");
+        System.out.println("| Data Contabile - Data Valuta - Descrizione Operazione - Importo |");
+        System.out.println("+-----------------------------------------------------------------+");
         for(int i=9; i>=0; i--) {
-            if(listaMovimenti[i]!=null)
-                System.out.println(listaMovimenti[i].getImportoDisponibile() + "€\t" + listaMovimenti[i].getDataDisponibile() + "\t" + listaMovimenti[i].getImportoContabile() + "€\t" + listaMovimenti[i].getDataContabile());
+            if(listaMovimenti[i].getDescrizioneOperazione()!=null && listaMovimenti[i].getDescrizioneOperazione().length() < 25) {
+                intLunghezzaDescrizione = 25 - listaMovimenti[i].getDescrizioneOperazione().length();
+                stringLunghezzaDescrizione = new StringBuilder(listaMovimenti[i].getDescrizioneOperazione());
+                stringLunghezzaDescrizione.append(" ".repeat(Math.max(0, intLunghezzaDescrizione))); /* for(int j = 0; j < intLunghezzaDescrizione; j++) { */
+            }
+
+            if(listaMovimenti[i]!=null && listaMovimenti[i].getImportoDisponibile()!=0)
+                System.out.println("   " + listaMovimenti[i].getDataContabile() + "      " + listaMovimenti[i].getDataDisponibile() + "     " + stringLunghezzaDescrizione + listaMovimenti[i].getImportoDisponibile()+"€");
         }
 
 
