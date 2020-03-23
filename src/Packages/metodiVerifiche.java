@@ -57,7 +57,15 @@ public class metodiVerifiche {
 
         } while (!exitMethods);
 
-        nome = nome.substring(0, 1).toUpperCase() + nome.substring(1).toLowerCase();
+        String[] nomeCognome = nome.split(" ");
+
+        nome="";
+        for (int i = 0; i < nomeCognome.length; i++) {
+            if(!nomeCognome.equals("di"))
+                nomeCognome[i] = nomeCognome[i].substring(0,1).toUpperCase() + nomeCognome[i].substring(1).toLowerCase();
+                System.out.println(nomeCognome[i]);
+                nome += nomeCognome[i] + " ";
+        }
 
         exitMethods = true;
         return nome;
