@@ -92,10 +92,26 @@ public class ObjectWrite extends JPasswordField {
                 case 2:
                     //Visualizzare Info Conto Corrente
                     visualizzaInfoConto(contiCorrentiArray);
+                    //Serializzazione
+                     fileOut = new FileOutputStream(file);
+                     fileObj = new ObjectOutputStream(fileOut);
+
+                    fileObj.writeObject(contiCorrentiArray);
+                    fileObj.close();
+                    fileOut.close();
+                    //Fine Serializzazione
                     break;
                 case 3:
                     //Visualizza Info Utente
                     visualizzaInfoUtente(contiCorrentiArray);
+                    //Serializzazione
+                    fileOut = new FileOutputStream(file);
+                    fileObj = new ObjectOutputStream(fileOut);
+
+                    fileObj.writeObject(contiCorrentiArray);
+                    fileObj.close();
+                    fileOut.close();
+                    //Fine Serializzazione
                     break;
                 case 4:
                     //Chiedere un prestito
@@ -121,7 +137,7 @@ public class ObjectWrite extends JPasswordField {
      * =========================================================
      */
     @SuppressWarnings("unused")
-    private static void visualizzaInfoUtente(ArrayList<contoCorrente> contiCorrentiArray) {
+    private static void visualizzaInfoUtente(ArrayList<contoCorrente> contiCorrentiArray) throws InterruptedException {
         int[] numbers = IntStream.rangeClosed(0, contiCorrentiArray.size() - 1).toArray();
         boolean presenzaCodice = false;
 
@@ -144,7 +160,8 @@ public class ObjectWrite extends JPasswordField {
 
                 //noinspection ForLoopReplaceableByForEach
                 for(int h = 0; h<verCodiceCliente.length; h++) { /* for(int h = 0; h<verCodiceCliente.length; h++) { */
-                    if (verCodiceCliente[h].getCodiceFiscale().equals(codiceFiscale)) {
+                    //System.out.println(verCodiceCliente[h].getCodiceFiscale());
+                    if (verCodiceCliente[h]!=null && verCodiceCliente[h].getCodiceFiscale().equals(codiceFiscale)) {
                         nome = verCodiceCliente[h].getNome();
                         cognome = verCodiceCliente[h].getCognome();
                         totaleConti.append("\n|| IBAN: ").append(verCodice.getIBAN()).append("    ").append("Saldo Contabile: ").append(verCodice.getSaldoContabile()).append("\n");
@@ -204,6 +221,7 @@ public class ObjectWrite extends JPasswordField {
 
         String iban = input.nextLine();
         contoCorrente verCodice = new contoCorrente();
+        int posizione = 0;
         //try {
             for (int i : numbers) {
                 //Si crea un oggetto temporaneo per ogni indice [i]
@@ -211,6 +229,7 @@ public class ObjectWrite extends JPasswordField {
                 infoCliente[] verCodiceCliente = verCodice.getCointestatari();
 
                     if(verCodice.getIBAN().equalsIgnoreCase(iban)) {
+                        posizione=i;
                         for (int h = 0; h < verCodiceCliente.length; h++) {
                             resocontoConto.append("\n|| Cointestatario ").append(h + 1).append(": ");
                             if(verCodiceCliente[h].getSesso().equalsIgnoreCase("F"))
@@ -237,7 +256,7 @@ public class ObjectWrite extends JPasswordField {
                         contoCorrente.listaMovimenti[] listaMovimentiTemp = verCodice.getListaMovimenti();
                         boolean verifica = false;
                         for(int i=listaMovimentiTemp.length-1; i>0 && !verifica; i--) {
-                            //if (listaMovimentiTemp[i]==null){
+                            if (listaMovimentiTemp[i].getDataContabile().equals("")){
                                 verifica=true;
                                 listaMovimentiTemp[i].setImportoDisponibile(importo);
                                 LocalDateTime time = LocalDateTime.now();
@@ -246,7 +265,7 @@ public class ObjectWrite extends JPasswordField {
                                 listaMovimentiTemp[i].setDataDisponibile(tempo);
                                 listaMovimentiTemp[i].setImportoContabile(importo);
                                 listaMovimentiTemp[i].setDataContabile(tempo);
-                            //}
+                            }
                             verCodice.listaMovimenti=listaMovimentiTemp;
                             //se ci sono più di 10 movimenti
                             //if(!verifica)
@@ -254,6 +273,7 @@ public class ObjectWrite extends JPasswordField {
                                 //copiare tutti il posto successivo
                         }
                         verCodice.toStringListaMovimenti();
+                        contiCorrentiArray.set(posizione,verCodice);
 
                     /*
                     System.out.print("\n\nTransazione effettuata - Sta per essere reindirizzato al menù");
