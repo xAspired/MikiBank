@@ -61,7 +61,8 @@ public class metodiVerifiche {
 
         nome="";
         for (int i = 0; i < nomeCognome.length; i++) {
-            if(!nomeCognome.equals("di"))
+            //di rimane sempre minuscolo
+            if(!nomeCognome[i].equals("di"))
                 nomeCognome[i] = nomeCognome[i].substring(0,1).toUpperCase() + nomeCognome[i].substring(1).toLowerCase();
             nome += nomeCognome[i] + " ";
         }
