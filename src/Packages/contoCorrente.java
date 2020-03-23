@@ -1,5 +1,6 @@
 package Packages;
 import java.io.Serializable;
+import java.util.Arrays;
 
 @SuppressWarnings("unused")
 public class contoCorrente extends infoCliente implements Serializable {
@@ -21,13 +22,15 @@ public class contoCorrente extends infoCliente implements Serializable {
     private String tipoConto;
     private float saldoDisponibile=0;
     private float saldoContabile=0;
+    private int movimentoAttuale=9;
+
 
     /*
      * =========================================================
      * Costruttori
      * =========================================================
      */
-    public contoCorrente(String IBAN, float saldoDisponibile, float saldoContabile, listaMovimenti[] listaMovimenti, float interesse, infoCliente[] cointestatari, String tipoConto) {
+    public contoCorrente(String IBAN, float saldoDisponibile, float saldoContabile, listaMovimenti[] listaMovimenti, float interesse, infoCliente[] cointestatari, String tipoConto, int movimentoAttuale) {
         this.IBAN = IBAN;
         this.saldoDisponibile = saldoDisponibile;
         this.saldoContabile = saldoContabile;
@@ -35,6 +38,7 @@ public class contoCorrente extends infoCliente implements Serializable {
         this.interesse = interesse;
         this.cointestatari = cointestatari;
         this.tipoConto = tipoConto;
+        this.movimentoAttuale=movimentoAttuale;
     }
 
     public contoCorrente() {}
@@ -85,8 +89,9 @@ public class contoCorrente extends infoCliente implements Serializable {
 
 
     public listaMovimenti[] getListaMovimenti(){
-        for(int i=listaMovimenti.length-1; i>0; i--) {
-            listaMovimenti[i] = new listaMovimenti();
+        for(int i=listaMovimenti.length-1; i>=0; i--) {
+            if(listaMovimenti[i]==null)
+                listaMovimenti[i] = new listaMovimenti();
         }
         return listaMovimenti;
     }
@@ -106,10 +111,11 @@ public class contoCorrente extends infoCliente implements Serializable {
         private String dataDisponibile="";
         private float importoContabile=0;
         private String dataContabile="";
+        private int movimentoAttuale=0;
 
         public listaMovimenti(){}
 
-        public listaMovimenti (float importoDisponibile, String dataDisponibile, float importoContabile, String dataContabile){
+        public listaMovimenti (float importoDisponibile, String dataDisponibile, float importoContabile, String dataContabile, int movimentoAttuale){
             this.importoDisponibile=importoDisponibile;
             this.dataDisponibile=dataDisponibile;
             this.importoContabile=importoContabile;
@@ -150,16 +156,20 @@ public class contoCorrente extends infoCliente implements Serializable {
 
     }
 
+
+    public int getMovimentoAttuale(){
+        return movimentoAttuale;
+    }
+    public void setMovimentoAttuale(int movimentoAttuale){
+        this.movimentoAttuale=movimentoAttuale;
+    }
     public void toStringListaMovimenti(){
         System.out.println("Lista Movimenti");
         boolean verifica = false;
-        for(int i=listaMovimenti.length-1; i>0 && !verifica; i--) {
-            listaMovimenti temp = listaMovimenti[i];
-            if (temp!=null){
-                verifica=true;
-                System.out.println("importo disponibile - data disponibile || importo contabile - data contabile");
+        System.out.println("importo disponibile - data disponibile || importo contabile - data contabile");
+        for(int i=9; i>=0; i--) {
+            if(listaMovimenti[i]!=null)
                 System.out.println(listaMovimenti[i].getImportoDisponibile() + "€\t" + listaMovimenti[i].getDataDisponibile() + "\t" + listaMovimenti[i].getImportoContabile() + "€\t" + listaMovimenti[i].getDataContabile());
-            }
         }
 
 
