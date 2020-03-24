@@ -295,9 +295,59 @@ public class ObjectWrite extends JPasswordField {
                             verCodice.listaMovimenti=listaMovimentiTemp;
 
                             contiCorrentiArray.set(posizione,verCodice);
+
+                        System.out.print("\n\nSta per essere reindirizzato al menù");
+                        TimeUnit.SECONDS.sleep(1);
+                        System.out.print(".");
+                        TimeUnit.SECONDS.sleep(1);
+                        System.out.print(".");
+                        TimeUnit.SECONDS.sleep(1);
+                        System.out.println(".\n");
                 }
                 if(scelta == 2) {
-                    verCodice.setSaldoContabile(preleva());
+                    float importo = preleva();
+                    String descrizione = aggiuntaDescrizione();
+                    System.out.println("Ha appena prelevato " + importo + "€ con causale: " + descrizione +  "\n");
+                    verCodice.setSaldoContabile(importo);
+                    verCodice.setSaldoDisponibile(importo);
+                    contoCorrente.listaMovimenti[] listaMovimentiTemp = verCodice.getListaMovimenti();
+                    //for(int i=listaMovimentiTemp.length-1; i>0 && !verifica; i--) {
+                    if (verCodice.getMovimentoAttuale()>=0) {
+                        int movimentoAttuale = verCodice.getMovimentoAttuale();
+                        listaMovimentiTemp[movimentoAttuale].setImportoDisponibile(importo);
+                        LocalDateTime time = LocalDateTime.now();
+                        String tempo = "";
+
+                                /*
+                                    Si gestisce il caso in cui il numero sia unico e quindi non vada
+                                    a rovinare la tabulazione della Lista Movimenti
+                                 */
+                        if(time.getDayOfMonth() < 10)
+                            tempo += "0" + time.getDayOfMonth();
+                        else
+                            tempo += time.getDayOfMonth();
+
+                        tempo += "/";
+
+                        if(time.getMonthValue() < 10)
+                            tempo += "0" + time.getMonthValue();
+                        else
+                            tempo += time.getMonthValue();
+
+                        tempo += "/" + time.getYear();
+
+                        listaMovimentiTemp[verCodice.getMovimentoAttuale()].setDataDisponibile(tempo);
+                        listaMovimentiTemp[verCodice.getMovimentoAttuale()].setImportoContabile(importo);
+                        listaMovimentiTemp[verCodice.getMovimentoAttuale()].setDataContabile(tempo);
+                        listaMovimentiTemp[verCodice.getMovimentoAttuale()].setDescrizioneOperazione(descrizione);
+                        verCodice.setMovimentoAttuale(verCodice.getMovimentoAttuale() - 1);
+                    }
+                    if(verCodice.getMovimentoAttuale()==-1)
+                        verCodice.setMovimentoAttuale(9);
+
+                    verCodice.listaMovimenti=listaMovimentiTemp;
+
+                    contiCorrentiArray.set(posizione,verCodice);
                     System.out.print("\n\nSta per essere reindirizzato al menù");
                     TimeUnit.SECONDS.sleep(1);
                     System.out.print(".");

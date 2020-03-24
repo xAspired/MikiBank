@@ -883,6 +883,10 @@ public class metodiVerifiche {
             try {
                 CAP = Integer.parseInt(input.nextLine());
                 exitMethods = false;
+                if(CAP<10000 && CAP>99999) {
+                    exitMethods = true;
+                    System.out.println("Ricorda il CAP è foramto da sole 5 cifre.");
+                }
             } catch (Exception e) {
                 System.out.print("CAP non valido!");
             }
