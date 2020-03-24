@@ -13,3 +13,4 @@ This program has as its purpose the "virtual" management of a bank, which includ
 </p>
 
 <p align="center">We decided to use GitHub for simplicity but the maximum of collaborators is 3 people.</p>
+<p align="center"><a href="http://gianmattiatorrente.altervista.org/BiTools/">BiTools</a> © 2019/2020</p>
