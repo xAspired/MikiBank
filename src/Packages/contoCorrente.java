@@ -173,6 +173,7 @@ public class contoCorrente extends infoCliente implements Serializable {
         boolean verifica = false;
         int intLunghezzaDescrizione;
         int numeroNull = 0;
+        String importoDisponibile = "";
         StringBuilder stringLunghezzaDescrizione = new StringBuilder();
 
 
@@ -180,16 +181,30 @@ public class contoCorrente extends infoCliente implements Serializable {
         System.out.println("| Data Contabile - Data Valuta - Descrizione Operazione - Importo |");
         System.out.println("+-----------------------------------------------------------------+");
         for(int i=9; i>=0; i--) {
+
+            //Variabile che verifica che sia presente almeno 1 movimento per printare la lista
             if(listaMovimenti[i]==null)
                 numeroNull++;
-            else if(listaMovimenti[i].getDescrizioneOperazione()!=null && listaMovimenti[i].getDescrizioneOperazione().length() < 25) {
-                intLunghezzaDescrizione = 25 - listaMovimenti[i].getDescrizioneOperazione().length();
+
+            //Si gestisce lo spazio tra la descrizione e l'importo
+            else if(listaMovimenti[i].getDescrizioneOperazione()!=null && listaMovimenti[i].getDescrizioneOperazione().length() < 24) {
+                intLunghezzaDescrizione = 24 - listaMovimenti[i].getDescrizioneOperazione().length();
                 stringLunghezzaDescrizione = new StringBuilder(listaMovimenti[i].getDescrizioneOperazione());
                 stringLunghezzaDescrizione.append(" ".repeat(Math.max(0, intLunghezzaDescrizione))); /* for(int j = 0; j < intLunghezzaDescrizione; j++) { */
             }
 
+            if(listaMovimenti[i]!=null) {
+                //Viene gestito l'allineamento dell'importo in caso esso sia negativo
+                if(listaMovimenti[i].getImportoDisponibile() < 0)
+                    importoDisponibile = "" + listaMovimenti[i].getImportoDisponibile();
+                else
+                    importoDisponibile = " " + listaMovimenti[i].getImportoDisponibile();
+
+            }
+
+
             if(listaMovimenti[i]!=null && listaMovimenti[i].getImportoDisponibile()!=0)
-                System.out.println("   " + listaMovimenti[i].getDataContabile() + "      " + listaMovimenti[i].getDataDisponibile() + "     " + stringLunghezzaDescrizione + listaMovimenti[i].getImportoDisponibile()+"€");
+                System.out.println("   " + listaMovimenti[i].getDataContabile() + "      " + listaMovimenti[i].getDataDisponibile() + "     " + stringLunghezzaDescrizione + importoDisponibile +"€");
         }
         if(numeroNull==10)
             System.out.print("\n\t\t|| Ancora nessun movimento. Deposita per iniziare! ||");

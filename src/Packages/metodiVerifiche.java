@@ -30,7 +30,7 @@ public class metodiVerifiche {
     }
 
     public static String verificaTipoConto() {
-        System.out.print("Che tipo di conto vuoi creare?");
+        System.out.print("Che tipo di conto vuole creare?");
         System.out.print("[1] Conto Deposito;");
         System.out.print("[2] Conto Corrente a Canone Fisso;");
         System.out.print("[3] Conto Corrente senza Canone");
@@ -51,7 +51,7 @@ public class metodiVerifiche {
             for (int i = 0; i < nome.length() && exitMethods; i++) {
                 if (!Character.isLetter(nome.charAt(i)) && nome.charAt(i) != ' ') {
                     exitMethods = false;
-                    System.out.println("Non ci possono essere numeri. Reinserisci...");
+                    System.out.println("Non ci possono essere numeri. Reinserisca...");
                 }
             }
 
@@ -145,7 +145,7 @@ public class metodiVerifiche {
                 //noinspection ConstantConditions
                 if ((i == 2) && (i == 5) && (data.charAt(i) == '.')) {
                     exitMethods = false;
-                    System.out.println("Hai dimenticato i punti.");
+                    System.out.println("Ha dimenticato i punti.");
                 } else if (Character.isLetter(data.charAt(i))) {
                     exitMethods = false;
                     System.out.println("Non ci possono essere lettere.");
@@ -191,6 +191,7 @@ public class metodiVerifiche {
             if (time.getYear()-annoReale<18 || (time.getYear()-annoReale==18 && meseReale > time.getMonthValue()) || (time.getYear()-annoReale==18 && meseReale==time.getMonthValue() && giornoReale > time.getDayOfYear())) {
                 data = "0";
             }
+
         }
 
         exitMethods = true;
@@ -202,7 +203,7 @@ public class metodiVerifiche {
         int scelta;
 
         while (exitMethods) {
-            System.out.println("Sei sicuro? \n[1] Sì\n[2] No");
+            System.out.println("È sicuro/a? \n[1] Sì\n[2] No");
             System.out.print(" ➡ ");
             try {
                 scelta = Integer.parseInt(input.nextLine());
@@ -447,7 +448,7 @@ public class metodiVerifiche {
         int scelta;
 
         while (exitMethods) {
-            System.out.println("Confermi il codice fiscale generato automaticamente? " + "➡ " + temp + "" + ":\n[1] Sì\n[2] No");
+            System.out.println("Conferma il codice fiscale generato automaticamente? " + "➡ " + temp + "" + ":\n[1] Sì\n[2] No");
             System.out.print(" ➡ ");
             try {
                 scelta = Integer.parseInt(input.nextLine());
@@ -460,7 +461,7 @@ public class metodiVerifiche {
                 else if(scelta==2) {
                     conferma=false;
                     exitMethods = false;
-                    System.out.println("Inserisci il codie fiscale personalmente:");
+                    System.out.println("Inserisca il codie fiscale personalmente:");
                 }
                 else
                     System.out.println("-valore non valido!-");
@@ -883,10 +884,6 @@ public class metodiVerifiche {
             try {
                 CAP = Integer.parseInt(input.nextLine());
                 exitMethods = false;
-                if(CAP<10000 && CAP>99999) {
-                    exitMethods = true;
-                    System.out.println("Ricorda il CAP è foramto da sole 5 cifre.");
-                }
             } catch (Exception e) {
                 System.out.print("CAP non valido!");
             }
@@ -995,7 +992,7 @@ public class metodiVerifiche {
         int scelta = 0;
         do {
             boolean conferma = true;
-            System.out.println("\n|| Inserisci il numero corrispondente ai possibili dati errati e/o 0 per terminare\n||");
+            System.out.println("\n|| Inserisca il numero corrispondente ai possibili dati errati e/o 0 per terminare\n||");
             System.out.println("|| [0] Conferma Dati e Salva");
             System.out.println("|| [1] Nome: " + cliente.getNome());
             System.out.println("|| [2] Cognome: " + cliente.getCognome());
