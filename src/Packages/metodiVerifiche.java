@@ -55,15 +55,13 @@ public class metodiVerifiche {
             }catch (Exception e){
                 System.out.println("Valore inserito non valido");
             }
-        }while(scelta!=1 || scelta!=2 || scelta!=3 || scelta!=4);
+        }while(scelta!=1 && scelta!=2 && scelta!=3 && scelta!=4);
 
         return tipoConto;
     }
 
 
     public static String verificaNomeCognome(String var) {
-        System.out.print(var + ": ");
-
         StringBuilder nome;
         exitMethods = false;
 
