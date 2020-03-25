@@ -128,13 +128,32 @@ public class metodiVerifiche {
         String data;
 
         int annoReale;
-        int meseReale;
+        int meseReale = 0;
         int giornoReale;
         
         do {
             exitMethods = true;
             data = input.nextLine();
 
+            if(data.length()<10) {
+                String giorno = "";
+                try {
+                    giorno = "" + data.charAt(data.length() - 9) + data.charAt(data.length() - 8);
+                    meseReale = Integer.parseInt(giorno);
+                } catch (Exception e) {
+                    data = "0" + data;
+                    //data = data.substring(0,2).replace("0" + data.charAt(0) ) + data.substring(2,3) + data.substring(4,data.length());
+                }
+
+                String mese = "";
+                try {
+                    mese = "" + data.charAt(data.length() - 7) + data.charAt(data.length() - 6);
+                    meseReale = Integer.parseInt(mese);
+                } catch (Exception e) {
+                    mese = mese.replace(".", ".0");
+                    data = data.substring(0, 2) + data.substring(2, 3).replace(".", mese) + data.substring(4, data.length());
+                }
+            }
             if (data.length() != 10) {
                 exitMethods = false;
                 System.out.println("Il valore inserito non rispetta la lunghezza!");
@@ -151,7 +170,10 @@ public class metodiVerifiche {
                     System.out.println("Non ci possono essere lettere.");
                 }
             }
-            String anno = "" + data.charAt(data.length() - 4) + data.charAt(data.length() - 3) + data.charAt(data.length() - 2) + data.charAt(data.length() - 1);
+        } while (!exitMethods);
+
+        String anno = "" + data.charAt(data.length() - 4) + data.charAt(data.length() - 3) + data.charAt(data.length() - 2) + data.charAt(data.length() - 1);
+
             annoReale = Integer.parseInt(anno);
             //System.out.println("anno:"+annoReale);
             String mese = "" + data.charAt(data.length() - 7) + data.charAt(data.length() - 6);
@@ -174,8 +196,6 @@ public class metodiVerifiche {
                 System.out.println("Sono stati inseriti valori non validi");
                 exitMethods = false;
             }
-        } while (!exitMethods);
-
 
         //Si verifica nel caso della scadenza carta che non sia già scduta
         LocalDateTime time = LocalDateTime.now();
