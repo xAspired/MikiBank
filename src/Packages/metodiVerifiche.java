@@ -30,21 +30,46 @@ public class metodiVerifiche {
     }
 
     public static String verificaTipoConto() {
-        System.out.print("Che tipo di conto vuole creare?");
-        System.out.print("[1] Conto Deposito;");
-        System.out.print("[2] Conto Corrente a Canone Fisso;");
-        System.out.print("[3] Conto Corrente senza Canone");
-        System.out.print("➡ ");
-        return "";
+        String tipoConto="";
+        int scelta=0;
+        do {
+            System.out.println("Che tipo di conto vuole creare?");
+            System.out.println("Conto Deposito:\n[1] Vincolato;");
+            System.out.println("[2] Non Vincolato;");
+            System.out.println("Conto Corrente:\n[3] a Canone Fisso;");
+            System.out.println("[4] senza Canone");
+            System.out.print("➡ ");
+            try{
+                scelta=Integer.parseInt(input.nextLine());
+                if(scelta==1)
+                    tipoConto="Conto Deposito Vincolato";
+                else if(scelta==2)
+                    tipoConto="Conto Deposito Non Vincolato";
+                else if(scelta==3)
+                    tipoConto="Conto Corrente A Canone Fisso";
+                else if(scelta==4)
+                    tipoConto="Conto Corrente Senza Canone";
+
+                else System.out.println("Inserisci valore valido");
+
+            }catch (Exception e){
+                System.out.println("Valore inserito non valido");
+            }
+        }while(scelta!=1 || scelta!=2 || scelta!=3 || scelta!=4);
+
+        return tipoConto;
     }
 
 
     public static String verificaNomeCognome(String var) {
         System.out.print(var + ": ");
+
         StringBuilder nome;
         exitMethods = false;
 
         do {
+            System.out.print(var + ": ");
+
             nome = new StringBuilder(input.nextLine());
             if (nome.length() != 0)
                 exitMethods = true;
@@ -123,8 +148,6 @@ public class metodiVerifiche {
     }
 
     public static String verificaData(String var) {
-        System.out.print(var + " (DD.MM.YYYY): ");
-
         String data;
 
         int annoReale;
@@ -132,6 +155,8 @@ public class metodiVerifiche {
         int giornoReale;
         
         do {
+            System.out.print(var + " (DD.MM.YYYY): ");
+
             exitMethods = true;
             data = input.nextLine();
 
@@ -904,6 +929,10 @@ public class metodiVerifiche {
             try {
                 CAP = Integer.parseInt(input.nextLine());
                 exitMethods = false;
+                if(CAP<10000 || CAP>99999) {
+                    exitMethods = true;
+                    System.out.println("CAP non valido!");
+                }
             } catch (Exception e) {
                 System.out.print("CAP non valido!");
             }
