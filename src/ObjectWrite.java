@@ -111,9 +111,9 @@ public class ObjectWrite extends JPasswordField {
                      fileOut = new FileOutputStream(file);
                      fileObj = new ObjectOutputStream(fileOut);
 
-                    fileObj.writeObject(contiCorrentiArray);
-                    fileObj.close();
-                    fileOut.close();
+                     fileObj.writeObject(contiCorrentiArray);
+                     fileObj.close();
+                     fileOut.close();
                     //Fine Serializzazione
                     break;
                 case 3:
@@ -247,7 +247,7 @@ public class ObjectWrite extends JPasswordField {
 
                         //verifica i depositi ormai fruttati
                         for(int b = verCodice.listaMovimenti.size()-1; b>=0; b--){
-                            if(verCodice.listaMovimenti.get(b).getDescrizioneOperazione().charAt(0)=='#'){
+                            if(verCodice.listaMovimenti.get(b)!=null && verCodice.listaMovimenti.get(b).getDescrizioneOperazione().charAt(0)=='#'){
                                 LocalDate time = LocalDate.now();
                                 String tempo = "";
                                 if(time.getDayOfMonth() < 10)
@@ -309,11 +309,16 @@ public class ObjectWrite extends JPasswordField {
                                 resocontoConto.append("\uD83D\uDE4E\uD83C\uDFFD\u200D♂ ");
                             resocontoConto.append(verCodiceCliente[h].getNome()).append(verCodiceCliente[h].getCognome()).append("    [").append(verCodiceCliente[h].getDataDiNascita()).append("]");
                         }
-                        resocontoConto.append("\n||\n|| Valuta: ").append(verCodice.getSaldoDisponibile()).append("€    ").append("Saldo contabile: ").append(verCodice.getSaldoContabile()).append("€    ");
+                        resocontoConto.append("\n||\n|| Valuta: ").append(verCodice.getSaldoDisponibile()).append("€    ").append("Saldo contabile: ").append(verCodice.getSaldoContabile()).append("€    \n||\n|| Tipo Conto: ").append(verCodice.getTipoConto());
                     }
 
             }
 
+            /*
+             * =========================================================
+             * Visualizza Info Conto - prelievo,deposito
+             * =========================================================
+             */
             if(resocontoConto.length() != 0) {
                 System.out.println("\n===================================================================\n                    " + iban + "\n===================================================================\n" + resocontoConto);
                 System.out.println("\n===================================================================\n                         " + "Lista Movimenti" + "\n===================================================================\n");
@@ -341,10 +346,16 @@ public class ObjectWrite extends JPasswordField {
                     }
                 }
 
+                /*
+                 * =========================================================
+                 * Deposita (normale)
+                 * =========================================================
+                 */
+
                 if(scelta == 1) {
                     float importo = deposita();
                     String descrizione = aggiuntaDescrizione();
-                    System.out.println("Ha appena depositato " + importo + "€ con causale: " + descrizione +  "\n");
+                    System.out.println("Ha appena depositato " + importo + "€ con causale: " + descrizione);
                     verCodice.setSaldoContabile(importo);
                     verCodice.setSaldoDisponibile(importo);
                     ArrayList<contoCorrente.listaMovimenti> listaMovimentiTemp = verCodice.getListaMovimenti();
@@ -377,6 +388,7 @@ public class ObjectWrite extends JPasswordField {
                           listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setImportoContabile(importo);
                           listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDataContabile(tempo);
                           listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDescrizioneOperazione(descrizione);
+                          listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDate(LocalDate.now());
                           verCodice.setMovimentoAttuale(verCodice.getMovimentoAttuale() + 1);
                     //}
                     if(verCodice.getMovimentoAttuale()==10)
@@ -397,77 +409,76 @@ public class ObjectWrite extends JPasswordField {
                     System.out.println(".\n");
                 }
 
+                /*
+                 * =========================================================
+                 * Preleva (normale e non)
+                 * =========================================================
+                 */
+
                 if(scelta == 2) {
-                    float importo = preleva();
-                    String descrizione = aggiuntaDescrizione();
+                    ArrayList<contoCorrente.listaMovimenti> listaMovimentiTemp = verCodice.getListaMovimenti();
+                    float importo = preleva(verCodice);
+                    if (importo != 0) {
+                            String descrizione = aggiuntaDescrizione();
 
-                    //Si verifica che la somma prelevabile rientri nel saldo complessivo
-                    if(verCodice.getSaldoDisponibile() + importo < 0)
-                        System.out.println("\uD83D\uDE1E Mi spiace ma tale somma supera il suo attuale saldo disponibile, pertanto non può prelevare.");
+                        //Si verifica che la somma prelevabile rientri nel saldo complessivo
+                        if (verCodice.getSaldoDisponibile() + importo < 0 && importo > 0) {
+                            System.out.println("\uD83D\uDE1E Mi spiace ma tale somma supera il suo attuale saldo disponibile, pertanto non può prelevare.");
+                        }
+                        else {
+                            System.out.println("Ha appena prelevato " + importo + "€ con causale: " + descrizione);
+                            verCodice.setSaldoContabile(importo);
 
-                    else {
-                        System.out.println("Ha appena prelevato " + importo + "€ con causale: " + descrizione + "\n");
-                        verCodice.setSaldoContabile(importo);
-                        verCodice.setSaldoDisponibile(importo);
-                        ArrayList<contoCorrente.listaMovimenti> listaMovimentiTemp = verCodice.getListaMovimenti();
+                            //if (verCodice.getMovimentoAttuale()<= 9) {
+                            contoCorrente.listaMovimenti oggettoMovimenti = new contoCorrente.listaMovimenti();
+                            listaMovimentiTemp.add(oggettoMovimenti);
+                            int movimentoAttuale = verCodice.getMovimentoAttuale();
+                            listaMovimentiTemp.get(movimentoAttuale).setImportoDisponibile(importo);
+                            LocalDateTime time = LocalDateTime.now();
+                            String tempo = "";
+                             /*
+                                Si gestisce il caso in cui il numero sia unico e quindi non vada
+                                a rovinare la tabulazione della Lista Movimenti
+                             */
+                            if (time.getDayOfMonth() < 10)
+                                tempo += "0" + time.getDayOfMonth();
+                            else
+                                tempo += time.getDayOfMonth();
 
-                        contoCorrente.listaMovimenti oggettoMovimenti = new contoCorrente.listaMovimenti();
-                        listaMovimentiTemp.add(oggettoMovimenti);
-                        //if (verCodice.getMovimentoAttuale()<= 9) {
-                        int movimentoAttuale = verCodice.getMovimentoAttuale();
-                        listaMovimentiTemp.get(movimentoAttuale).setImportoDisponibile(importo);
-                        LocalDateTime time = LocalDateTime.now();
-                        String tempo = "";
-                         /*
-                            Si gestisce il caso in cui il numero sia unico e quindi non vada
-                            a rovinare la tabulazione della Lista Movimenti
-                         */
-                        if (time.getDayOfMonth() < 10)
-                            tempo += "0" + time.getDayOfMonth();
-                        else
-                            tempo += time.getDayOfMonth();
+                            tempo += "/";
 
-                        tempo += "/";
+                            if (time.getMonthValue() < 10)
+                                tempo += "0" + time.getMonthValue();
+                            else
+                                tempo += time.getMonthValue();
 
-                        if (time.getMonthValue() < 10)
-                            tempo += "0" + time.getMonthValue();
-                        else
-                            tempo += time.getMonthValue();
+                            tempo += "/" + time.getYear();
 
-                        tempo += "/" + time.getYear();
+                            listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDataDisponibile(tempo);
+                            listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setImportoContabile(importo);
+                            listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDataContabile(tempo);
+                            listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDescrizioneOperazione(descrizione);
+                            listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDate(LocalDate.now());
+                            verCodice.setMovimentoAttuale(verCodice.getMovimentoAttuale() + 1);
+                            //}
+                            if (verCodice.getMovimentoAttuale() == 10)
+                                verCodice.setMovimentoAttuale(0);
 
-                        listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDataDisponibile(tempo);
-                        listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setImportoContabile(importo);
-                        listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDataContabile(tempo);
-                        listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDescrizioneOperazione(descrizione);
-                        verCodice.setMovimentoAttuale(verCodice.getMovimentoAttuale() + 1);
-                        //}
-                        if (verCodice.getMovimentoAttuale() == 10)
-                            verCodice.setMovimentoAttuale(0);
+                            //System.out.print(verCodice.getListaMovimenti());
+                            //System.out.print(verCodice.getListaMovimenti().size());
 
-                        //System.out.print(verCodice.getListaMovimenti());
-                        //System.out.print(verCodice.getListaMovimenti().size());
+                            verCodice.listaMovimenti = listaMovimentiTemp;
+                            contiCorrentiArray.set(posizione, verCodice);
 
-                        verCodice.listaMovimenti = listaMovimentiTemp;
-                        contiCorrentiArray.set(posizione, verCodice);
-
-                        System.out.print("\n\nSta per essere reindirizzato al menù");
-                        TimeUnit.SECONDS.sleep(1);
-                        System.out.print(".");
-                        TimeUnit.SECONDS.sleep(1);
-                        System.out.print(".");
-                        TimeUnit.SECONDS.sleep(1);
-                        System.out.println(".\n");
+                            System.out.print("\n\nSta per essere reindirizzato al menù");
+                            TimeUnit.SECONDS.sleep(1);
+                            System.out.print(".");
+                            TimeUnit.SECONDS.sleep(1);
+                            System.out.print(".");
+                            TimeUnit.SECONDS.sleep(1);
+                            System.out.println(".\n");
+                        }
                     }
-                }
-                if(scelta == 4 && (verCodice.getTipoConto().equals("Conto Deposito non Vincolato") || verCodice.getTipoConto().equals("Conto Deposito Vincolato"))) {
-                    System.out.print("\n\nSta per essere reindirizzato al menù");
-                    TimeUnit.SECONDS.sleep(1);
-                    System.out.print(".");
-                    TimeUnit.SECONDS.sleep(1);
-                    System.out.print(".");
-                    TimeUnit.SECONDS.sleep(1);
-                    System.out.println(".\n");
                 }
 
                 if(scelta == 3 && ((verCodice.getTipoConto().equals("Conto Deposito non Vincolato") || verCodice.getTipoConto().equals("Conto Deposito Vincolato")))) {
@@ -490,10 +501,11 @@ public class ObjectWrite extends JPasswordField {
                     //verCodice.setSaldoDisponibile(importo);
                     verCodice.setSaldoContabile(importo);
                     ArrayList<contoCorrente.listaMovimenti> listaMovimentiTemp = verCodice.getListaMovimenti();
-                    contoCorrente.listaMovimenti oggettoMovimenti = new contoCorrente.listaMovimenti();
-                    listaMovimentiTemp.add(oggettoMovimenti);
+
                     //if (verCodice.getMovimentoAttuale()<= 9) {
                     int movimentoAttuale = verCodice.getMovimentoAttuale();
+                    contoCorrente.listaMovimenti oggettoMovimenti = new contoCorrente.listaMovimenti();
+                    listaMovimentiTemp.add(oggettoMovimenti);
                     listaMovimentiTemp.get(movimentoAttuale).setImportoDisponibile(importo);
 
                     LocalDateTime time = LocalDateTime.now();
@@ -551,18 +563,18 @@ public class ObjectWrite extends JPasswordField {
 
                     descrizione += Integer.parseInt(String.valueOf(verCodice.getListaMovimenti().size()));
 
-                    System.out.println("Ha appena depositato " + importo + "€ con codice: " + descrizione +  "\n");
+                    System.out.println("Ha appena depositato " + importo + "€ con codice: " + descrizione);
 
                     //calcolo importo disponibile
-                    NumberFormat format = new DecimalFormat("#.##");
-                    String importoFruttato = format.format((float) ((importo * 1.48 * noOfDaysBetween) / 36500));
-                    System.out.println("Se attenderà " + noOfDaysBetween + " giorni, i suoi interessi corrisponderanno a €" + importoFruttato);
+                    float importoFruttato = ((float) ((importo * 1.48 * noOfDaysBetween) / 36500));
+                    System.out.println("Se attenderà " + noOfDaysBetween + " giorni, i suoi interessi corrisponderanno a €" + Math.round((importoFruttato)*100)/100.00 + ".\nPer un totale di €" + Math.round((importo + importoFruttato)*100)/100.00);
 
 
                     listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDataDisponibile(tempo);
                     listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setImportoContabile(importo);
                     listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDataContabile(tempoDisponibile);
                     listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDescrizioneOperazione(descrizione);
+                    listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDate(LocalDate.now());
                     verCodice.setMovimentoAttuale(verCodice.getMovimentoAttuale() + 1);
                     //}
                     if(verCodice.getMovimentoAttuale()==10)
@@ -584,6 +596,16 @@ public class ObjectWrite extends JPasswordField {
                 }
 
                 if(scelta == 3 && !((verCodice.getTipoConto().equals("Conto Deposito non Vincolato") || verCodice.getTipoConto().equals("Conto Deposito Vincolato")))) {
+                    System.out.print("\n\nSta per essere reindirizzato al menù");
+                    TimeUnit.SECONDS.sleep(1);
+                    System.out.print(".");
+                    TimeUnit.SECONDS.sleep(1);
+                    System.out.print(".");
+                    TimeUnit.SECONDS.sleep(1);
+                    System.out.println(".\n");
+                }
+
+                if(scelta == 4 && (verCodice.getTipoConto().equals("Conto Deposito non Vincolato") || verCodice.getTipoConto().equals("Conto Deposito Vincolato"))) {
                     System.out.print("\n\nSta per essere reindirizzato al menù");
                     TimeUnit.SECONDS.sleep(1);
                     System.out.print(".");
@@ -621,19 +643,87 @@ public class ObjectWrite extends JPasswordField {
         }
         return denaro;
     }
-    private static float preleva(){
+    private static float preleva(contoCorrente verCodice){
         float denaro = 0;
+        int scelta = 0;
         boolean exitMethods = true;
+
         while(exitMethods) {
-            System.out.print("\nInserisca la cifra da prelevare: €");
             try {
-                denaro = Integer.parseInt("-" + Integer.parseInt(input.nextLine()));
-                exitMethods = false;
+                if((verCodice.getTipoConto().equals("Conto Deposito non Vincolato") || verCodice.getTipoConto().equals("Conto Deposito Vincolato"))) {
+                    System.out.println("\nCosa vuole prelevare?\n[1] Saldo Disponibile\n[2] Deposito Cauzionale (Saldo Contabile)");
+                    System.out.print(" ➡ ");
+                    scelta = Integer.parseInt(input.nextLine());
+                }
+                else
+                    scelta = 1;
+
+                if(scelta == 1 || scelta == 2)
+                    exitMethods = false;
             }
             catch (Exception e) {
-                System.out.print("Errore! Il valore da prelevare non può essere uguale a 0€");
+                System.out.print("Errore! Valore non valido.");
             }
         }
+
+        /*
+        Prelievo normale
+        */
+        if(scelta == 1) {
+            exitMethods = true;
+            while(exitMethods) {
+                System.out.print("\nInserisca la cifra da prelevare: €");
+                try {
+                    denaro = Integer.parseInt("-" + Integer.parseInt(input.nextLine()));
+                    exitMethods = false;
+                }
+                catch (Exception e) {
+                    System.out.print("Errore! Il valore da prelevare non può essere uguale a 0€");
+                }
+            }
+            verCodice.setSaldoDisponibile(denaro);
+        }
+
+        /*
+        Prelievo fruttato
+        */
+        else {
+            boolean conferma = true;
+            if(verCodice.listaMovimenti.size()!=0){
+                System.out.print("Inserisca il codice della transazione (Es. #12345): ");
+                String codiceTransazione = input.nextLine();
+                codiceTransazione = codiceTransazione.replaceAll(" ","");
+                for(int i = verCodice.listaMovimenti.size()-1; i>=0; i--) {
+                    //esiste il codice di transazione?
+                    if (verCodice.listaMovimenti.get(i) != null && verCodice.getListaMovimenti().get(i).getDescrizioneOperazione().equals(codiceTransazione)) {
+                        conferma=false;
+                        //////interesse
+                        //data di inizio
+                        String dataInizio = verCodice.listaMovimenti.get(i).getDataDisponibile();
+                        //data attuale
+                        LocalDate dataAttuale= LocalDate.now();
+                        LocalDate dataPrima = verCodice.listaMovimenti.get(i).getDate();;
+                        long noOfDaysBetween = ChronoUnit.DAYS.between(dataAttuale, dataPrima);
+
+                        //Calcolo numero giorni
+                        if (noOfDaysBetween == 0)
+                            noOfDaysBetween = 1;
+
+                        //importo totale
+                        denaro = (float) (Math.round((verCodice.listaMovimenti.get(i).getImportoContabile() + (verCodice.listaMovimenti.get(i).getImportoContabile() * 1.48 * noOfDaysBetween) / 36500) * 100) / 100.00);
+                        denaro=denaro*-1;
+                        verCodice.listaMovimenti.get(i).setImportoContabile(denaro);
+                        //verCodice.setSaldoDisponibile(denaro);
+                        //System.out.println(denaro + "dchcbdshb" + denaro*-1);
+                        //Azzerato il movimento
+                        verCodice.listaMovimenti.get(i).setImportoContabile(0);
+
+                    } else if (conferma)
+                        System.out.println("Non esiste nessun movimento con tale codice");
+                }
+            }
+        }
+
         return denaro;
     }
 
@@ -642,7 +732,7 @@ public class ObjectWrite extends JPasswordField {
         String lunghezzaMax = "Descrizione Operazione";
         boolean exitMethods = true;
         while(exitMethods) {
-            System.out.print("Inserisca la causale del deposito (Max. " + lunghezzaMax.length() + " Caratteri): ");
+            System.out.print("Inserisca la causale dell'operazione (Max. " + lunghezzaMax.length() + " Caratteri): ");
             causale = input.nextLine();
             if (causale.length() > lunghezzaMax.length())
                 System.out.println("Errore! Inserire una causale più corta.");

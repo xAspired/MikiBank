@@ -1,5 +1,6 @@
 package Packages;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -116,15 +117,18 @@ public class contoCorrente extends infoCliente implements Serializable {
         private float importoContabile=0;
         private String dataContabile="";
         private String descrizioneOperazione;
+        private LocalDate date;
 
         public listaMovimenti(){}
 
-        public listaMovimenti (float importoDisponibile, String dataDisponibile, float importoContabile, String dataContabile, int movimentoAttuale, String descrizioneOperazione){
+        public listaMovimenti (float importoDisponibile, String dataDisponibile, float importoContabile, String dataContabile, int movimentoAttuale, String descrizioneOperazione, LocalDate date){
             this.importoDisponibile=importoDisponibile;
             this.dataDisponibile=dataDisponibile;
             this.importoContabile=importoContabile;
             this.dataContabile=dataContabile;
             this.descrizioneOperazione=descrizioneOperazione;
+            this.date = date;
+
         }
 
         public float getImportoDisponibile() {
@@ -165,6 +169,14 @@ public class contoCorrente extends infoCliente implements Serializable {
 
         public void setDescrizioneOperazione(String descrizioneOperazione) {
             this.descrizioneOperazione = descrizioneOperazione;
+        }
+
+        public LocalDate getDate(){
+            return date;
+        }
+
+        public void setDate(LocalDate date) {
+            this.date = date;
         }
     }
 

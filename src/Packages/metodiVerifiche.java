@@ -34,28 +34,34 @@ public class metodiVerifiche {
         int scelta=0;
         do {
             System.out.println("Che tipo di conto vuole creare?");
-            System.out.println("Conto Deposito:\n[1] Vincolato;");
-            System.out.println("[2] Non Vincolato;");
-            System.out.println("Conto Corrente:\n[3] a Canone Fisso;");
-            System.out.println("[4] senza Canone");
+            System.out.println("Conto Deposito:\n  [1] Vincolato [Work in Progress];");
+            System.out.println("  [2] Non Vincolato;");
+            System.out.println("Conto Corrente:\n  [3] a Canone Fisso [Work in Progress];");
+            System.out.println("  [4] senza Canone [Work in Progress]");
             System.out.print("➡ ");
             try{
                 scelta=Integer.parseInt(input.nextLine());
+                /*
                 if(scelta==1)
                     tipoConto="Conto Deposito Vincolato";
-                else if(scelta==2)
+                 */
+                if(scelta==2)
                     tipoConto="Conto Deposito non Vincolato";
+                /*
                 else if(scelta==3)
                     tipoConto="Conto Corrente a Canone Fisso";
                 else if(scelta==4)
                     tipoConto="Conto Corrente senza Canone";
+                */
+                if(scelta==3 || scelta==4)
+                    System.out.println("Opzione non disponibile. Ci scusiamo per il disagio! \uD83D\uDE1E\n");
 
                 else System.out.println("Inserisci valore valido");
 
             }catch (Exception e){
                 System.out.println("Valore inserito non valido");
             }
-        }while(scelta!=1 && scelta!=2 && scelta!=3 && scelta!=4);
+        }while(/*scelta!=1 && */ scelta!=2 /*&& scelta!=3 && scelta!=4*/);
 
         return tipoConto;
     }
@@ -749,7 +755,7 @@ public class metodiVerifiche {
     public static String verificaCittadinanza () {
         String cittadinanza = null;
         while (exitMethods) {
-            System.out.print("Cittadinanza: ");
+            System.out.print("Cittadinanza (italiana): ");
             try {
                 cittadinanza = input.nextLine();
                 exitMethods = !cittadinanza.equalsIgnoreCase("Italiano") && !cittadinanza.equalsIgnoreCase("Italiana");
@@ -1031,13 +1037,14 @@ public class metodiVerifiche {
             ex.printStackTrace();
         }
 
-        System.out.println(IBAN);
+        System.out.println(" e il suo IBAN è: " + IBAN + "\n");
         return IBAN;
     }
 
 
     public static void verificaDatiInseritiFinale(infoCliente cliente) {
         int scelta = 0;
+        menu:
         do {
             boolean conferma = true;
             System.out.println("\n|| Inserisca il numero corrispondente ai possibili dati errati e/o 0 per terminare\n||");
@@ -1057,13 +1064,13 @@ public class metodiVerifiche {
             System.out.println("|| [13] Numero civico: " + cliente.getNumeroCivico());
             System.out.println("|| [14] CAP di residenza: " + cliente.getCapResidenza());
             System.out.print(" ➡ ");
-            
+
             while (conferma) {
                 try {
                     scelta = Integer.parseInt(input.nextLine());
 
                     if (scelta >= 0 && scelta <= 14) {
-                        conferma = verificaDatiInseriti();
+                        conferma=false;
                     } else
                         System.out.println("-valore non valido-");
 
@@ -1072,81 +1079,90 @@ public class metodiVerifiche {
                 }
             }
 
-            switch (scelta) {
-                //Esci
-                case 0:
-                    scelta = 0;
-                    System.out.println("I dati del cliente sono stati registrati.\n");
-                    break;
-
-                //Nome
-                case 1:
-                    cliente.setNome(verificaNomeCognome("Nome"));
-                    break;
-
-                //Cognome
-                case 2:
-                    cliente.setCognome(verificaNomeCognome("Cognome"));
-                    break;
-
-                //ID Carta
-                case 3:
-                    cliente.setCartaID(verificaCartaID());
-                    break;
-
-                //Data Scadenza Carta
-                case 4:
-                    cliente.setCartaScadenza(verificaData("Data scadenza Carta d'Identità"));
-                    break;
-
-                //Data di Nascita
-                case 5:
-                    cliente.setDataDiNascita(verificaData("Data di nascita"));
-                    break;
-
-                //Sesso
-                case 6:
-                    cliente.setSesso(verificaSesso());
-                    break;
-
-                case 7:
-
-                //Codice Fiscale
-                case 8:
-                    cliente.setCodiceFiscale(verificaCodiceFiscale(cliente.getNome(), cliente.getCognome(), cliente.getDataDiNascita(), cliente.getSesso(), cliente.getComuneResidenza()));
-                    break;
-
-                //Cittadinanza
-                case 9:
-                    cliente.setCittadinanza(verificaCittadinanza());
-                    break;
-
-                //Stato di Residenza
-                case 10:
-                    cliente.setStatoResidenza(verificaStatoResidenza());
-                    break;
-
-                //Comune di Residenza
-                case 11:
-                    cliente.setComuneResidenza(verificaComune("Residenza"));
-                    break;
-
-                //Indirizzo di Residenza
-                case 12:
-                    cliente.setIndirizzoResidenza(verificaIndirizzoResidenza());
-                    break;
-
-                //Numero Civico
-                case 13:
-                    cliente.setNumeroCivico(verificaNumeroCivico());
-                    break;
-
-                //CAP di Residenza
-                case 14:
-                    cliente.setCapResidenza(verificaCapResidenza());
-                    break;
-
+            if(verificaDatiInseriti()) {
+                scelta=333;
+                //noinspection UnnecessaryLabelOnContinueStatement
+                continue menu;
             }
+
+                switch (scelta) {
+                    //Esci
+                    case 0:
+                        scelta = 0;
+                        System.out.print("I suoi dati sono stati registrati");
+                        break;
+
+                    //Nome
+                    case 1:
+                        cliente.setNome(verificaNomeCognome("Nome"));
+                        break;
+
+                    //Cognome
+                    case 2:
+                        cliente.setCognome(verificaNomeCognome("Cognome"));
+                        break;
+
+                    //ID Carta
+                    case 3:
+                        cliente.setCartaID(verificaCartaID());
+                        break;
+
+                    //Data Scadenza Carta
+                    case 4:
+                        cliente.setCartaScadenza(verificaData("Data scadenza Carta d'Identità"));
+                        break;
+
+                    //Data di Nascita
+                    case 5:
+                        cliente.setDataDiNascita(verificaData("Data di nascita"));
+                        break;
+
+                    //Sesso
+                    case 6:
+                        cliente.setSesso(verificaSesso());
+                        break;
+
+                    case 7:
+
+                        //Codice Fiscale
+                    case 8:
+                        cliente.setCodiceFiscale(verificaCodiceFiscale(cliente.getNome(), cliente.getCognome(), cliente.getDataDiNascita(), cliente.getSesso(), cliente.getComuneResidenza()));
+                        break;
+
+                    //Cittadinanza
+                    case 9:
+                        cliente.setCittadinanza(verificaCittadinanza());
+                        break;
+
+                    //Stato di Residenza
+                    case 10:
+                        cliente.setStatoResidenza(verificaStatoResidenza());
+                        break;
+
+                    //Comune di Residenza
+                    case 11:
+                        cliente.setComuneResidenza(verificaComune("Residenza"));
+                        break;
+
+                    //Indirizzo di Residenza
+                    case 12:
+                        cliente.setIndirizzoResidenza(verificaIndirizzoResidenza());
+                        break;
+
+                    //Numero Civico
+                    case 13:
+                        cliente.setNumeroCivico(verificaNumeroCivico());
+                        break;
+
+                    //CAP di Residenza
+                    case 14:
+                        cliente.setCapResidenza(verificaCapResidenza());
+                        break;
+
+                    case 333:
+                        break;
+
+                }
         }while(scelta!=0);
     }
 }
