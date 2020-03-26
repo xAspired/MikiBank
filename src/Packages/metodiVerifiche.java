@@ -44,11 +44,11 @@ public class metodiVerifiche {
                 if(scelta==1)
                     tipoConto="Conto Deposito Vincolato";
                 else if(scelta==2)
-                    tipoConto="Conto Deposito Non Vincolato";
+                    tipoConto="Conto Deposito non Vincolato";
                 else if(scelta==3)
-                    tipoConto="Conto Corrente A Canone Fisso";
+                    tipoConto="Conto Corrente a Canone Fisso";
                 else if(scelta==4)
-                    tipoConto="Conto Corrente Senza Canone";
+                    tipoConto="Conto Corrente senza Canone";
 
                 else System.out.println("Inserisci valore valido");
 
@@ -149,7 +149,7 @@ public class metodiVerifiche {
         String data;
 
         int annoReale;
-        int meseReale = 0;
+        int meseReale;
         int giornoReale;
         
         do {
@@ -159,22 +159,23 @@ public class metodiVerifiche {
             data = input.nextLine();
 
             if(data.length()<10) {
-                String giorno = "";
+                String giorno;
                 try {
                     giorno = "" + data.charAt(data.length() - 9) + data.charAt(data.length() - 8);
+                    //noinspection UnusedAssignment
                     meseReale = Integer.parseInt(giorno);
                 } catch (Exception e) {
                     data = "0" + data;
-                    //data = data.substring(0,2).replace("0" + data.charAt(0) ) + data.substring(2,3) + data.substring(4,data.length());
                 }
 
                 String mese = "";
                 try {
                     mese = "" + data.charAt(data.length() - 7) + data.charAt(data.length() - 6);
+                    //noinspection UnusedAssignment
                     meseReale = Integer.parseInt(mese);
                 } catch (Exception e) {
                     mese = mese.replace(".", ".0");
-                    data = data.substring(0, 2) + data.substring(2, 3).replace(".", mese) + data.substring(4, data.length());
+                    data = data.substring(0, 2) + data.substring(2, 3).replace(".", mese) + data.substring(4);
                 }
             }
             if (data.length() != 10) {
