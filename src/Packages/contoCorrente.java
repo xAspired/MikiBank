@@ -214,7 +214,10 @@ public class contoCorrente extends infoCliente implements Serializable {
                 if (listaMovimenti.get(i).getDescrizioneOperazione() != null && listaMovimenti.get(i).getDescrizioneOperazione().length() < 24) {
                     intLunghezzaDescrizione = 24 - listaMovimenti.get(i).getDescrizioneOperazione().length();
                     stringLunghezzaDescrizione = new StringBuilder(listaMovimenti.get(i).getDescrizioneOperazione());
-                    stringLunghezzaDescrizione.append(" ".repeat(Math.max(0, intLunghezzaDescrizione))); /* for(int j = 0; j < intLunghezzaDescrizione; j++) { */
+                    for(int j = 0; j < intLunghezzaDescrizione; j++) {
+                        stringLunghezzaDescrizione.append(" ");
+                    }
+                    //stringLunghezzaDescrizione.append(" ".repeat(Math.max(0, intLunghezzaDescrizione))); /* for(int j = 0; j < intLunghezzaDescrizione; j++) { */
                 }
 
                 if (listaMovimenti.get(i) != null) {

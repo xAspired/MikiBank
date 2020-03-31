@@ -45,18 +45,20 @@ public class metodiVerifiche {
                 if(scelta==1)
                     tipoConto="Conto Deposito Vincolato";
                  */
-                if(scelta==2)
-                    tipoConto="Conto Deposito non Vincolato";
+                if(scelta==2) {
+                    tipoConto = "Conto Deposito non Vincolato";
+                }
                 /*
                 else if(scelta==3)
                     tipoConto="Conto Corrente a Canone Fisso";
                 else if(scelta==4)
                     tipoConto="Conto Corrente senza Canone";
                 */
-                if(scelta==3 || scelta==4)
+                else if(scelta==1 || scelta==3 || scelta==4)
                     System.out.println("Opzione non disponibile. Ci scusiamo per il disagio! \uD83D\uDE1E\n");
 
                 else System.out.println("Inserisci valore valido");
+
 
             }catch (Exception e){
                 System.out.println("Valore inserito non valido");
@@ -229,7 +231,7 @@ public class metodiVerifiche {
 
         //Si verifica nel caso della scadenza carta che non sia già scduta
         LocalDateTime time = LocalDateTime.now();
-        if (var.equals("Data scadenza Carta d'Identità")) {
+        if (var.equals("Data scadenza della Carta d'Identità")) {
             //System.out.println(time.getYear()+" "+time.getMonthValue()+" "+time.getDayOfMonth());
             if (annoReale < time.getYear() || (annoReale==time.getYear() && meseReale < time.getMonthValue()) || (annoReale==time.getYear() && meseReale==time.getMonthValue() && giornoReale < time.getDayOfYear())) {
                 data = "0";
@@ -1011,7 +1013,8 @@ public class metodiVerifiche {
              *  for(int i = IBANchar.length(); i<11; i++)
              *      zero.append("0");
              */
-            zero.append("0".repeat(Math.max(0, 11 - IBANchar.length())));
+            for(int i = IBANchar.length(); i<11; i++)
+                zero.append("0");
 
 
             //Aggiunta all'IBAN degli 0 + il numero effettivo del conto
@@ -1109,7 +1112,7 @@ public class metodiVerifiche {
 
                     //Data Scadenza Carta
                     case 4:
-                        cliente.setCartaScadenza(verificaData("Data scadenza Carta d'Identità"));
+                        cliente.setCartaScadenza(verificaData("Data scadenza della Carta d'Identità"));
                         break;
 
                     //Data di Nascita

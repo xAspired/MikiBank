@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="MikiBank:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/MikiBank_jar</output-path>
+    <root id="archive" name="MikiBank.jar">
+      <element id="module-output" name="MikiBank" />
+    </root>
+  </artifact>
+</component>

@@ -206,8 +206,8 @@ public class ObjectWrite extends JPasswordField {
                         scelta = Integer.parseInt(input.nextLine());
 
                         if(scelta==1) {
+                            System.out.println("Per creare un conto ritorni al menù");
                             exitMethods = false;
-                            //creaConto();
                         }
                         else if(scelta==2) {
                             exitMethods = false;
@@ -422,10 +422,7 @@ public class ObjectWrite extends JPasswordField {
                             String descrizione = aggiuntaDescrizione();
 
                         //Si verifica che la somma prelevabile rientri nel saldo complessivo
-                        if (verCodice.getSaldoDisponibile() + importo < 0 && importo > 0) {
-                            System.out.println("\uD83D\uDE1E Mi spiace ma tale somma supera il suo attuale saldo disponibile, pertanto non può prelevare.");
-                        }
-                        else {
+                        if (importo != 0) {
                             System.out.println("Ha appena prelevato " + importo + "€ con causale: " + descrizione);
                             verCodice.setSaldoContabile(importo);
 
@@ -681,7 +678,12 @@ public class ObjectWrite extends JPasswordField {
                     System.out.print("Errore! Il valore da prelevare non può essere uguale a 0€");
                 }
             }
-            verCodice.setSaldoDisponibile(denaro);
+            if (verCodice.getSaldoDisponibile() + denaro < 0) {
+                System.out.println("\uD83D\uDE1E Mi spiace ma tale somma supera il suo attuale saldo disponibile, pertanto non può prelevare.");
+                denaro = 0;
+            }
+            else
+                verCodice.setSaldoDisponibile(denaro);
         }
 
         /*
@@ -698,11 +700,9 @@ public class ObjectWrite extends JPasswordField {
                     if (verCodice.listaMovimenti.get(i) != null && verCodice.getListaMovimenti().get(i).getDescrizioneOperazione().equals(codiceTransazione)) {
                         conferma=false;
                         //////interesse
-                        //data di inizio
-                        String dataInizio = verCodice.listaMovimenti.get(i).getDataDisponibile();
                         //data attuale
                         LocalDate dataAttuale= LocalDate.now();
-                        LocalDate dataPrima = verCodice.listaMovimenti.get(i).getDate();;
+                        LocalDate dataPrima = verCodice.listaMovimenti.get(i).getDate();
                         long noOfDaysBetween = ChronoUnit.DAYS.between(dataAttuale, dataPrima);
 
                         //Calcolo numero giorni
@@ -721,6 +721,9 @@ public class ObjectWrite extends JPasswordField {
                     } else if (conferma)
                         System.out.println("Non esiste nessun movimento con tale codice");
                 }
+            }
+            else {
+                System.out.println("Ancora nessun movimento");
             }
         }
 
@@ -792,7 +795,7 @@ public class ObjectWrite extends JPasswordField {
 
             String cognome = verificaNomeCognome("Cognome");
             String cartaID = verificaCartaID(); //ID riconoscitivo carta d'identità (CA00000AA) Numero Unico Nazionale
-            String cartaScadenza = verificaData("Data scadenza Carta d'Identità"); //Scadenza carta d'identità
+            String cartaScadenza = verificaData("Data scadenza della Carta d'Identità"); //Scadenza carta d'identità
 
             //Errore Interno: Cx00 dove C equivale a "C"arta, mentre le cifre sono in progressione
             if (cartaScadenza.equals("0")) {
