@@ -24,6 +24,7 @@ public class contoCorrente extends infoCliente implements Serializable {
     private float saldoDisponibile=0;
     private float saldoContabile=0;
     String tipoConto;
+    private String statoConto;
 
 
     /*
@@ -31,7 +32,7 @@ public class contoCorrente extends infoCliente implements Serializable {
      * Costruttori
      * =========================================================
      */
-    public contoCorrente(String IBAN, float saldoDisponibile, float saldoContabile, ArrayList<listaMovimenti> listaMovimenti, float interesse, infoCliente[] cointestatari, String tipoConto) {
+    public contoCorrente(String IBAN, float saldoDisponibile, float saldoContabile, ArrayList<listaMovimenti> listaMovimenti, float interesse, infoCliente[] cointestatari, String tipoConto, String statoConto) {
         this.IBAN = IBAN;
         this.saldoDisponibile = saldoDisponibile;
         this.saldoContabile = saldoContabile;
@@ -39,6 +40,7 @@ public class contoCorrente extends infoCliente implements Serializable {
         this.interesse = interesse;
         this.tipoConto = tipoConto;
         this.cointestatari = cointestatari;
+        this.statoConto = statoConto;
     }
 
     public contoCorrente() {}
@@ -97,6 +99,14 @@ public class contoCorrente extends infoCliente implements Serializable {
 
     public ArrayList<contoCorrente.listaMovimenti> getListaMovimenti(){
         return listaMovimenti;
+    }
+
+    public String getStatoConto(){
+        return statoConto;
+    }
+
+    public void setStatoConto(String statoConto) {
+        this.statoConto = statoConto;
     }
 
     @Override
