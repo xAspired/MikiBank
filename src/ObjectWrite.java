@@ -352,7 +352,9 @@ public class ObjectWrite extends JPasswordField {
          */
 
         //Se a resocontoConto sono già stati assegnati dei valori
+
         if(resocontoConto.length() != 0) {
+
             System.out.println("\n===================================================================\n                    " + iban + "\n===================================================================\n" + resocontoConto);
             System.out.println("\n===================================================================\n                         " + "Lista Movimenti" + "\n===================================================================\n");
             verCodice.toStringListaMovimenti();
@@ -400,11 +402,9 @@ public class ObjectWrite extends JPasswordField {
                 verCodice.setSaldoDisponibile(importo);
                 ArrayList<contoCorrente.listaMovimenti> listaMovimentiTemp = verCodice.getListaMovimenti();
                 contoCorrente.listaMovimenti oggettoMovimenti = new contoCorrente.listaMovimenti();
-                listaMovimentiTemp.add(oggettoMovimenti);
-                //if (verCodice.getMovimentoAttuale()<= 9) {
-                //Serve a riconosciere a quale numero dei 10 movimenti necessari si è arrivato
-                int movimentoAttuale = verCodice.getMovimentoAttuale();
-                listaMovimentiTemp.get(movimentoAttuale).setImportoDisponibile(importo);
+
+
+                oggettoMovimenti.setImportoDisponibile(importo);
                 LocalDateTime time = LocalDateTime.now();
                 String tempo = "";
 
@@ -426,16 +426,13 @@ public class ObjectWrite extends JPasswordField {
 
                 tempo += "/" + time.getYear();
 
-                listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDataDisponibile(tempo);
-                listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setImportoContabile(importo);
-                listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDataContabile(tempo);
-                listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDescrizioneOperazione(descrizione);
-                listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDate(LocalDate.now());
-                verCodice.setMovimentoAttuale(verCodice.getMovimentoAttuale() + 1);
+                oggettoMovimenti.setDataDisponibile(tempo);
+                oggettoMovimenti.setImportoContabile(importo);
+                oggettoMovimenti.setDataContabile(tempo);
+                oggettoMovimenti.setDescrizioneOperazione(descrizione);
+                oggettoMovimenti.setDate(LocalDate.now());
 
-                if(verCodice.getMovimentoAttuale()==10)
-                    verCodice.setMovimentoAttuale(0);
-
+                listaMovimentiTemp.add(oggettoMovimenti);
                 verCodice.listaMovimenti=listaMovimentiTemp;
                 contiCorrentiArray.set(posizione,verCodice);
 
@@ -462,14 +459,16 @@ public class ObjectWrite extends JPasswordField {
 
                     //Si verifica che la somma prelevabile rientri nel saldo complessivo
                     if (importo != 0) {
-                        System.out.println("Ha appena prelevato " + importo + "€ con causale: " + descrizione);
+                        if(verCodice.getTipoConto().equals("Conto Deposito Vincolato"))
+                            System.out.println("Ha appena prelevato " + importo + "€ con causale: " + descrizione + " (annesso di interessi)");
+                        else if(verCodice.getTipoConto().equals("Conto Deposito non Vincolato"))
+                            System.out.println("Ha appena prelevato " + importo + "€ con causale: " + descrizione + " (non annesso di interessi)");
+
                         verCodice.setSaldoContabile(importo);
 
                         //if (verCodice.getMovimentoAttuale()<= 9) {
                         contoCorrente.listaMovimenti oggettoMovimenti = new contoCorrente.listaMovimenti();
-                        listaMovimentiTemp.add(oggettoMovimenti);
-                        int movimentoAttuale = verCodice.getMovimentoAttuale();
-                        listaMovimentiTemp.get(movimentoAttuale).setImportoDisponibile(importo);
+                        oggettoMovimenti.setImportoDisponibile(importo);
                         LocalDateTime time = LocalDateTime.now();
                         String tempo = "";
 
@@ -491,16 +490,13 @@ public class ObjectWrite extends JPasswordField {
 
                         tempo += "/" + time.getYear();
 
-                        listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDataDisponibile(tempo);
-                        listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setImportoContabile(importo);
-                        listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDataContabile(tempo);
-                        listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDescrizioneOperazione(descrizione);
-                        listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDate(LocalDate.now());
-                        verCodice.setMovimentoAttuale(verCodice.getMovimentoAttuale() + 1);
+                        oggettoMovimenti.setDataDisponibile(tempo);
+                        oggettoMovimenti.setImportoContabile(importo);
+                        oggettoMovimenti.setDataContabile(tempo);
+                        oggettoMovimenti.setDescrizioneOperazione(descrizione);
+                        oggettoMovimenti.setDate(LocalDate.now());
 
-                        if (verCodice.getMovimentoAttuale() == 10)
-                            verCodice.setMovimentoAttuale(0);
-
+                        listaMovimentiTemp.add(oggettoMovimenti);
                         verCodice.listaMovimenti = listaMovimentiTemp;
                         contiCorrentiArray.set(posizione, verCodice);
 
@@ -537,10 +533,8 @@ public class ObjectWrite extends JPasswordField {
                 verCodice.setSaldoContabile(importo);
                 ArrayList<contoCorrente.listaMovimenti> listaMovimentiTemp = verCodice.getListaMovimenti();
 
-                int movimentoAttuale = verCodice.getMovimentoAttuale();
                 contoCorrente.listaMovimenti oggettoMovimenti = new contoCorrente.listaMovimenti();
-                listaMovimentiTemp.add(oggettoMovimenti);
-                listaMovimentiTemp.get(movimentoAttuale).setImportoDisponibile(importo);
+                oggettoMovimenti.setImportoDisponibile(importo);
 
                 LocalDateTime time = LocalDateTime.now();
                 //calcolo data contabile
@@ -605,16 +599,13 @@ public class ObjectWrite extends JPasswordField {
                 System.out.println("Se attenderà " + noOfDaysBetween + " giorni, i suoi interessi corrisponderanno a €" + Math.round((importoFruttato)*100)/100.00 + ".\nPer un totale di €" + Math.round((importo + importoFruttato)*100)/100.00);
 
 
-                listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDataDisponibile(tempo);
-                listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setImportoContabile(importo);
-                listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDataContabile(tempoDisponibile);
-                listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDescrizioneOperazione(descrizione);
-                listaMovimentiTemp.get(verCodice.getMovimentoAttuale()).setDate(LocalDate.now());
-                verCodice.setMovimentoAttuale(verCodice.getMovimentoAttuale() + 1);
+                oggettoMovimenti.setDataDisponibile(tempo);
+                oggettoMovimenti.setImportoContabile(importo);
+                oggettoMovimenti.setDataContabile(tempoDisponibile);
+                oggettoMovimenti.setDescrizioneOperazione(descrizione);
+                oggettoMovimenti.setDate(LocalDate.now());
 
-                if(verCodice.getMovimentoAttuale()==10)
-                    verCodice.setMovimentoAttuale(0);
-
+                listaMovimentiTemp.add(oggettoMovimenti);
                 verCodice.listaMovimenti=listaMovimentiTemp;
                 contiCorrentiArray.set(posizione,verCodice);
 
@@ -681,8 +672,13 @@ public class ObjectWrite extends JPasswordField {
 
         while(exitMethods) {
             try {
-                if((verCodice.getTipoConto().equals("Conto Deposito non Vincolato") || verCodice.getTipoConto().equals("Conto Deposito Vincolato"))) {
+                if((verCodice.getTipoConto().equals("Conto Deposito non Vincolato" /*) || verCodice.getTipoConto().equals("Conto Deposito Vincolato"*/))) {
                     System.out.println("\nCosa vuole prelevare?\n[1] Saldo Disponibile\n[2] Deposito Cauzionale (Saldo Contabile)");
+                    System.out.print(" ➡ ");
+                    scelta = Integer.parseInt(input.nextLine());
+                }
+                else if(verCodice.getTipoConto().equals("Conto Deposito Vincolato")) {
+                    System.out.println("\nCosa vuole prelevare?\n[1] Saldo Disponibile\n[2] Deposito Cauzionale (Saldo Contabile) [Perdita Interessi]");
                     System.out.print(" ➡ ");
                     scelta = Integer.parseInt(input.nextLine());
                 }
@@ -723,7 +719,7 @@ public class ObjectWrite extends JPasswordField {
         /*
           Prelievo fruttato
         */
-        else {
+        else if(verCodice.getTipoConto().equals("Conto Deposito non Vincolato")){
             boolean conferma = true;
 
             //Se sono già stati messi a frutto degli interessi o comunque la lista movimenti non è vuota
@@ -760,6 +756,39 @@ public class ObjectWrite extends JPasswordField {
 
                         //Denaro somma il valore prima posseduto + gli interessi maturati
                         denaro = (float) (Math.round((verCodice.listaMovimenti.get(i).getImportoContabile() + (verCodice.listaMovimenti.get(i).getImportoContabile() * 1.48 * noOfDaysBetween) / 36500) * 100) / 100.00);
+                        denaro=denaro*-1;
+
+                        verCodice.listaMovimenti.get(i).setImportoContabile(0);
+
+                    }
+                    else if (conferma)
+                        System.out.println("Non esiste nessun movimento con tale codice");
+                }
+            }
+            else
+                System.out.println("Ancora nessun movimento");
+        }
+        else if(verCodice.getTipoConto().equals("Conto Deposito Vincolato")){
+            boolean conferma = true;
+
+            //Se sono già stati messi a frutto degli interessi o comunque la lista movimenti non è vuota
+            if(verCodice.listaMovimenti.size()!=0){
+                System.out.print("Inserisca il codice della transazione (Es. #12345): ");
+                String codiceTransazione = input.nextLine();
+
+                //Si rimuovono spazi nell'eventualità si abbia sbagliato a scrivere
+                codiceTransazione = codiceTransazione.replaceAll(" ","");
+
+                for(int i = verCodice.listaMovimenti.size() - 1; i>=0; i--) {
+
+                    //Dopo aver controllato che la lista movimenti non sia vuota si verifica se il codice
+                    //appena inserito corrisponda ad un altro già esistente
+                    if (verCodice.listaMovimenti.get(i) != null && verCodice.getListaMovimenti().get(i).getDescrizioneOperazione().equals(codiceTransazione)) {
+
+                        conferma=false;
+
+                        //Denaro somma il valore prima posseduto
+                        denaro = (float) (Math.round((verCodice.listaMovimenti.get(i).getImportoContabile()*100)/100.00));
                         denaro=denaro*-1;
 
                         verCodice.listaMovimenti.get(i).setImportoContabile(0);
@@ -889,8 +918,7 @@ public class ObjectWrite extends JPasswordField {
             float saldoContabile = 0;
             ArrayList<contoCorrente.listaMovimenti> listaMovimenti = new ArrayList<>();
             //contoCorrente.listaMovimenti listaMovimenti = new contoCorrente.listaMovimenti[10];
-            int movimentoAttuale = 0;
-            return new contoCorrente(IBAN, saldoDisponibile, saldoContabile, listaMovimenti, interesse, cointestatari, tipoConto, movimentoAttuale);
+            return new contoCorrente(IBAN, saldoDisponibile, saldoContabile, listaMovimenti, interesse, cointestatari, tipoConto);
         }
 
         return new contoCorrente();

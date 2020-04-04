@@ -23,7 +23,6 @@ public class contoCorrente extends infoCliente implements Serializable {
     private float interesse;
     private float saldoDisponibile=0;
     private float saldoContabile=0;
-    private int movimentoAttuale=0;
     String tipoConto;
 
 
@@ -32,7 +31,7 @@ public class contoCorrente extends infoCliente implements Serializable {
      * Costruttori
      * =========================================================
      */
-    public contoCorrente(String IBAN, float saldoDisponibile, float saldoContabile, ArrayList<listaMovimenti> listaMovimenti, float interesse, infoCliente[] cointestatari, String tipoConto, int movimentoAttuale) {
+    public contoCorrente(String IBAN, float saldoDisponibile, float saldoContabile, ArrayList<listaMovimenti> listaMovimenti, float interesse, infoCliente[] cointestatari, String tipoConto) {
         this.IBAN = IBAN;
         this.saldoDisponibile = saldoDisponibile;
         this.saldoContabile = saldoContabile;
@@ -40,7 +39,6 @@ public class contoCorrente extends infoCliente implements Serializable {
         this.interesse = interesse;
         this.tipoConto = tipoConto;
         this.cointestatari = cointestatari;
-        this.movimentoAttuale=movimentoAttuale;
     }
 
     public contoCorrente() {}
@@ -180,12 +178,6 @@ public class contoCorrente extends infoCliente implements Serializable {
         }
     }
 
-    public int getMovimentoAttuale(){
-        return movimentoAttuale;
-    }
-    public void setMovimentoAttuale(int movimentoAttuale){
-        this.movimentoAttuale=movimentoAttuale;
-    }
     public void toStringListaMovimenti(){
         boolean verifica = false;
         int intLunghezzaDescrizione;
