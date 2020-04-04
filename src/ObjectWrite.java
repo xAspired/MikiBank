@@ -274,10 +274,12 @@ public class ObjectWrite extends JPasswordField {
 
                 //Verifica i depositi ormai fruttati [ANDREA]
                 for(int b = verCodice.listaMovimenti.size() - 1; b>=0; b--){
+                    //Se il movimento in considerazione appartiene alla lista di movimenti che hanno fruttato
                     if(verCodice.listaMovimenti.get(b)!=null && verCodice.listaMovimenti.get(b).getDescrizioneOperazione().charAt(0)=='#'){
                         LocalDate time = LocalDate.now();
                         String tempo = "";
 
+                        //Si genera una data "corretta" rispetto al resto delle dae salvate
                         if(time.getDayOfMonth() < 10)
                             tempo += "0" + time.getDayOfMonth();
                         else
@@ -305,9 +307,10 @@ public class ObjectWrite extends JPasswordField {
                             verCodice.listaMovimenti.get(b).setImportoContabile(importoTotale);
                             verCodice.setSaldoDisponibile(importoTotale);
                             System.out.println("Sono stati accreditati " + verCodice.listaMovimenti.get(b).getImportoContabile() + " sul tuo conto");
-                            //Azzerato il movimento
+                            //Azzerato il movimento così da eliminarlo
                             verCodice.listaMovimenti.get(b).setImportoContabile(0);
 
+                            //Si genera un oggetto lista movimento così da assegnarli tutti i parametri generati
                             contoCorrente.listaMovimenti movimentoBanca = new contoCorrente.listaMovimenti();
                             String dataContabile = verCodice.listaMovimenti.get(b).getDataContabile();
                             String dataValuta = verCodice.listaMovimenti.get(b).getDataDisponibile();
@@ -318,6 +321,7 @@ public class ObjectWrite extends JPasswordField {
                             movimentoBanca.setImportoContabile(importo);
                             movimentoBanca.setImportoDisponibile(importo);
                             movimentoBanca.setDescrizioneOperazione(causale);
+                            //La lista movimenti viene aggiunta all' array
                             verCodice.listaMovimenti.add(movimentoBanca);
                         }
 
@@ -387,7 +391,9 @@ public class ObjectWrite extends JPasswordField {
 
             if(scelta == 1) {
                 //ANDREA
+                //Si genera l'importo da depositare
                 float importo = deposita();
+                //Si genera una descrizione per la lista movimenti
                 String descrizione = aggiuntaDescrizione();
                 System.out.println("Ha appena depositato " + importo + "€ con causale: " + descrizione);
                 verCodice.setSaldoContabile(importo);
@@ -396,6 +402,7 @@ public class ObjectWrite extends JPasswordField {
                 contoCorrente.listaMovimenti oggettoMovimenti = new contoCorrente.listaMovimenti();
                 listaMovimentiTemp.add(oggettoMovimenti);
                 //if (verCodice.getMovimentoAttuale()<= 9) {
+                //Serve a riconosciere a quale numero dei 10 movimenti necessari si è arrivato
                 int movimentoAttuale = verCodice.getMovimentoAttuale();
                 listaMovimentiTemp.get(movimentoAttuale).setImportoDisponibile(importo);
                 LocalDateTime time = LocalDateTime.now();
