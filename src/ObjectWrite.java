@@ -24,6 +24,8 @@ public class ObjectWrite extends JPasswordField {
 
     public static void main(String[] args) throws Exception {
 
+
+
         //Si inizializza un ArrayList chiamato contiCorrentiArray
         ArrayList<contoCorrente> contiCorrentiArray;
         File file = new File("contiCorrenti");
@@ -289,7 +291,7 @@ public class ObjectWrite extends JPasswordField {
             //corrisponda con quello del cointestatario in questione
             if(verCodice.getIBAN()!=null && verCodice.getIBAN().equalsIgnoreCase(iban)) {
 
-                //Verifica i depositi ormai fruttati [ANDREA]
+                //Verifica i depositi ormai fruttati
                 for(int b = verCodice.listaMovimenti.size() - 1; b>=0; b--){
                     //Se il movimento in considerazione appartiene alla lista di movimenti che hanno fruttato
                     if(verCodice.listaMovimenti.get(b)!=null && verCodice.listaMovimenti.get(b).getDescrizioneOperazione().charAt(0)=='#'){
@@ -323,7 +325,7 @@ public class ObjectWrite extends JPasswordField {
                             float importoTotale = (float) (verCodice.listaMovimenti.get(b).getImportoContabile() + (verCodice.listaMovimenti.get(b).getImportoContabile() * 1.48 * noOfDaysBetween) / 36500);
                             verCodice.listaMovimenti.get(b).setImportoContabile(importoTotale);
                             verCodice.setSaldoDisponibile(importoTotale);
-                            System.out.println("Sono stati accreditati " + verCodice.listaMovimenti.get(b).getImportoContabile() + " sul tuo conto");
+                            System.out.println("Sono stati accreditati " + verCodice.listaMovimenti.get(b).getImportoContabile() + " sul suo conto");
                             //Azzerato il movimento così da eliminarlo
                             verCodice.listaMovimenti.get(b).setImportoContabile(0);
 
@@ -340,8 +342,68 @@ public class ObjectWrite extends JPasswordField {
                             movimentoBanca.setDescrizioneOperazione(causale);
                             //La lista movimenti viene aggiunta all' array
                             verCodice.listaMovimenti.add(movimentoBanca);
+                            contiCorrentiArray.set(i, verCodice);
+
                         }
 
+                    }
+
+                    if(verCodice.getTipoConto().equals("Conto Corrente a Canone Fisso")){
+                        //data apertura conto, data+anno
+                        LocalDate ultimaData = verCodice.getDataUltimoPagamento();
+                        LocalDate dataAttuale = LocalDate.now();
+                        long DaysBetween = ChronoUnit.DAYS.between(ultimaData, dataAttuale);
+
+                        //Si paga una somma di denaro corrispondente al tempo pattuito (365 giorni)
+                        if(DaysBetween==365){
+
+                            ArrayList<contoCorrente.listaMovimenti> listaMovimentiTemp = verCodice.getListaMovimenti();
+                            contoCorrente.listaMovimenti oggettoMovimenti = new contoCorrente.listaMovimenti();
+
+                            if(verCodice.getSaldoDisponibile()>=60) {
+                                listaMovimentiTemp.add(oggettoMovimenti);
+
+                                //date in forma corretta
+                                String tempo = "";
+
+                                //Si genera una data "corretta" rispetto al resto delle dae salvate
+                                if(dataAttuale.getDayOfMonth() < 10)
+                                    tempo += "0" + dataAttuale.getDayOfMonth();
+                                else
+                                    tempo += dataAttuale.getDayOfMonth();
+
+                                tempo += "/";
+
+                                if(dataAttuale.getMonthValue() < 10)
+                                    tempo += "0" + dataAttuale.getMonthValue();
+                                else
+                                    tempo += dataAttuale.getMonthValue();
+
+                                tempo += "/" + dataAttuale.getYear();
+
+                                //Si genera un oggetto lista movimento così da assegnarli tutti i parametri generati
+                                String causale = "Tax Annuale";
+                                oggettoMovimenti.setDataContabile(tempo);
+                                oggettoMovimenti.setDataDisponibile(tempo);
+                                oggettoMovimenti.setImportoContabile(-60);
+                                oggettoMovimenti.setImportoDisponibile(-60);
+                                oggettoMovimenti.setDescrizioneOperazione(causale);
+                                //La lista movimenti viene aggiunta all' array
+                                verCodice.listaMovimenti.add(oggettoMovimenti);
+                                contiCorrentiArray.set(i, verCodice);
+
+                                verCodice.setSaldoDisponibile(-60);
+                                verCodice.setSaldoContabile(-60);
+                                System.out.println("\nÈ stata prelevata la tassa annuale [60€]");
+                                verCodice.listaMovimenti = listaMovimentiTemp;
+                                contiCorrentiArray.set(posizione, verCodice);
+
+                            }
+                            else {
+                                verCodice.setStatoConto("SOSPESO");
+                                System.out.println("Il suo account è stato temporaneamente sospeso.\nPer ulteriori informazioni si rivolga al nostro  ufficio clientela.\n");
+                            }
+                        }
                     }
 
                 }
@@ -381,11 +443,84 @@ public class ObjectWrite extends JPasswordField {
                 System.out.print("\t\tCi dispiace ma il conto sembrerebbe essere chiuso.");
                 System.out.println("\n===================================================================\n");
             }
-            else {
-                System.out.println("\n\n** Cosa vuole fare? **\n[1] Depositare\n[2] Prelevare");
+            else if(verCodice.getStatoConto().equals("SOSPESO")) {
+                System.out.print("\n\n===================================================================\n");
+                System.out.print("\t\tCi dispiace ma il conto sembrerebbe essere sospeso.");
+                System.out.println("\n===================================================================\n");
+                System.out.println("\nA quanto pare le tasse annuali non sono state pagate. Vuole pagarle?\n[1] Si\n[2] No");
 
-                if (verCodice.getTipoConto().equals("Conto Deposito non Vincolato") || verCodice.getTipoConto().equals("Conto Deposito Vincolato"))
-                    System.out.println("[3] Deposito Cauzionale\n[4] Tornare al menù");
+                int scelta;
+                boolean exitMethods = true;
+                while (exitMethods) {
+                    System.out.print(" ➡ ");
+                    try {
+                        scelta = Integer.parseInt(input.nextLine());
+
+                        if(scelta==1) {
+                            for (int l = 0; l <= 1; l++) {
+                                ArrayList<contoCorrente.listaMovimenti> listaMovimentiTemp = verCodice.getListaMovimenti();
+                                contoCorrente.listaMovimenti oggettoMovimenti = new contoCorrente.listaMovimenti();
+                                exitMethods = false;
+
+                                listaMovimentiTemp.add(oggettoMovimenti);
+
+                                //date in forma corretta
+                                String tempo = "";
+                                LocalDate dataAttuale = LocalDate.now();
+
+                                //Si genera una data "corretta" rispetto al resto delle dae salvate
+                                if (dataAttuale.getDayOfMonth() < 10)
+                                    tempo += "0" + dataAttuale.getDayOfMonth();
+                                else
+                                    tempo += dataAttuale.getDayOfMonth();
+
+                                tempo += "/";
+
+                                if (dataAttuale.getMonthValue() < 10)
+                                    tempo += "0" + dataAttuale.getMonthValue();
+                                else
+                                    tempo += dataAttuale.getMonthValue();
+
+                                tempo += "/" + dataAttuale.getYear();
+
+                                //Si genera un oggetto lista movimento così da assegnarli tutti i parametri generati
+                                String causale = "Tax Annuale";
+                                oggettoMovimenti.setDataContabile(tempo);
+                                oggettoMovimenti.setDataDisponibile(tempo);
+                                if(l==0) {
+                                    oggettoMovimenti.setImportoContabile(60);
+                                    oggettoMovimenti.setImportoDisponibile(60);
+                                }
+                                else{
+                                    oggettoMovimenti.setImportoContabile(-60);
+                                    oggettoMovimenti.setImportoDisponibile(-60);
+                                }
+                                oggettoMovimenti.setDescrizioneOperazione(causale);
+                                //La lista movimenti viene aggiunta all' array
+                                verCodice.listaMovimenti = listaMovimentiTemp;
+                                contiCorrentiArray.set(posizione, verCodice);
+                            }
+                            verCodice.setStatoConto("APERTO");
+                            System.out.println("Il suo conto è stato ripristinato correttamente.\n");
+                        }
+                        else if(scelta==2) {
+                            exitMethods = false;
+                        }
+                        else
+                            System.out.println("-valore non valido!-");
+                    } catch (Exception e) {
+                        System.out.println("-valore non valido!-");
+                    }
+                }
+            }
+            else {
+                System.out.println("\n\n** Cosa vuole fare? **");
+
+                if(verCodice.getTipoConto().equals("Conto Corrente senza Canone") || verCodice.getTipoConto().equals("Conto Corrente a Canone Fisso"))
+                    System.out.println("\n[1] Depositare\n[2] Prelevare");
+
+                else if (verCodice.getTipoConto().equals("Conto Deposito non Vincolato") || verCodice.getTipoConto().equals("Conto Deposito Vincolato"))
+                    System.out.println("\n[1] Deposito Cauzionale\n[2] Prelievo Cauzionale");
                 else
                     System.out.println("[3] Tornare al menù");
 
@@ -412,14 +547,16 @@ public class ObjectWrite extends JPasswordField {
                  * Deposita (normale)
                  * =========================================================
                  */
-
-                if (scelta == 1) {
-                    //ANDREA
+                if (scelta == 1 && (verCodice.getTipoConto().equals("Conto Corrente a Canone Fisso") || verCodice.getTipoConto().equals("Conto Corrente senza Canone"))) {
                     //Si genera l'importo da depositare
                     float importo = deposita();
                     //Si genera una descrizione per la lista movimenti
                     String descrizione = aggiuntaDescrizione();
-                    System.out.println("Ha appena depositato " + importo + "€ con causale: " + descrizione);
+                    if (verCodice.getTipoConto().equals("Conto Corrente senza Canone")) {
+                        importo = importo - 2;
+                        System.out.println("Ha appena depositato " + importo + "€ con causale: " + descrizione + " [+2€ Tax]");
+                    } else
+                        System.out.println("Ha appena depositato " + importo + "€ con causale: " + descrizione);
                     verCodice.setSaldoContabile(importo);
                     verCodice.setSaldoDisponibile(importo);
                     ArrayList<contoCorrente.listaMovimenti> listaMovimentiTemp = verCodice.getListaMovimenti();
@@ -467,73 +604,9 @@ public class ObjectWrite extends JPasswordField {
                     System.out.println(".\n");
                 }
 
-                /*
-                 * =========================================================
-                 * Preleva (normale e non)
-                 * =========================================================
-                 */
 
-                if (scelta == 2) {
-                    ArrayList<contoCorrente.listaMovimenti> listaMovimentiTemp = verCodice.getListaMovimenti();
-                    float importo = preleva(verCodice);
-                    if (importo != 0) {
-                        String descrizione = aggiuntaDescrizione();
 
-                        //Si verifica che la somma prelevabile rientri nel saldo complessivo
-                        if (importo != 0) {
-                            if (verCodice.getTipoConto().equals("Conto Deposito Vincolato"))
-                                System.out.println("Ha appena prelevato " + importo + "€ con causale: " + descrizione + " (annesso di interessi)");
-                            else if (verCodice.getTipoConto().equals("Conto Deposito non Vincolato"))
-                                System.out.println("Ha appena prelevato " + importo + "€ con causale: " + descrizione + " (non annesso di interessi)");
-
-                            verCodice.setSaldoContabile(importo);
-
-                            //if (verCodice.getMovimentoAttuale()<= 9) {
-                            contoCorrente.listaMovimenti oggettoMovimenti = new contoCorrente.listaMovimenti();
-                            oggettoMovimenti.setImportoDisponibile(importo);
-                            LocalDateTime time = LocalDateTime.now();
-                            String tempo = "";
-
-                        /*
-                            Si gestisce il caso in cui il numero sia unico e quindi non vada
-                            a rovinare la tabulazione della Lista Movimenti
-                         */
-                            if (time.getDayOfMonth() < 10)
-                                tempo += "0" + time.getDayOfMonth();
-                            else
-                                tempo += time.getDayOfMonth();
-
-                            tempo += "/";
-
-                            if (time.getMonthValue() < 10)
-                                tempo += "0" + time.getMonthValue();
-                            else
-                                tempo += time.getMonthValue();
-
-                            tempo += "/" + time.getYear();
-
-                            oggettoMovimenti.setDataDisponibile(tempo);
-                            oggettoMovimenti.setImportoContabile(importo);
-                            oggettoMovimenti.setDataContabile(tempo);
-                            oggettoMovimenti.setDescrizioneOperazione(descrizione);
-                            oggettoMovimenti.setDate(LocalDate.now());
-
-                            listaMovimentiTemp.add(oggettoMovimenti);
-                            verCodice.listaMovimenti = listaMovimentiTemp;
-                            contiCorrentiArray.set(posizione, verCodice);
-
-                            System.out.print("\n\nSta per essere reindirizzato al menù");
-                            TimeUnit.SECONDS.sleep(1);
-                            System.out.print(".");
-                            TimeUnit.SECONDS.sleep(1);
-                            System.out.print(".");
-                            TimeUnit.SECONDS.sleep(1);
-                            System.out.println(".\n");
-                        }
-                    }
-                }
-
-                if (scelta == 3 && ((verCodice.getTipoConto().equals("Conto Deposito non Vincolato") || verCodice.getTipoConto().equals("Conto Deposito Vincolato")))) {
+                if (scelta == 1 && ((verCodice.getTipoConto().equals("Conto Deposito non Vincolato") || verCodice.getTipoConto().equals("Conto Deposito Vincolato")))) {
                     float importo = deposita();
 
                     exitMethods = true;
@@ -637,17 +710,80 @@ public class ObjectWrite extends JPasswordField {
                     System.out.println(".\n");
                 }
 
-                if (scelta == 3 && !((verCodice.getTipoConto().equals("Conto Deposito non Vincolato") || verCodice.getTipoConto().equals("Conto Deposito Vincolato")))) {
-                    System.out.print("\n\nSta per essere reindirizzato al menù");
-                    TimeUnit.SECONDS.sleep(1);
-                    System.out.print(".");
-                    TimeUnit.SECONDS.sleep(1);
-                    System.out.print(".");
-                    TimeUnit.SECONDS.sleep(1);
-                    System.out.println(".\n");
+                /*
+                 * =========================================================
+                 * Preleva (normale e non)
+                 * =========================================================
+                 */
+
+                if (scelta == 2) {
+                    ArrayList<contoCorrente.listaMovimenti> listaMovimentiTemp = verCodice.getListaMovimenti();
+                    float importo = preleva(verCodice);
+                    if (importo != 0) {
+                        String descrizione = aggiuntaDescrizione();
+
+                        //Si verifica che la somma prelevabile rientri nel saldo complessivo
+                        if (importo != 0) {
+                            switch (verCodice.getTipoConto()) {
+                                case "Conto Deposito Vincolato":
+                                    System.out.println("Ha appena prelevato " + importo + "€ con causale: " + descrizione + " (annesso di interessi)");
+                                    break;
+                                case "Conto Deposito non Vincolato":
+                                    System.out.println("Ha appena prelevato " + importo + "€ con causale: " + descrizione + " (non annesso di interessi)");
+                                    break;
+                                case "Conto Corrente senza Canone":
+                                    System.out.println("Ha appena prelevato " + importo + "€ con causale: " + descrizione + " [+2€ Tax]");
+                                    break;
+                            }
+
+                            verCodice.setSaldoContabile(importo);
+
+                            //if (verCodice.getMovimentoAttuale()<= 9) {
+                            contoCorrente.listaMovimenti oggettoMovimenti = new contoCorrente.listaMovimenti();
+                            oggettoMovimenti.setImportoDisponibile(importo);
+                            LocalDateTime time = LocalDateTime.now();
+                            String tempo = "";
+
+                        /*
+                            Si gestisce il caso in cui il numero sia unico e quindi non vada
+                            a rovinare la tabulazione della Lista Movimenti
+                         */
+                            if (time.getDayOfMonth() < 10)
+                                tempo += "0" + time.getDayOfMonth();
+                            else
+                                tempo += time.getDayOfMonth();
+
+                            tempo += "/";
+
+                            if (time.getMonthValue() < 10)
+                                tempo += "0" + time.getMonthValue();
+                            else
+                                tempo += time.getMonthValue();
+
+                            tempo += "/" + time.getYear();
+
+                            oggettoMovimenti.setDataDisponibile(tempo);
+                            oggettoMovimenti.setImportoContabile(importo);
+                            oggettoMovimenti.setDataContabile(tempo);
+                            oggettoMovimenti.setDescrizioneOperazione(descrizione);
+                            oggettoMovimenti.setDate(LocalDate.now());
+
+                            listaMovimentiTemp.add(oggettoMovimenti);
+                            verCodice.listaMovimenti = listaMovimentiTemp;
+                            contiCorrentiArray.set(posizione, verCodice);
+
+                            System.out.print("\n\nSta per essere reindirizzato al menù");
+                            TimeUnit.SECONDS.sleep(1);
+                            System.out.print(".");
+                            TimeUnit.SECONDS.sleep(1);
+                            System.out.print(".");
+                            TimeUnit.SECONDS.sleep(1);
+                            System.out.println(".\n");
+                        }
+                    }
                 }
 
-                if (scelta == 4 && (verCodice.getTipoConto().equals("Conto Deposito non Vincolato") || verCodice.getTipoConto().equals("Conto Deposito Vincolato"))) {
+                if (scelta == 3) {
                     System.out.print("\n\nSta per essere reindirizzato al menù");
                     TimeUnit.SECONDS.sleep(1);
                     System.out.print(".");
@@ -682,54 +818,44 @@ public class ObjectWrite extends JPasswordField {
                 System.out.print("Errore! Il valore da depositare non può essere uguale a 0€");
             }
         }
+
         return denaro;
     }
 
     private static float preleva(contoCorrente verCodice){
         float denaro = 0;
-        int scelta = 0;
+        int scelta;
         boolean exitMethods = true;
 
-        while(exitMethods) {
-            try {
-                if((verCodice.getTipoConto().equals("Conto Deposito non Vincolato" /*) || verCodice.getTipoConto().equals("Conto Deposito Vincolato"*/))) {
-                    System.out.println("\nCosa vuole prelevare?\n[1] Saldo Disponibile\n[2] Deposito Cauzionale (Saldo Contabile)");
-                    System.out.print(" ➡ ");
-                    scelta = Integer.parseInt(input.nextLine());
-                }
-                else if(verCodice.getTipoConto().equals("Conto Deposito Vincolato")) {
-                    System.out.println("\nCosa vuole prelevare?\n[1] Saldo Disponibile\n[2] Deposito Cauzionale (Saldo Contabile) [Perdita Interessi]");
-                    System.out.print(" ➡ ");
-                    scelta = Integer.parseInt(input.nextLine());
-                }
-                else
-                    scelta = 1;
+        if((verCodice.getTipoConto().equals("Conto Deposito non Vincolato") || verCodice.getTipoConto().equals("Conto Deposito Vincolato")))
+            scelta = 2;
 
-                if(scelta == 1 || scelta == 2)
-                    exitMethods = false;
-            }
-            catch (Exception e) {
-                System.out.print("Errore! Valore non valido.");
-            }
-        }
+        else
+            scelta = 1;
 
         /*
           Prelievo normale
         */
         if(scelta == 1) {
-            exitMethods = true;
             while(exitMethods) {
-                System.out.print("\nInserisca la cifra da prelevare: €");
+                if(verCodice.getTipoConto().equals("Conto Corrente senza Canone"))
+                    System.out.print("\nInserisca la cifra da prelevare [+2€ Tax]: €");
+                else
+                    System.out.print("\nInserisca la cifra da prelevare: €");
+
                 try {
                     denaro = Integer.parseInt("-" + Integer.parseInt(input.nextLine()));
                     exitMethods = false;
+                    if(verCodice.getTipoConto().equals("Conto Corrente senza Canone"))
+                        //Rimosse le 2€ di tasse
+                        denaro = denaro - 2;
                 }
                 catch (Exception e) {
                     System.out.print("Errore! Il valore da prelevare non può essere uguale a 0€");
                 }
             }
             if (verCodice.getSaldoDisponibile() + denaro < 0) {
-                System.out.println("\uD83D\uDE1E Mi spiace ma tale somma supera il suo attuale saldo disponibile, pertanto non può prelevare.");
+                System.out.println("\uD83D\uDE1E Mi spiace ma tale somma supera il suo attuale saldo disponibile, pertanto non può prelevare.\n");
                 denaro = 0;
             }
             else
@@ -838,6 +964,8 @@ public class ObjectWrite extends JPasswordField {
             else
                 exitMethods = false;
         }
+        causale = causale.substring(0,1).toUpperCase() + causale.substring(1).toLowerCase();
+
         return causale;
     }
 
@@ -938,8 +1066,10 @@ public class ObjectWrite extends JPasswordField {
             float saldoContabile = 0;
             ArrayList<contoCorrente.listaMovimenti> listaMovimenti = new ArrayList<>();
             String statoConto = "APERTO";
+
+            LocalDate dataUltimoPagamento = LocalDate.now();
             //contoCorrente.listaMovimenti listaMovimenti = new contoCorrente.listaMovimenti[10];
-            return new contoCorrente(IBAN, saldoDisponibile, saldoContabile, listaMovimenti, interesse, cointestatari, tipoConto, statoConto);
+            return new contoCorrente(IBAN, saldoDisponibile, saldoContabile, listaMovimenti, interesse, cointestatari, tipoConto, statoConto, dataUltimoPagamento);
         }
 
         return new contoCorrente();

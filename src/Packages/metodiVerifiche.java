@@ -36,8 +36,8 @@ public class metodiVerifiche {
             System.out.println("Che tipo di conto vuole creare?");
             System.out.println("Conto Deposito:\n  [1] Vincolato;");
             System.out.println("  [2] Non Vincolato;");
-            System.out.println("Conto Corrente:\n  [3] a Canone Fisso [Work in Progress];");
-            System.out.println("  [4] senza Canone [Work in Progress]");
+            System.out.println("Conto Corrente:\n  [3] a Canone Fisso;");
+            System.out.println("  [4] senza Canone");
             System.out.print("➡ ");
             try{
                 scelta=Integer.parseInt(input.nextLine());
@@ -48,14 +48,12 @@ public class metodiVerifiche {
                 else if(scelta==2) {
                     tipoConto = "Conto Deposito non Vincolato";
                 }
-                /*
+
                 else if(scelta==3)
                     tipoConto="Conto Corrente a Canone Fisso";
+
                 else if(scelta==4)
                     tipoConto="Conto Corrente senza Canone";
-                */
-                else if(scelta==3 || scelta==4)
-                    System.out.println("Opzione non disponibile. Ci scusiamo per il disagio! \uD83D\uDE1E\n");
 
                 else System.out.println("Inserisci valore valido");
 
@@ -63,7 +61,7 @@ public class metodiVerifiche {
             }catch (Exception e){
                 System.out.println("Valore inserito non valido");
             }
-        }while(scelta!=1 &&  scelta!=2 /*&& scelta!=3 && scelta!=4*/);
+        }while(scelta!=1 &&  scelta!=2 && scelta!=3 && scelta!=4);
 
         return tipoConto;
     }
