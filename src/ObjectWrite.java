@@ -20,11 +20,10 @@ import static Packages.metodiVerifiche.*;
  */
 public class ObjectWrite extends JPasswordField {
     static Scanner input = new Scanner(System.in);
+    static contoCorrente verCodice = new contoCorrente();
 
 
     public static void main(String[] args) throws Exception {
-
-
 
         //Si inizializza un ArrayList chiamato contiCorrentiArray
         ArrayList<contoCorrente> contiCorrentiArray;
@@ -49,7 +48,9 @@ public class ObjectWrite extends JPasswordField {
             contiCorrentiArray = new ArrayList<>();
 
         System.out.println("Numero Conti Presenti: " + contiCorrentiArray.size() + "\n");
-
+        for(int i=0; i<contiCorrentiArray.size() - 1; i++){
+            System.out.println(contiCorrentiArray.get(i).listaMovimenti.get(i).getDescrizioneOperazione());
+        }
         //Fine Serializzazione e Deserializzazione
 
 
@@ -62,6 +63,8 @@ public class ObjectWrite extends JPasswordField {
         do {
             boolean whileStatement = true;
             while (whileStatement) {
+                System.out.println("Numero Conti Presenti: " + contiCorrentiArray.size() + "\n");
+
                 System.out.println("\t\tMIKIBANK");
                 System.out.println("[0] Uscita dal programma");
                 System.out.println("[1] Creazione di un conto corrente");
@@ -99,10 +102,9 @@ public class ObjectWrite extends JPasswordField {
                     break;
                 case 1:
                     contoCorrente verificaConto = creaConto(contiCorrentiArray);
-                    contoCorrente contoVuoto = new contoCorrente();
 
                     //Se il conto è vuoto, si richiama di nuovo il menù
-                    if(verificaConto.equals(contoVuoto))
+                    if(verificaConto==null)
                         continue menu;
 
                     //Creazione Conto Corrente
@@ -277,21 +279,42 @@ public class ObjectWrite extends JPasswordField {
         String iban = input.nextLine();
 
         //Creazione di un conto vuoto
-        contoCorrente verCodice = new contoCorrente();
+        contoCorrente verCodiceTemp = new contoCorrente();
         int posizione = 0;
         for (int i : numbers) {
 
             //verCodice assume il valore di un contoCorrente per ogni indice [i]
-            verCodice = contiCorrentiArray.get(i);
+            verCodiceTemp = contiCorrentiArray.get(i);
 
             //Si crea un array di cointestatari, che prende il valore dei cointestatari di un conto per ogni indice [i]
-            infoCliente[] verCodiceCliente = verCodice.getCointestatari();
+            infoCliente[] verCodiceCliente = verCodiceTemp.getCointestatari();
 
             //Dopo aver verificato che l'IBAN non sia vuoto, si verifica che l'IBAN appena inserito
             //corrisponda con quello del cointestatario in questione
-            if(verCodice.getIBAN()!=null && verCodice.getIBAN().equalsIgnoreCase(iban)) {
+            if(verCodiceTemp.getIBAN()!=null && verCodiceTemp.getIBAN().equalsIgnoreCase(iban)) {
+                verCodice = verCodiceTemp;
 
-                //Verifica i depositi ormai fruttati
+                if(verCodice.getTipoConto().equals("Conto Corrente a Canone Fisso") || verCodice.getTipoConto().equals("Conto Corrente Senza Canone")) {
+                    if(verCodice.getListaFantasma()!=null) {
+                        for(int k=0; k<verCodice.listaFantasma.size()-1; k++){
+                            //DOPO 48 ORE
+                            if(verCodice.listaFantasma.get(k)!=null && verCodice.listaFantasma.get(k).getTipoOperazione().equals("Bonifico Uscita")){
+                                //Data scelta dal cliente sommata alle 48 ore
+                                LocalDate dataFinale = stringToLocalDate(verCodice.listaFantasma.get(k).getDataFine());
+
+                                //Se la data scelta è passata vengono caricati i soldi
+                                if(dataFinale.isBefore(LocalDate.now()) || dataFinale.isEqual(LocalDate.now())){
+                                    verCodice.setSaldoContabile(-verCodice.listaFantasma.get(k).getImportoContabile());
+                                    verCodice.listaFantasma.set(k, null);
+                                }
+                            }
+                        }
+                    }
+
+
+                }
+
+                    //Verifica i depositi ormai fruttati
                 for(int b = verCodice.listaMovimenti.size() - 1; b>=0; b--){
                     //Se il movimento in considerazione appartiene alla lista di movimenti che hanno fruttato
                     if(verCodice.listaMovimenti.get(b)!=null && verCodice.listaMovimenti.get(b).getDescrizioneOperazione().charAt(0)=='#'){
@@ -396,7 +419,7 @@ public class ObjectWrite extends JPasswordField {
                                 verCodice.setSaldoContabile(-60);
                                 System.out.println("\nÈ stata prelevata la tassa annuale [60€]");
                                 verCodice.listaMovimenti = listaMovimentiTemp;
-                                contiCorrentiArray.set(posizione, verCodice);
+                                contiCorrentiArray.set(i, verCodice);
 
                             }
                             else {
@@ -405,6 +428,7 @@ public class ObjectWrite extends JPasswordField {
                             }
                         }
                     }
+
 
                 }
 
@@ -517,12 +541,11 @@ public class ObjectWrite extends JPasswordField {
                 System.out.println("\n\n** Cosa vuole fare? **");
 
                 if(verCodice.getTipoConto().equals("Conto Corrente senza Canone") || verCodice.getTipoConto().equals("Conto Corrente a Canone Fisso"))
-                    System.out.println("\n[1] Depositare\n[2] Prelevare");
+                    System.out.println("\n[1] Depositare\n[2] Prelevare\n[3] Bonifico Bancario\n[4] Tornare al menù");
 
                 else if (verCodice.getTipoConto().equals("Conto Deposito non Vincolato") || verCodice.getTipoConto().equals("Conto Deposito Vincolato"))
-                    System.out.println("\n[1] Deposito Cauzionale\n[2] Prelievo Cauzionale");
-                else
-                    System.out.println("[3] Tornare al menù");
+                    System.out.println("\n[1] Deposito Cauzionale\n[2] Prelievo Cauzionale\n[3] Tornare al menù");
+
 
                 boolean exitMethods = true;
                 int scelta = 0;
@@ -531,9 +554,9 @@ public class ObjectWrite extends JPasswordField {
                     try {
                         System.out.print(" ➡ ");
                         scelta = Integer.parseInt(input.nextLine());
-                        if (!(scelta != 1 && scelta != 2 && scelta != 3) && !(verCodice.getTipoConto().equals("Conto Deposito non Vincolato") || verCodice.getTipoConto().equals("Conto Deposito Vincolato")))
+                        if (!(scelta != 1 && scelta != 2 && scelta != 3 && scelta != 4) && !(verCodice.getTipoConto().equals("Conto Deposito non Vincolato") || verCodice.getTipoConto().equals("Conto Deposito Vincolato")))
                             exitMethods = false;
-                        else if (!(scelta != 1 && scelta != 2 && scelta != 3 && scelta != 4) && (verCodice.getTipoConto().equals("Conto Deposito non Vincolato") || verCodice.getTipoConto().equals("Conto Deposito Vincolato")))
+                        else if (!(scelta != 1 && scelta != 2 && scelta != 3) && (verCodice.getTipoConto().equals("Conto Deposito non Vincolato") || verCodice.getTipoConto().equals("Conto Deposito Vincolato")))
                             exitMethods = false;
                         else
                             System.out.println("Valore non valido. È pregato/a di reinserirlo.");
@@ -783,7 +806,99 @@ public class ObjectWrite extends JPasswordField {
                     }
                 }
 
-                if (scelta == 3) {
+                if (scelta == 3 && (verCodice.getTipoConto().equals("Conto Deposito non Vincolato") || verCodice.getTipoConto().equals("Conto Deposito Vincolato"))) {
+                    System.out.print("\n\nSta per essere reindirizzato al menù");
+                    TimeUnit.SECONDS.sleep(1);
+                    System.out.print(".");
+                    TimeUnit.SECONDS.sleep(1);
+                    System.out.print(".");
+                    TimeUnit.SECONDS.sleep(1);
+                    System.out.println(".\n");
+                }
+
+                if (scelta == 3 && (verCodice.getTipoConto().equals("Conto Corrente senza Canone") || verCodice.getTipoConto().equals("Conto Corrente a Canone Fisso"))) {
+                    System.out.print("Iban Beneficiario: ");
+                    String ibanBeneficiario = input.nextLine();
+                    float denaro = 0;
+                    for (int i : numbers) {
+
+                        //verCodice assume il valore di un contoCorrente per ogni indice [i]
+                        verCodice = contiCorrentiArray.get(i);
+
+                        //Dopo aver verificato che l'IBAN non sia vuoto, si verifica che l'IBAN appena inserito
+                        //corrisponda con quello del cointestatario in questione
+                        if (verCodice.getIBAN() != null && verCodice.getIBAN().equalsIgnoreCase(ibanBeneficiario)) {
+                            exitMethods = true;
+                            while(exitMethods) {
+                                System.out.print("\nInserisca la cifra da inviare: €");
+                                try {
+                                    denaro = Integer.parseInt(input.nextLine());
+                                    exitMethods = false;
+                                }
+                                catch (Exception e) {
+                                    System.out.print("Errore! Il valore da depositare non può essere uguale a 0€");
+                                }
+                            }
+
+                            String causale = aggiuntaDescrizione();
+
+                            String dataEsecuzione = verificaData("Data esecuzione");
+                            LocalDate dataReale = stringToLocalDate(dataEsecuzione);
+                            //LocalDate dataRealeFinale = dataReale.plusDays(2);
+                            LocalDate dataRealeFinale = dataReale;
+                            String dataFinale = localDateToString(dataRealeFinale);
+
+                            System.out.println("Considerando le 48 ore di elaborazione, il ricevente riceverà il denaro in data " + dataFinale);
+
+                            if(LocalDate.now().equals(dataReale)) {
+                                if(verCodice.getSaldoDisponibile()>denaro) {
+                                    verCodice.setSaldoDisponibile(-denaro);
+                                    System.out.println("Il denaro dal suo conto è stato detratto");
+
+                                    ArrayList<contoCorrente.listaMovimenti> listaMovimentiTemp = verCodice.getListaMovimenti();
+                                    contoCorrente.listaMovimenti oggettoMovimenti = new contoCorrente.listaMovimenti();
+
+                                    listaMovimentiTemp.add(oggettoMovimenti);
+
+                                    //Si genera un oggetto lista movimento così da assegnarli tutti i parametri generati
+                                    oggettoMovimenti.setDataContabile(dataFinale);
+                                    oggettoMovimenti.setDataDisponibile(dataEsecuzione);
+                                    //RICORDATI DI FARE LA VEIRIFCA DOPO 48 ORE SULL'IMPORTO CONTABILE (Lista Fantasma)
+                                    oggettoMovimenti.setImportoDisponibile(-denaro);
+                                    oggettoMovimenti.setDescrizioneOperazione(causale);
+                                    //La lista movimenti viene aggiunta all' array
+                                    verCodice.listaMovimenti.add(oggettoMovimenti);
+                                    contiCorrentiArray.set(i, verCodice);
+
+                                    //GESTIONE DELLA LISTA FANTASMA
+                                    ArrayList<contoCorrente.listaFantasma> listaFantasmaTemp = verCodice.getListaFantasma();
+                                    contoCorrente.listaFantasma oggettoFantasmi = new contoCorrente.listaFantasma();
+
+                                    listaFantasmaTemp.add(oggettoFantasmi);
+
+                                    //Si genera un oggetto lista movimento così da assegnarli tutti i parametri generati
+                                    oggettoFantasmi.setDataFine(dataFinale);
+                                    //RICORDATI DI FARE LA VEIRIFCA DOPO 48 ORE SULL'IMPORTO CONTABILE (Lista Fantasma)
+                                    oggettoFantasmi.setImportoContabile(denaro);
+                                    //Si associa alla descrizione dell'operazione l'iabn del destinatario
+                                    oggettoFantasmi.setDescrizioneOperazione(ibanBeneficiario);
+                                    oggettoFantasmi.setTipoOperazione("Bonifico Uscita");
+                                    //La lista movimenti viene aggiunta all' array
+                                    verCodice.listaFantasma.add(oggettoFantasmi);
+                                    contiCorrentiArray.set(i, verCodice);
+
+                                }
+                                else
+                                    System.out.println("Il denaro presente sul suo conto non è sufficiente");
+
+                            }
+                        }
+                        else
+                            System.out.print("\n\n|| L'IBAN " + iban + " non è stato trovato.\n");
+                    }
+                }
+
+                if(scelta == 4 && (verCodice.getTipoConto().equals("Conto Corrente senza Canone") || verCodice.getTipoConto().equals("Conto Corrente a Canone Fisso"))) {
                     System.out.print("\n\nSta per essere reindirizzato al menù");
                     TimeUnit.SECONDS.sleep(1);
                     System.out.print(".");
@@ -1066,13 +1181,13 @@ public class ObjectWrite extends JPasswordField {
             float saldoContabile = 0;
             ArrayList<contoCorrente.listaMovimenti> listaMovimenti = new ArrayList<>();
             String statoConto = "APERTO";
-
+            ArrayList<contoCorrente.listaFantasma> listaFantasma = new ArrayList<>();
             LocalDate dataUltimoPagamento = LocalDate.now();
             //contoCorrente.listaMovimenti listaMovimenti = new contoCorrente.listaMovimenti[10];
-            return new contoCorrente(IBAN, saldoDisponibile, saldoContabile, listaMovimenti, interesse, cointestatari, tipoConto, statoConto, dataUltimoPagamento);
+            return new contoCorrente(IBAN, saldoDisponibile, saldoContabile, listaMovimenti, interesse, cointestatari, tipoConto, statoConto, dataUltimoPagamento, listaFantasma);
         }
 
-        return new contoCorrente();
+        return null;
 
     }
 

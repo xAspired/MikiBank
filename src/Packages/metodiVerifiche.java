@@ -3,6 +3,7 @@ package Packages;
 //Librerie java.io
 
 import java.io.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Objects;
@@ -247,6 +248,57 @@ public class metodiVerifiche {
         exitMethods = true;
         return data;
         }
+
+        public static LocalDate stringToLocalDate (String data) {
+
+            int annoReale;
+            int meseReale;
+            int giornoReale;
+            LocalDate sommaDate;
+
+
+            String anno = "" + data.charAt(data.length() - 4) + data.charAt(data.length() - 3) + data.charAt(data.length() - 2) + data.charAt(data.length() - 1);
+
+            annoReale = Integer.parseInt(anno);
+            //System.out.println("anno:"+annoReale);
+            String mese = "" + data.charAt(data.length() - 7) + data.charAt(data.length() - 6);
+            meseReale = Integer.parseInt(mese);
+            //System.out.println("mese:"+meseReale);
+            String giorno = "" + data.charAt(data.length() - 10) + data.charAt(data.length() - 9);
+            giornoReale = Integer.parseInt(giorno);
+            //System.out.println("giorno:"+giornoReale);
+            sommaDate = LocalDate.parse(annoReale + "-" + meseReale + "-" + giornoReale);
+
+            //Si verifica nel caso della scadenza carta che non sia già scduta
+            LocalDate dataReale = sommaDate;
+
+            System.out.print(dataReale);
+
+            return dataReale;
+        }
+
+    public static String localDateToString(LocalDate time){
+        String tempo = "";
+        /*
+            Si gestisce il caso in cui il numero sia unico e quindi non vada
+            a rovinare la tabulazione della Lista Movimenti
+         */
+        if (time.getDayOfMonth() < 10)
+            tempo += "0" + time.getDayOfMonth();
+        else
+            tempo += time.getDayOfMonth();
+
+        tempo += "/";
+
+        if (time.getMonthValue() < 10)
+            tempo += "0" + time.getMonthValue();
+        else
+            tempo += time.getMonthValue();
+
+        tempo += "/" + time.getYear();
+
+        return tempo;
+    }
 
     public static boolean verificaDatiInseriti() {
         boolean conferma=true;

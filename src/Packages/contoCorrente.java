@@ -26,6 +26,8 @@ public class contoCorrente extends infoCliente implements Serializable {
     String tipoConto;
     private String statoConto;
     private LocalDate dataUltimoPagamento;
+    public ArrayList<listaFantasma> listaFantasma = new ArrayList<>();
+
 
 
     /*
@@ -33,7 +35,7 @@ public class contoCorrente extends infoCliente implements Serializable {
      * Costruttori
      * =========================================================
      */
-    public contoCorrente(String IBAN, float saldoDisponibile, float saldoContabile, ArrayList<listaMovimenti> listaMovimenti, float interesse, infoCliente[] cointestatari, String tipoConto, String statoConto, LocalDate dataUltimoPagamento) {
+    public contoCorrente(String IBAN, float saldoDisponibile, float saldoContabile, ArrayList<listaMovimenti> listaMovimenti, float interesse, infoCliente[] cointestatari, String tipoConto, String statoConto, LocalDate dataUltimoPagamento, ArrayList<listaFantasma> listaFantasma) {
         this.IBAN = IBAN;
         this.saldoDisponibile = saldoDisponibile;
         this.saldoContabile = saldoContabile;
@@ -43,6 +45,7 @@ public class contoCorrente extends infoCliente implements Serializable {
         this.cointestatari = cointestatari;
         this.statoConto = statoConto;
         this.dataUltimoPagamento = dataUltimoPagamento;
+        this.listaFantasma = listaFantasma;
     }
 
     public contoCorrente() {}
@@ -119,6 +122,11 @@ public class contoCorrente extends infoCliente implements Serializable {
         this.dataUltimoPagamento = dataUltimoPagamento;
     }
 
+    public ArrayList<contoCorrente.listaFantasma> getListaFantasma(){
+        return listaFantasma;
+    }
+
+
     @Override
     public String toString() {
         return "Conto [" +
@@ -128,6 +136,9 @@ public class contoCorrente extends infoCliente implements Serializable {
                 ']';
     }
 
+    /*
+    CLASSE LISTAMOVIMENTI
+    */
     public static class listaMovimenti implements Serializable {
 
         private float importoDisponibile=0;
@@ -197,6 +208,81 @@ public class contoCorrente extends infoCliente implements Serializable {
             this.date = date;
         }
     }
+
+    /*
+    CLASSE LISTA FANTASMA
+     */
+
+    public static class listaFantasma implements Serializable {
+
+        private float importoDisponibile=0;
+        private String dataInizio="";
+        private float importoContabile=0;
+        private String dataFine="";
+        private String descrizioneOperazione;
+        private String tipoOperazione = "";
+
+        public listaFantasma(){}
+
+        public listaFantasma (float importoDisponibile, String dataInizio, float importoContabile, String dataFine, int movimentoAttuale, String descrizioneOperazione, String tipoOperazione){
+            this.importoDisponibile=importoDisponibile;
+            this.dataInizio=dataInizio;
+            this.importoContabile=importoContabile;
+            this.dataFine=dataFine;
+            this.descrizioneOperazione=descrizioneOperazione;
+            this.tipoOperazione = tipoOperazione;
+        }
+
+        public float getImportoDisponibile() {
+            return importoDisponibile;
+        }
+
+        public void setImportoDisponibile(float saldoDisponibile) {
+            this.importoDisponibile = saldoDisponibile;
+        }
+
+        public float getImportoContabile() {
+            return importoContabile;
+        }
+
+        public void setImportoContabile(float importoContabile) {
+            this.importoContabile = importoContabile;
+        }
+
+        public void setDataInizio(String dataInizio) {
+            this.dataInizio = dataInizio;
+        }
+
+        public String getDataInizio() {
+            return dataInizio;
+        }
+
+        public void setDataFine(String dataFine) {
+            this.dataFine = dataFine;
+        }
+
+        public String getDataFine() {
+            return dataFine;
+        }
+
+        public String getDescrizioneOperazione() {
+            return descrizioneOperazione;
+        }
+
+        public void setDescrizioneOperazione(String descrizioneOperazione) {
+            this.descrizioneOperazione = descrizioneOperazione;
+        }
+
+        public String getTipoOperazione() {
+            return tipoOperazione;
+        }
+
+        public void setTipoOperazione(String tipoOperazione) {
+            this.tipoOperazione = tipoOperazione;
+        }
+    }
+
+
 
     public void toStringListaMovimenti(){
         boolean verifica = false;
