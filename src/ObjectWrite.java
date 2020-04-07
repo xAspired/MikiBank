@@ -48,9 +48,7 @@ public class ObjectWrite extends JPasswordField {
             contiCorrentiArray = new ArrayList<>();
 
         System.out.println("Numero Conti Presenti: " + contiCorrentiArray.size() + "\n");
-        for(int i=0; i<contiCorrentiArray.size() - 1; i++){
-            System.out.println(contiCorrentiArray.get(i).listaMovimenti.get(i).getDescrizioneOperazione());
-        }
+
         //Fine Serializzazione e Deserializzazione
 
 
@@ -279,7 +277,7 @@ public class ObjectWrite extends JPasswordField {
         String iban = input.nextLine();
 
         //Creazione di un conto vuoto
-        contoCorrente verCodiceTemp = new contoCorrente();
+        contoCorrente verCodiceTemp;
         int posizione = 0;
         for (int i : numbers) {
 
@@ -820,14 +818,16 @@ public class ObjectWrite extends JPasswordField {
                     System.out.print("Iban Beneficiario: ");
                     String ibanBeneficiario = input.nextLine();
                     float denaro = 0;
+                    int numeroConteggi = 0;
                     for (int i : numbers) {
-
                         //verCodice assume il valore di un contoCorrente per ogni indice [i]
-                        verCodice = contiCorrentiArray.get(i);
+                        verCodiceTemp = contiCorrentiArray.get(i);
 
                         //Dopo aver verificato che l'IBAN non sia vuoto, si verifica che l'IBAN appena inserito
                         //corrisponda con quello del cointestatario in questione
-                        if (verCodice.getIBAN() != null && verCodice.getIBAN().equalsIgnoreCase(ibanBeneficiario)) {
+                        if (verCodiceTemp.getIBAN() != null && verCodiceTemp.getIBAN().equalsIgnoreCase(ibanBeneficiario)) {
+                            posizione = i;
+                            numeroConteggi++;
                             exitMethods = true;
                             while(exitMethods) {
                                 System.out.print("\nInserisca la cifra da inviare: €");
@@ -845,6 +845,7 @@ public class ObjectWrite extends JPasswordField {
                             String dataEsecuzione = verificaData("Data esecuzione");
                             LocalDate dataReale = stringToLocalDate(dataEsecuzione);
                             //LocalDate dataRealeFinale = dataReale.plusDays(2);
+                            //noinspection UnnecessaryLocalVariable
                             LocalDate dataRealeFinale = dataReale;
                             String dataFinale = localDateToString(dataRealeFinale);
 
@@ -858,7 +859,7 @@ public class ObjectWrite extends JPasswordField {
                                     ArrayList<contoCorrente.listaMovimenti> listaMovimentiTemp = verCodice.getListaMovimenti();
                                     contoCorrente.listaMovimenti oggettoMovimenti = new contoCorrente.listaMovimenti();
 
-                                    listaMovimentiTemp.add(oggettoMovimenti);
+                                    //listaMovimentiTemp.add(oggettoMovimenti);
 
                                     //Si genera un oggetto lista movimento così da assegnarli tutti i parametri generati
                                     oggettoMovimenti.setDataContabile(dataFinale);
@@ -868,7 +869,7 @@ public class ObjectWrite extends JPasswordField {
                                     oggettoMovimenti.setDescrizioneOperazione(causale);
                                     //La lista movimenti viene aggiunta all' array
                                     verCodice.listaMovimenti.add(oggettoMovimenti);
-                                    contiCorrentiArray.set(i, verCodice);
+                                    contiCorrentiArray.set(posizione, verCodice);
 
                                     //GESTIONE DELLA LISTA FANTASMA
                                     ArrayList<contoCorrente.listaFantasma> listaFantasmaTemp = verCodice.getListaFantasma();
@@ -885,7 +886,7 @@ public class ObjectWrite extends JPasswordField {
                                     oggettoFantasmi.setTipoOperazione("Bonifico Uscita");
                                     //La lista movimenti viene aggiunta all' array
                                     verCodice.listaFantasma.add(oggettoFantasmi);
-                                    contiCorrentiArray.set(i, verCodice);
+                                    contiCorrentiArray.set(posizione, verCodice);
 
                                 }
                                 else
@@ -893,9 +894,10 @@ public class ObjectWrite extends JPasswordField {
 
                             }
                         }
-                        else
-                            System.out.print("\n\n|| L'IBAN " + iban + " non è stato trovato.\n");
+
                     }
+                    if(numeroConteggi != 1)
+                        System.out.print("\n\n|| L'IBAN " + iban + " non è stato trovato.\n");
                 }
 
                 if(scelta == 4 && (verCodice.getTipoConto().equals("Conto Corrente senza Canone") || verCodice.getTipoConto().equals("Conto Corrente a Canone Fisso"))) {

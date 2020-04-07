@@ -239,7 +239,7 @@ public class metodiVerifiche {
 
         //Si verifica che il cliente sia maggiorenne
         else{
-            if (time.getYear()-annoReale<18 || (time.getYear()-annoReale==18 && meseReale > time.getMonthValue()) || (time.getYear()-annoReale==18 && meseReale==time.getMonthValue() && giornoReale > time.getDayOfYear())) {
+            if ((time.getYear()-annoReale<18 || (time.getYear()-annoReale==18 && meseReale > time.getMonthValue()) || (time.getYear()-annoReale==18 && meseReale==time.getMonthValue() && giornoReale > time.getDayOfYear())) && !var.equals("Data esecuzione")) {
                 data = "0";
             }
 
@@ -257,22 +257,31 @@ public class metodiVerifiche {
             LocalDate sommaDate;
 
 
-            String anno = "" + data.charAt(data.length() - 4) + data.charAt(data.length() - 3) + data.charAt(data.length() - 2) + data.charAt(data.length() - 1);
 
+            String anno = "" + data.charAt(data.length() - 4) + data.charAt(data.length() - 3) + data.charAt(data.length() - 2) + data.charAt(data.length() - 1);
             annoReale = Integer.parseInt(anno);
             //System.out.println("anno:"+annoReale);
             String mese = "" + data.charAt(data.length() - 7) + data.charAt(data.length() - 6);
             meseReale = Integer.parseInt(mese);
+
             //System.out.println("mese:"+meseReale);
             String giorno = "" + data.charAt(data.length() - 10) + data.charAt(data.length() - 9);
+
             giornoReale = Integer.parseInt(giorno);
             //System.out.println("giorno:"+giornoReale);
-            sommaDate = LocalDate.parse(annoReale + "-" + meseReale + "-" + giornoReale);
+            if(meseReale < 10 && giornoReale < 10)
+                sommaDate = LocalDate.parse(annoReale + "-0" + meseReale + "-0" + giornoReale);
+            else if(meseReale < 10)
+                sommaDate = LocalDate.parse(annoReale + "-0" + meseReale + "-" + giornoReale);
+            else if(giornoReale < 10)
+                sommaDate = LocalDate.parse(annoReale + "-" + meseReale + "-0" + giornoReale);
+            else
+                sommaDate = LocalDate.parse(annoReale + "-" + meseReale + "-" + giornoReale);
+
 
             //Si verifica nel caso della scadenza carta che non sia già scduta
             LocalDate dataReale = sommaDate;
 
-            System.out.print(dataReale);
 
             return dataReale;
         }
